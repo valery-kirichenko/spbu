@@ -1,0 +1,7 @@
+print("Hello")
+print("It's me")
+print("I was wondering if after all tehse years you'd like to meet")
+print("To go over")
+print("Everything")
+print("They said that time supposed to heal ya")
+print("But I ain't done much healing")
