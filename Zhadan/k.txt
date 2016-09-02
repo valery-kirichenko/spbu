@@ -1,0 +1,4 @@
+program z1;
+begin
+ write('Hello World');	
+end.
