@@ -1,0 +1,4 @@
+Uses crt;
+begin
+	Writeln('Hi, world');
+end.
