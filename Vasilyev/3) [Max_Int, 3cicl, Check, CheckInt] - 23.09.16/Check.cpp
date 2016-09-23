@@ -18,4 +18,5 @@ int main()
 		return 0;
 	}
 	cout << n / m;
+	return 0;
 }
