@@ -33,4 +33,5 @@ int main()
 		while (j <11);
 		break;
 	}
+	return 0;
 }
