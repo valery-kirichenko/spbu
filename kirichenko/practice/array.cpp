@@ -90,7 +90,7 @@ void do_smth() {
 						break;
 					}
 				}
-				if (num == -1) std::cout << "Нет отрицательных чисел";
+				if (maxVal == -1) std::cout << "Нет отрицательных чисел";
 				else std::cout << "Максимальное отрицательное число: " << maxVal;
 				std::cout << std::endl;
 				break;
