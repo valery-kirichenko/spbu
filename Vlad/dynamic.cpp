@@ -6,9 +6,4 @@ int main() {
 		cin >> b[a];
 	}
 	delete  []b;
-	//b = &a;
-	//c = *b; //c = 5
-	//*b = 6;
-	//std::cout << a;
-	
 }
