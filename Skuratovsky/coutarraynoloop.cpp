@@ -6,8 +6,7 @@ using namespace std;
 int main()
 {
   vector<int> a(10);
-  ostream_iterator<int> out (cout, " ");
-   copy(a.begin(), a.end(), out);
+   copy(a.begin(), a.end(), ostream_iterator<int>(cout, " "));
  
 
   return 0;
