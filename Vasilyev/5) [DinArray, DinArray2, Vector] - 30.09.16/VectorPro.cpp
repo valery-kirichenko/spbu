@@ -8,8 +8,8 @@ using namespace std;
 int inp()
 {
 	string str;
-	int b = 0, x = 0;
-	bool k = true;
+	int b, x;
+	bool k;
 st:
 	b = 0; x = 0;
 	k = true;
@@ -55,7 +55,7 @@ sv:
 	cout << "Enter size of array: ";
 	n = 0;
 	n = inp();
-	if (n < 0) {
+	if (n <= 0) {
 		cout << "Error! Wrong size! Try again.\n";
 		goto sv;
 	}
