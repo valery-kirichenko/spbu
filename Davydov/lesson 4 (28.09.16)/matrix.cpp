@@ -1,12 +1,15 @@
 #include<iostream>
 #include<cstdlib>
+#include<ctime>
 using namespace std;
 
-void det(int *a);
 const int l=2;
+void det(int C[l][l]);
+â
 int main()
 {
 	setlocale(0, " ");
+	srand ( time(NULL) ); 
 	int i, j, k;
 	int A[l+1][l+1];
 	int B[l+1][l+1];
@@ -54,7 +57,7 @@ int main()
 			}
 			cout<<endl;
 		}
-		det(&C[1][1]);
+		det(C);
 
 	cout<<"The difference of matrices"<<endl;
 	for (i=1;i<=l;i++)
@@ -66,7 +69,7 @@ int main()
 		}
 		cout<<endl;
 	}
-	det(&C[1][1]);
+	det(C);
 		
 	cout<<"The composition of matrices"<<endl;
 	for (k=1;k<=l;k++)
@@ -79,13 +82,13 @@ int main()
 	}
 	cout<<endl;
 	}
-	det(&E[1][1]);
+	det(E);
 
 	system("pause");
 	return 0;	
 }
-void det(int *c)
+void det(int Ñ[l][l])
 {
-cout<<"The determinat of this matrix is "<<*(c)**(c+4)-*(c+1)**(c+3)<<endl;
+cout<<"The determinat of this matrix is "<<Ñ[1][1]<<endl;
 cout<<endl;
 }
