@@ -86,9 +86,15 @@ int main()
 	system("pause");
 	return 0;	
 }
+<<<<<<< HEAD
 void det(int N[l][l])
 {
 cout<<"The determinat of this matrix is "<<N[1][1]<<endl;
+=======
+void det(int Ñ[l][l])
+{
+cout<<"The determinat of this matrix is "<<Ñ[1][1]<<endl;
+>>>>>>> 2be1a7a266c197c27276441a93588cbafe02f4ae
 cout<<endl;
 }
 
