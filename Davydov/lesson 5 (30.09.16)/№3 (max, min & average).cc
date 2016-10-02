@@ -31,6 +31,7 @@ int main()
 		average = Vector[0];
 		min = Vector[0];
 		max = Vector[0];
+
 		for(int i = 1; i < Vector.size(); i++) 
 		{
 		cout<<"Vector["<<i<<"] = ";
