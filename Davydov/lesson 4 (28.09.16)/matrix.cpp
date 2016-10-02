@@ -5,7 +5,6 @@ using namespace std;
 
 const int l=2;
 void det(int C[l][l]);
-â
 int main()
 {
 	setlocale(0, " ");
@@ -87,8 +86,8 @@ int main()
 	system("pause");
 	return 0;	
 }
-void det(int Ñ[l][l])
+void det(int Ã‘[l][l])
 {
-cout<<"The determinat of this matrix is "<<Ñ[1][1]<<endl;
+cout<<"The determinat of this matrix is "<<Ã‘[1][1]<<endl;
 cout<<endl;
 }
