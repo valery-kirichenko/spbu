@@ -22,6 +22,7 @@ int main()
 			else
 			{cout <<"count!!!"<<endl; n=0; break;}
 		}
+
     vector<int> Vector(n);
 	if (Vector.size()!=0)
 	{
