@@ -10,7 +10,7 @@ int main()
 	char x[100];
 
 	setlocale(LC_ALL, "");
-	cout << "Введите размер массива: ";
+	cout << "Enter size of array: ";
 	scanf("%s", &x);
 	for (i=0;i<strlen(x);i++)
 		{
@@ -20,12 +20,12 @@ int main()
 			n = n*10+s;
 			}
 			else
-			{cout <<"Необходимо ввести число"<<endl; n=0; break;}
+			{cout <<"count!!!"<<endl; n=0; break;}
 		}
     vector<int> Vector(n);
 	if (Vector.size()!=0)
 	{
-		cout << "Введите массив: "<<endl;
+		cout << "Enter your array: "<<endl;
 		cout<<"Vector[0] = ";
 		cin>>Vector[0];
 		average = Vector[0];
@@ -40,12 +40,12 @@ int main()
 		if (Vector[i] > max) max = Vector[i];
 		}
 		cout<<endl;
-		cout<<"Исходный массив"<<endl;
+		cout<<"Your array"<<endl;
 		copy(Vector.begin(), Vector.end(), ostream_iterator<int>(cout," ") );
 		cout<<endl;
-		cout<<"Максимальный элемент = "<<max<<endl;
-		cout<<"Минимальный элемент = "<<min<<endl;
-		cout<<"Среднее арифметическое всех элементов = "<<(double) average/n<<endl;
+		cout<<"The biggest element = "<<max<<endl;
+		cout<<"The smallest element = "<<min<<endl;
+		cout<<"Arithmetical mean = "<<(double) average/n<<endl;
 	}
 
 	system("pause");
