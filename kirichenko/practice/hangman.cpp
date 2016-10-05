@@ -155,13 +155,11 @@ void play_friend() {
 }
 
 int main() {
-	//std::cout << "123456";
-	//std::cout << "\033[4D\033[K" << std::endl;
 	int action;
 	bool work = true;
-	std::cout << "Добро пожаловать в Виселицу!\n";
+	std::cout << "\033[1;34mДобро пожаловать в Виселицу!\033[0m\n";
 	while (work) {
-		std::cout << "Выберите режим игры:\n1. С компьютером\n2. С другом\n3. Выход\n";
+		std::cout << "\033[1mВыберите режим игры:\033[0m\n1. С компьютером\n2. С другом\n3. Выход\n";
 		std::cin >> action;
 		std::cout << "\033[5F\033[J";
 		switch (action) {
