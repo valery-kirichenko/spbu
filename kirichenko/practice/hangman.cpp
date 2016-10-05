@@ -63,6 +63,27 @@ std::string steps[] = {
 						"¯¯¯¯¯¯¯    \n"
 					};
 
+std::string alphabetL = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+std::string alphabetU = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+
+std::string to_lower(std::string s) {
+	std::string out = "";
+	for (int i = 0; i < s.length(); i += 2) {
+		int find = alphabetU.find(s.substr(i, 2));
+		if (find == std::string::npos) {
+			find = alphabetL.find(s.substr(i, 2));
+			if (find == std::string::npos) {
+				return "false";
+			} else {
+				out += alphabetL.substr(find, 2);
+			}
+		} else {
+			out += alphabetL.substr(find, 2);
+		}
+	}
+	return out;
+}
+
 int sym_to_pos(int sym, std::string word, int indices[]) {
 	int sum = 0;
 	for (int i = 0; i < sym; i++)
@@ -90,12 +111,20 @@ void game(std::string word) {
 	for (int i = 0; i < letter_count; i++)
 		ind[i] = 2;
 	int guessed_letters = 2;
+	// TODO: add logic to letters
 	std::vector<std::string> letters;
 	while (attempt < 6) {
 		std::cout << steps[attempt];
 		std::cout << "Слово: " << mod_word << std::endl;
 		std::cout << "Введите букву: ";
 		std::cin >> guess;
+
+		guess = to_lower(guess);
+		if (guess == "false") {
+			std::cout << "\033[10F\033[J";
+			std::cout << "Введите букву русского алфавита\n";
+			continue;
+		}
 
 		exist = false;
 
@@ -151,7 +180,16 @@ void play_friend() {
 	std::cout << "Загадайте слово:\n";
 	std::cin >> word;
 	std::cout << "\033[2F\033[K";
-	game(word);
+	word = to_lower(word);
+	if (word == "false") {
+		std::cout << "Слово должно состоять из букв русского алфавита\n";
+		play_friend();
+	} else {
+		if (word.length() < 6) {
+			std::cout << "В слове должно быть больше 2 букв\n" << std::endl;
+			play_friend();
+		} else game(word);
+	}
 }
 
 int main() {
