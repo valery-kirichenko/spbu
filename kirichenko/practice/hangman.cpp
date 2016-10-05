@@ -138,7 +138,7 @@ void play_computer() {
 	dict.clear();
 	dict.seekg(0, std::ios::beg);
 	std::random_device generator;
-	std::uniform_int_distribution<int> distribution(0, 14);
+	std::uniform_int_distribution<int> distribution(0, word_count);
 	int rand = distribution(generator);
 	for (int i = 0; i < rand; i++)
 		std::getline(dict, word);
