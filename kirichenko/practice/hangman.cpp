@@ -1,8 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <ctime>
-#include <cstdlib>
+#include <random>
 #include <vector>
 
 std::string steps[] = {
@@ -97,7 +96,7 @@ void game(std::string word) {
 		std::cout << "Слово: " << mod_word << std::endl;
 		std::cout << "Введите букву: ";
 		std::cin >> guess;
-		
+
 		exist = false;
 
 		for (int i = 1; i < letter_count - 1; i++) {
@@ -138,9 +137,9 @@ void play_computer() {
         ++word_count;
 	dict.clear();
 	dict.seekg(0, std::ios::beg);
-	std::srand(std::time(0));
-	// TODO: fix random
-    int rand = std::rand() % word_count;
+	std::random_device generator;
+	std::uniform_int_distribution<int> distribution(0, 14);
+	int rand = distribution(generator);
 	for (int i = 0; i < rand; i++)
 		std::getline(dict, word);
 	dict.close();
