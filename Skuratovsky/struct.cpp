@@ -13,9 +13,6 @@ using namespace std;
 void setid (STUDENT *ptr, int value)
 {ptr->id=value;
 };
-void setname (STUDENT *ptr, char *value)
-{
-ptr->first=value};
 int main()
 {
 
