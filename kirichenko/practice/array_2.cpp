@@ -1,7 +1,6 @@
 #include <iostream>
 
-int main()
-{
+int main() {
 	int m, n;
 	std::cout << "Введите размер массива: ";
 	std::cin >> m >> n;
