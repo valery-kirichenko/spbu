@@ -232,10 +232,6 @@ void play_friend(std::string message = "") {
 	std::string word;
 	screen(2, message);
 	std::cin >> word;
-<<<<<<< Updated upstream
-	std::cout << "\033[2F\033[K"; // Remove word that was entered by second player
-=======
->>>>>>> Stashed changes
 	word = to_lower(word);
 	if (word == "false") {
 		message = "Слово должно состоять из букв русского алфавита\n";
