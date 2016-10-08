@@ -1,7 +1,7 @@
 #include <iostream>
 
 void calculator() {
-	
+
 }
 
 int main() {
@@ -18,7 +18,7 @@ int main() {
 
 		std::cout << "Now choose an operation:\n1) +\n2) -\n3) *\n4) /\n5) %\n";
 		std::cin >> operation;
-
+		
 		switch(operation) {
 			case 1:
 				std::cout << a << " + " << b << " = " << a + b << std::endl;
@@ -36,7 +36,7 @@ int main() {
 				std::cout << a << " % " << b << " = " << a % b << std::endl;
 				break;
 			default:
-				std::cout << "Can't find requested operation" << std::endl; 
+				std::cout << "Can't find requested operation" << std::endl;
 		}
 
 		std::cout << "What now?\n1) One more calculation, please\n2) Exit\n";
@@ -45,7 +45,7 @@ int main() {
 		switch(operation) {
 			case 1:
 				break;
-			
+
 			default:
 				std::cout << "Bye" << std::endl;
 				is_working = false;
