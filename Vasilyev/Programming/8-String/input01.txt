@@ -1,0 +1,14 @@
+#define SUPER 100
+#define Young 200
+
+London is the capital of Great Britain!
+It is a SUPER!  SUPER Young
+We are Young!
+
+#undef SUPER
+My prog is SUPER!
+We are Young! Young! Young! Young! Young!
+
+#undef Young
+My prog is SUPER!
+We are Young! Young! Young! Young! Young!
