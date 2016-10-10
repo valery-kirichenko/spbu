@@ -97,13 +97,13 @@ void screen(int scr, std::string message = "", int img = -1, std::string word = 
 			break;
 		case 2:
 			std::cout << message
-					  << "Загадайте слово:\n";
+					  << "Загадайте слово:\033[0m\n";
 			printed += 2;
 			break;
 		case 3:
 			std::cout << steps[img]
-					  << message
-					  << "Загаданное слово: " << word << "\n"
+					  << "\033[1;33m" << message << "\033[0m"
+					  << "\033[1mЗагаданное слово: \033[32m" << word << "\033[0m\n"
 					  << "Нажмите enter, чтобы продолжить" << std::endl;
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
 			std::cin.get();
@@ -170,8 +170,8 @@ void game(std::string word, std::string message = "") {
 	while (attempt < 6) {
 		screen(1, message, attempt, mod_word);
 		message = "";
-		//std::cin >> guess;
-		std::getline(std::cin, guess);
+		std::cin >> guess;
+		//std::getline(std::cin, guess);
 		printed++;
 		guess = to_lower(guess);
 		if (guess == "false") {
