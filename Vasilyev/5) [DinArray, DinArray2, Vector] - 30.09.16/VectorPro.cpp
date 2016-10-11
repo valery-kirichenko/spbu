@@ -8,56 +8,59 @@ using namespace std;
 int inp()
 {
 	string str;
-	int b, x;
-	bool k;
-st:
-	b = 0; x = 0;
-	k = true;
-	str.clear();
-	getline(cin, str);
-	for (int i = 0; i < str.size(); i++)
+	int b = 0, x = 0;
+	bool k = true;
+	while (true)
 	{
-		if (((str[i] < '0') | (str[i] > '9')) & (str[0] != '-')) {
-			k = false;
-			break;
-		}
-		if (str[i] == '-') {
-			b++;
-			if (b > 1) {
+		b = 0; x = 0;
+		k = true;
+		str.clear();
+		getline(cin, str);
+		for (int i = 0; i < str.size(); i++)
+		{
+			if (((str[i] < '0') | (str[i] > '9')) & (str[0] != '-')) {
 				k = false;
 				break;
 			}
+			if (str[i] == '-') {
+				b++;
+				if (b > 1) {
+					k = false;
+					break;
+				}
+			}
 		}
-	}
-	if (k == false) {
-		cout << "Error! Wrong data! Try again.\n";
-		goto st;
-	}
-	else {
-		try
-		{
-			x = stoi(str);
-			return x;
-		}
-		catch (...)
-		{
+		if (k == false) {
 			cout << "Error! Wrong data! Try again.\n";
-			goto st;
+		}
+		else {
+			try
+			{
+				x = stoi(str);
+				return x;
+			}
+			catch (...)
+			{
+				cout << "Error! Wrong data! Try again.\n";
+			}
 		}
 	}
-	return 0;
 }
 
 int main()
 {
 	int n;
-sv:
-	cout << "Enter size of array: ";
-	n = 0;
-	n = inp();
-	if (n <= 0) {
-		cout << "Error! Wrong size! Try again.\n";
-		goto sv;
+	bool flag = true;
+	while (flag)
+	{
+		cout << "Enter size of array: ";
+		n = 0;
+		n = inp();
+		if (n <= 0) {
+			cout << "Error! Wrong size! Try again.\n";
+		}
+		else
+			flag = false;
 	}
 	vector <int> a(n);
 	for (int i = 0; i < a.size(); i++)
@@ -78,7 +81,7 @@ sv:
 	}
 	cout << "Max = " << max << endl;
 	cout << "Min = " << min << endl;
-	cout << "Average = " << sum / a.size() << endl;
+	cout << "Average = " << (double)(sum) / a.size() << endl;
 	system("pause");
 	return 0;
 }

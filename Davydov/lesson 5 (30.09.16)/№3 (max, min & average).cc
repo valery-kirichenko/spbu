@@ -4,25 +4,15 @@
 #include <iterator> 
 using namespace std;
 
+int inspection();
+
 int main()
 {
 	int min, max, s, i, n = 0, average = 0;
-	char x[100];
 
 	setlocale(LC_ALL, "");
 	cout << "Enter size of array: ";
-	scanf("%s", &x);
-	for (i=0;i<strlen(x);i++)
-		{
-			if ((x[i]>='0')&&(x[i]<='9'))
-			{
-			s = x[i]-'0';
-			n = n*10+s;
-			}
-			else
-			{cout <<"count!!!"<<endl; n=0; break;}
-		}
-
+	n = inspection();
     vector<int> Vector(n);
 	if (Vector.size()!=0)
 	{
@@ -52,4 +42,23 @@ int main()
 
 	system("pause");
 	return 0;
+}
+
+int inspection()
+{
+	char x[10];
+	int i, n;
+
+	scanf("%s", &x);
+	for (i=0;i<strlen(x);i++)
+		{
+			if ((x[i]>='0')&&(x[i]<='9'))
+			{
+			s = x[i]-'0';
+			n = n*10+s;
+			}
+			else
+			{cout <<"count!!!"<<endl; n=0; break;}
+		}
+	return n;
 }

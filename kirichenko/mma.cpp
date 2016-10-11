@@ -17,8 +17,7 @@ int main() {
 		if (v[i] < min) min = v[i];
 		avg += v[i];
 	}
-
-	std::cout << "Max: " << max << "\nMin: " << min << "\nAvg: " << avg / n << std::endl;
+	std::cout << avg << std::endl	std::cout << "Max: " << max << "\nMin: " << min << "\nAvg: " << float(avg) / n << std::endl;
 
 	return 0;
 
