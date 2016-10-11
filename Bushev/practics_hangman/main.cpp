@@ -28,6 +28,7 @@ const int MIN_WORD_LENGTH = 3;
 const int MAX_WORD_LENGTH = 15;
 
 const int ONLINE_WAIT = 15;
+const int MAX_REQUEST_TRIES = 3;
 
 void show_online_menu(int error);
 
@@ -158,7 +159,13 @@ int start_pve(){
 
 string perform_request(Http::Request request){
     Http http(SERVER_ADDR);
-    Http::Response response = http.sendRequest(request);
+    Http::Response response;
+
+    for(int i = 0; i < MAX_REQUEST_TRIES; i++){
+        response = http.sendRequest(request);
+        if(response.getStatus() == Http::Response::Ok && response.getBody()[0] != '#') break;
+    }
+
     return response.getStatus() == Http::Response::Ok ? response.getBody() : "#Ошибка подключения, проверьте соединение";
 }
 
@@ -381,7 +388,7 @@ void open_connection(string player, int gid){
 
     if(ans[0] != '#') while(start_online(ans, player, gid, 1)){ }
     else{
-        cout << endl << endl << ans << endl << endl;
+        cout << ans << endl << endl;
         system("pause");
     }
 }
