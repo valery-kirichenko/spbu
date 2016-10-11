@@ -1,15 +1,15 @@
 <?php
 header('Content-Type: text/html; charset=cp1251');
-if($_POST['hash'] != "HCXt7xC47HGvVwo_68XX25Tgs789XBZ4fhsP0") exit("#Îøèáêà, äîñòóï çàïðåùåí");
+if($_POST['hash'] != "HCXt7xC47HGvVwo_68XX25Tgs789XBZ4fhsP0") exit("#ÐžÑˆÐ¸Ð±ÐºÐ°, Ð´Ð¾ÑÑ‚ÑƒÐ¿ Ð·Ð°Ð¿Ñ€ÐµÑ‰ÐµÐ½");
 
 include_once("mysql/sql_connect.php");
 
 $host = mysqli_real_escape_string($db, $_POST['host']);
-if(!isset($host) || empty($host)) exit("#Îøèáêà, ââåäåíî íåêîððåêòíîå íàçâàíèå èãðû");
+if(!isset($host) || empty($host)) exit("#ÐžÑˆÐ¸Ð±ÐºÐ°, Ð²Ð²ÐµÐ´ÐµÐ½Ð¾ Ð½ÐµÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ð¾Ðµ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ Ð¸Ð³Ñ€Ñ‹");
 
-$data = mysqli_query($db, "SELECT gid FROM hangman_games WHERE host='$host' AND active=0") or exit("#Íå óäàëîñü ïîäêëþ÷èòüñÿ ê ñåðâåðó, ïîïðîáóéòå ïîçæå");
-$fdata = mysqli_fetch_assoc($data); if(isset($fdata['gid'])) exit("#Âàø íèê óæå çàíÿò, èçìåíèòå åãî äëÿ ñîçäàíèÿ èãðû");
+$data = mysqli_query($db, "SELECT gid FROM hangman_games WHERE host='$host' AND active=0") or exit("#ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒÑÑ Ðº ÑÐµÑ€Ð²ÐµÑ€Ñƒ, Ð¿Ð¾Ð¿Ñ€Ð¾Ð±ÑƒÐ¹Ñ‚Ðµ Ð¿Ð¾Ð·Ð¶Ðµ");
+$fdata = mysqli_fetch_assoc($data); if(isset($fdata['gid'])) exit("#Ð’Ð°Ñˆ Ð½Ð¸Ðº ÑƒÐ¶Ðµ Ð·Ð°Ð½ÑÑ‚, Ð¸Ð·Ð¼ÐµÐ½Ð¸Ñ‚Ðµ ÐµÐ³Ð¾ Ð´Ð»Ñ ÑÐ¾Ð·Ð´Ð°Ð½Ð¸Ñ Ð¸Ð³Ñ€Ñ‹");
 
-mysqli_query($db, "INSERT INTO hangman_games (host, letter) VALUES ('$host', '-')") or exit("#Íå óäàëîñü ïîäêëþ÷èòüñÿ ê ñåðâåðó, ïîïðîáóéòå ïîçæå");
-exit("Èãðà áûëà óïåøíî ñîçäàíà ïîä íîìåðîì #".$fdata['gid']);
+mysqli_query($db, "INSERT INTO hangman_games (host, letter) VALUES ('$host', '-')") or exit("#ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒÑÑ Ðº ÑÐµÑ€Ð²ÐµÑ€Ñƒ, Ð¿Ð¾Ð¿Ñ€Ð¾Ð±ÑƒÐ¹Ñ‚Ðµ Ð¿Ð¾Ð·Ð¶Ðµ");
+exit("Ð˜Ð³Ñ€Ð° Ð±Ñ‹Ð»Ð° ÑƒÐ¿ÐµÑˆÐ½Ð¾ ÑÐ¾Ð·Ð´Ð°Ð½Ð° Ð¿Ð¾Ð´ Ð½Ð¾Ð¼ÐµÑ€Ð¾Ð¼ #".$fdata['gid']);
 ?>
