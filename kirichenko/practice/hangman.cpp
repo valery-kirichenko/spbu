@@ -110,8 +110,6 @@ void screen(int scr, std::string message = "", int img = -1, std::string word = 
 			printed += 11;
 			break;
 	}
-
-
 }
 
 std::string alphabetL = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
