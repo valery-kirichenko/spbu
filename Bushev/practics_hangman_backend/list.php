@@ -1,11 +1,11 @@
 <?php
 header('Content-Type: text/html; charset=cp1251');
-if($_POST['hash'] != "HCXt7xC47HGvVwo_68XX25Tgs789XBZ4fhsP0") exit("#Îøèáêà, äîñòóï çàïðåùåí");
+if($_POST['hash'] != "HCXt7xC47HGvVwo_68XX25Tgs789XBZ4fhsP0") exit("#ÐžÑˆÐ¸Ð±ÐºÐ°, Ð´Ð¾ÑÑ‚ÑƒÐ¿ Ð·Ð°Ð¿Ñ€ÐµÑ‰ÐµÐ½");
 
 include_once("mysql/sql_connect.php");
 
-$data = mysqli_query($db, "SELECT gid, host FROM hangman_games WHERE active=0") or exit("#Íå óäàëîñü ïîäêëþ÷èòüñÿ ê ñåðâåðó, ïîïðîáóéòå ïîçæå");
+$data = mysqli_query($db, "SELECT gid, host FROM hangman_games WHERE active=0") or exit("#ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒÑÑ Ðº ÑÐµÑ€Ð²ÐµÑ€Ñƒ, Ð¿Ð¾Ð¿Ñ€Ð¾Ð±ÑƒÐ¹Ñ‚Ðµ Ð¿Ð¾Ð·Ð¶Ðµ");
 while($fdata = mysqli_fetch_assoc($data)){
-	echo "Èãðà #".$fdata['gid'].", ñîçäàíà ïîëüçîâàòåëåì: ".$fdata['host'].PHP_EOL;
+	echo "Ð˜Ð³Ñ€Ð° #".$fdata['gid'].", ÑÐ¾Ð·Ð´Ð°Ð½Ð° Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÐµÐ¼: ".$fdata['host'].PHP_EOL;
 }
 ?>

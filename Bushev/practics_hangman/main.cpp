@@ -36,12 +36,12 @@ void console_clear(){
 }
 
 char c_lower(char c){
-    return c < 'а' ? c + 32 : c;
+    return c < 'Р°' ? c + 32 : c;
 }
 
 bool s_lower(string &str){
     for(unsigned int i = 0; i < str.size(); i++){
-        if(str[i] < 'А' || str[i] > 'я') return 1;
+        if(str[i] < 'Рђ' || str[i] > 'СЏ') return 1;
         else str[i] = c_lower(str[i]);
     }
 
@@ -62,25 +62,25 @@ bool check_letter(string str, string &ans, char letter){
 }
 
 void show_intro(){
-    cout << "Добро пожаловать в игру Виселица (выход - exit)\n\n";
-    cout << "Вы можете выбрать несколько режимов игры\nВведите pve или pvp для выбора соответствующего режима: ";
+    cout << "Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ РІ РёРіСЂСѓ Р’РёСЃРµР»РёС†Р° (РІС‹С…РѕРґ - exit)\n\n";
+    cout << "Р’С‹ РјРѕР¶РµС‚Рµ РІС‹Р±СЂР°С‚СЊ РЅРµСЃРєРѕР»СЊРєРѕ СЂРµР¶РёРјРѕРІ РёРіСЂС‹\nР’РІРµРґРёС‚Рµ pve РёР»Рё pvp РґР»СЏ РІС‹Р±РѕСЂР° СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµРіРѕ СЂРµР¶РёРјР°: ";
 }
 
 void show_online_intro(string name){
-    cout << "Добро пожаловать в онлайн версию виселицы";
+    cout << "Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ РІ РѕРЅР»Р°Р№РЅ РІРµСЂСЃРёСЋ РІРёСЃРµР»РёС†С‹";
 
     if(name != "") cout << ", " << name;
     cout << "!" << endl;
 
-    cout << "\nСписок доступных функций: " << endl;
-    cout << "\ncreate <name> - создать новую игру" << endl;
-    cout << "list - вывести список доступных игр" << endl;
-    cout << "connect <id> - подключиться к игре" << endl;
-    cout << "set <name> - сменить ник" << endl;
-    cout << "exit - выйти в главное меню\n\n";
+    cout << "\nРЎРїРёСЃРѕРє РґРѕСЃС‚СѓРїРЅС‹С… С„СѓРЅРєС†РёР№: " << endl;
+    cout << "\ncreate <name> - СЃРѕР·РґР°С‚СЊ РЅРѕРІСѓСЋ РёРіСЂСѓ" << endl;
+    cout << "list - РІС‹РІРµСЃС‚Рё СЃРїРёСЃРѕРє РґРѕСЃС‚СѓРїРЅС‹С… РёРіСЂ" << endl;
+    cout << "connect <id> - РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ Рє РёРіСЂРµ" << endl;
+    cout << "set <name> - СЃРјРµРЅРёС‚СЊ РЅРёРє" << endl;
+    cout << "exit - РІС‹Р№С‚Рё РІ РіР»Р°РІРЅРѕРµ РјРµРЅСЋ\n\n";
 
-    if(name != "") cout << "Введите команду: ";
-    else cout << "Введите свой ник, чтобы продолжить: ";
+    if(name != "") cout << "Р’РІРµРґРёС‚Рµ РєРѕРјР°РЅРґСѓ: ";
+    else cout << "Р’РІРµРґРёС‚Рµ СЃРІРѕР№ РЅРёРє, С‡С‚РѕР±С‹ РїСЂРѕРґРѕР»Р¶РёС‚СЊ: ";
 }
 
 void show_man(int mmax){
@@ -111,17 +111,17 @@ int start_game(string str){
 
         correct = 0;
 
-        cout << endl << "Вам нужно угадать слово: " << ans << endl;
-        cout << "Введите букву: "; cin >> stream;
+        cout << endl << "Р’Р°Рј РЅСѓР¶РЅРѕ СѓРіР°РґР°С‚СЊ СЃР»РѕРІРѕ: " << ans << endl;
+        cout << "Р’РІРµРґРёС‚Рµ Р±СѓРєРІСѓ: "; cin >> stream;
         correct = check_letter(str, ans, c_lower(stream[0]));
 
         if(ans == str){
             show_man(i);
 
-            cout << endl << "Вам нужно угадать слово: " << ans << endl;
-            cout << "\nПоздравляем, вы выиграли! Слово отгадано!" << endl;
-            cout << "Хотите сыграть еще раз? -> "; cin >> stream;
-            return stream[0] == 'y' || stream[0] == 'д';
+            cout << endl << "Р’Р°Рј РЅСѓР¶РЅРѕ СѓРіР°РґР°С‚СЊ СЃР»РѕРІРѕ: " << ans << endl;
+            cout << "\nРџРѕР·РґСЂР°РІР»СЏРµРј, РІС‹ РІС‹РёРіСЂР°Р»Рё! РЎР»РѕРІРѕ РѕС‚РіР°РґР°РЅРѕ!" << endl;
+            cout << "РҐРѕС‚РёС‚Рµ СЃС‹РіСЂР°С‚СЊ РµС‰Рµ СЂР°Р·? -> "; cin >> stream;
+            return stream[0] == 'y' || stream[0] == 'Рґ';
         }
 
         if(correct) i--;
@@ -129,11 +129,11 @@ int start_game(string str){
 
     show_man(6);
 
-    cout << endl << "Вам нужно угадать слово: " << ans << endl;
-    cout << "\nК сожалению, вы не смогли угадать ответ. Правильно: " << str << endl;
-    cout << "Хотите сыграть еще раз (y - да)? -> "; cin >> stream;
+    cout << endl << "Р’Р°Рј РЅСѓР¶РЅРѕ СѓРіР°РґР°С‚СЊ СЃР»РѕРІРѕ: " << ans << endl;
+    cout << "\nРљ СЃРѕР¶Р°Р»РµРЅРёСЋ, РІС‹ РЅРµ СЃРјРѕРіР»Рё СѓРіР°РґР°С‚СЊ РѕС‚РІРµС‚. РџСЂР°РІРёР»СЊРЅРѕ: " << str << endl;
+    cout << "РҐРѕС‚РёС‚Рµ СЃС‹РіСЂР°С‚СЊ РµС‰Рµ СЂР°Р· (y - РґР°)? -> "; cin >> stream;
 
-    return stream[0] == 'y' || stream[0] == 'д';
+    return stream[0] == 'y' || stream[0] == 'Рґ';
 }
 
 int start_pve(){
@@ -159,7 +159,7 @@ int start_pve(){
 string perform_request(Http::Request request){
     Http http(SERVER_ADDR);
     Http::Response response = http.sendRequest(request);
-    return response.getStatus() == Http::Response::Ok ? response.getBody() : "#Ошибка подключения, проверьте соединение";
+    return response.getStatus() == Http::Response::Ok ? response.getBody() : "#РћС€РёР±РєР° РїРѕРґРєР»СЋС‡РµРЅРёСЏ, РїСЂРѕРІРµСЂСЊС‚Рµ СЃРѕРµРґРёРЅРµРЅРёРµ";
 }
 
 void close_game(int gid){
@@ -173,7 +173,7 @@ void close_game(int gid){
 bool error_connection(string &ans, int gid){
     if(ans[0] == '#' || ans[ans.size()-1] == '9'){
         console_clear();
-        cout << "Соединение прервано..." << endl << endl;
+        cout << "РЎРѕРµРґРёРЅРµРЅРёРµ РїСЂРµСЂРІР°РЅРѕ..." << endl << endl;
         close_game(gid);
         system("pause");
         return 1;
@@ -195,12 +195,12 @@ bool start_online(string host, string player, int gid, bool role){
 
     console_clear();
 
-    cout << "Комната игры #" << gid << endl << endl;
-    cout << "Хост" << (!role ? " (!): " : ": " ) << host << endl;
-    cout << "Присоеденился"<< (role ? " (!): " : ": " ) << player << endl << endl;
+    cout << "РљРѕРјРЅР°С‚Р° РёРіСЂС‹ #" << gid << endl << endl;
+    cout << "РҐРѕСЃС‚" << (!role ? " (!): " : ": " ) << host << endl;
+    cout << "РџСЂРёСЃРѕРµРґРµРЅРёР»СЃСЏ"<< (role ? " (!): " : ": " ) << player << endl << endl;
 
-    cout << "Итоговый счет: " << ans << endl;
-    cout << "До начала новой игры осталось: " << ONLINE_WAIT;
+    cout << "РС‚РѕРіРѕРІС‹Р№ СЃС‡РµС‚: " << ans << endl;
+    cout << "Р”Рѕ РЅР°С‡Р°Р»Р° РЅРѕРІРѕР№ РёРіСЂС‹ РѕСЃС‚Р°Р»РѕСЃСЊ: " << ONLINE_WAIT;
 
     while(true){
         sec = clock.getElapsedTime().asSeconds();
@@ -228,11 +228,11 @@ bool start_online(string host, string player, int gid, bool role){
 
             if((role && ans[0] == '1') || (!role && ans[0] == '0')){
                 while(true){
-                    cout << "Загадайте слово для вашего собеседника: ";
+                    cout << "Р—Р°РіР°РґР°Р№С‚Рµ СЃР»РѕРІРѕ РґР»СЏ РІР°С€РµРіРѕ СЃРѕР±РµСЃРµРґРЅРёРєР°: ";
                     cin >> word;
 
                     if(s_lower(word) || word.size() < MIN_WORD_LENGTH || word.size() > MAX_WORD_LENGTH){
-                        cout << "\nРазрешены только русские слова с длиной [" << MIN_WORD_LENGTH << ", " << MAX_WORD_LENGTH << "] букв\n";
+                        cout << "\nР Р°Р·СЂРµС€РµРЅС‹ С‚РѕР»СЊРєРѕ СЂСѓСЃСЃРєРёРµ СЃР»РѕРІР° СЃ РґР»РёРЅРѕР№ [" << MIN_WORD_LENGTH << ", " << MAX_WORD_LENGTH << "] Р±СѓРєРІ\n";
                     }else break;
                 }
 
@@ -276,17 +276,17 @@ bool start_online(string host, string player, int gid, bool role){
                         end_type = -1;
                     }
 
-                    cout << endl << "Последняя введенная буква: " << ans[ans.size()-1] << endl;
+                    cout << endl << "РџРѕСЃР»РµРґРЅСЏСЏ РІРІРµРґРµРЅРЅР°СЏ Р±СѓРєРІР°: " << ans[ans.size()-1] << endl;
                     ans.erase(ans.size()-1, 1);
 
-                    cout << endl << "Вы загадали слово: " << word << endl;
-                    cout << "Соперник разгадал: " << ans << endl;
+                    cout << endl << "Р’С‹ Р·Р°РіР°РґР°Р»Рё СЃР»РѕРІРѕ: " << word << endl;
+                    cout << "РЎРѕРїРµСЂРЅРёРє СЂР°Р·РіР°РґР°Р»: " << ans << endl;
 
                     if(end_type == 1){
-                        cout << "\nВы победили! Загаданное слово не разгадано!" << endl;
+                        cout << "\nР’С‹ РїРѕР±РµРґРёР»Рё! Р—Р°РіР°РґР°РЅРЅРѕРµ СЃР»РѕРІРѕ РЅРµ СЂР°Р·РіР°РґР°РЅРѕ!" << endl;
                         break;
                     }else if(end_type == -1){
-                        cout << "\nВы проиграли! Соперник разгадал ваше слово!" << endl;
+                        cout << "\nР’С‹ РїСЂРѕРёРіСЂР°Р»Рё! РЎРѕРїРµСЂРЅРёРє СЂР°Р·РіР°РґР°Р» РІР°С€Рµ СЃР»РѕРІРѕ!" << endl;
                         break;
                     }
 
@@ -298,7 +298,7 @@ bool start_online(string host, string player, int gid, bool role){
                 ans = perform_request(request);
                 if(error_connection(ans, gid)) return 0;
             }else{
-                cout << "Ваш собеседник загадывает слово..." << endl;
+                cout << "Р’Р°С€ СЃРѕР±РµСЃРµРґРЅРёРє Р·Р°РіР°РґС‹РІР°РµС‚ СЃР»РѕРІРѕ..." << endl;
                 request.setUri("/9_hangman_backend/word.php");
 
                 while(true){
@@ -327,28 +327,28 @@ bool start_online(string host, string player, int gid, bool role){
 
                     show_man(6 - tries);
 
-                    cout << endl << "Последняя введенная буква: " << ans[ans.size()-1] << endl;
+                    cout << endl << "РџРѕСЃР»РµРґРЅСЏСЏ РІРІРµРґРµРЅРЅР°СЏ Р±СѓРєРІР°: " << ans[ans.size()-1] << endl;
                     ans.erase(ans.size()-1, 1);
 
                     progress = ans;
 
-                    cout << endl << "Вам нужно угадать слово: " << progress << endl;
-                    cout << "Введите букву: "; cin >> ans;
+                    cout << endl << "Р’Р°Рј РЅСѓР¶РЅРѕ СѓРіР°РґР°С‚СЊ СЃР»РѕРІРѕ: " << progress << endl;
+                    cout << "Р’РІРµРґРёС‚Рµ Р±СѓРєРІСѓ: "; cin >> ans;
 
                     if(!check_letter(word, progress, c_lower(ans[0]))) tries--;
 
                     if(progress == word){
                         show_man(6 - tries);
 
-                        cout << endl << "Вам нужно угадать слово: " << word << endl;
-                        cout << "\nПоздравляем, вы выиграли! Слово отгадано!" << endl;
+                        cout << endl << "Р’Р°Рј РЅСѓР¶РЅРѕ СѓРіР°РґР°С‚СЊ СЃР»РѕРІРѕ: " << word << endl;
+                        cout << "\nРџРѕР·РґСЂР°РІР»СЏРµРј, РІС‹ РІС‹РёРіСЂР°Р»Рё! РЎР»РѕРІРѕ РѕС‚РіР°РґР°РЅРѕ!" << endl;
 
                         stream << "&win=1";
                     }else if(tries <= 0){
                         show_man(6);
 
-                        cout << endl << "Вам нужно угадать слово: " << progress << endl;
-                        cout << "\nК сожалению, вы не смогли угадать ответ. Правильно: " << word << endl;
+                        cout << endl << "Р’Р°Рј РЅСѓР¶РЅРѕ СѓРіР°РґР°С‚СЊ СЃР»РѕРІРѕ: " << progress << endl;
+                        cout << "\nРљ СЃРѕР¶Р°Р»РµРЅРёСЋ, РІС‹ РЅРµ СЃРјРѕРіР»Рё СѓРіР°РґР°С‚СЊ РѕС‚РІРµС‚. РџСЂР°РІРёР»СЊРЅРѕ: " << word << endl;
 
                         stream << "&lost=1";
                     }
@@ -363,8 +363,8 @@ bool start_online(string host, string player, int gid, bool role){
                 }
             }
 
-            cout << "Хотите сыграть еще раз (y - да)? -> "; cin >> ans;
-            return ans[0] == 'y' || ans[0] == 'д';
+            cout << "РҐРѕС‚РёС‚Рµ СЃС‹РіСЂР°С‚СЊ РµС‰Рµ СЂР°Р· (y - РґР°)? -> "; cin >> ans;
+            return ans[0] == 'y' || ans[0] == 'Рґ';
         }
     }
 }
@@ -392,8 +392,8 @@ void waiting_player(string name, int gid){
     Clock clock;
     int sec = 0, ms = 0, lsec = 0, lms = 0, lstate = 0;
 
-    cout << "Ожидание соперника для начала игры... " << LOADING[0] << endl;
-    cout << "Осталось времени до конца: " << LOADING_TIME - sec;
+    cout << "РћР¶РёРґР°РЅРёРµ СЃРѕРїРµСЂРЅРёРєР° РґР»СЏ РЅР°С‡Р°Р»Р° РёРіСЂС‹... " << LOADING[0] << endl;
+    cout << "РћСЃС‚Р°Р»РѕСЃСЊ РІСЂРµРјРµРЅРё РґРѕ РєРѕРЅС†Р°: " << LOADING_TIME - sec;
 
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -443,10 +443,10 @@ void waiting_player(string name, int gid){
         }
     }
 
-    cout << "\n\nВремя ожидания истекло. Продолжить ожидание? -> ";
+    cout << "\n\nР’СЂРµРјСЏ РѕР¶РёРґР°РЅРёСЏ РёСЃС‚РµРєР»Рѕ. РџСЂРѕРґРѕР»Р¶РёС‚СЊ РѕР¶РёРґР°РЅРёРµ? -> ";
     string str; cin >> str;
 
-    if(str[0] == 'y' || str[0] == 'д') waiting_player(name, gid);
+    if(str[0] == 'y' || str[0] == 'Рґ') waiting_player(name, gid);
     else close_game(gid);
 }
 
@@ -474,7 +474,7 @@ void create_game(string name){
     if(!gid){
         cout << endl << endl;
         system("pause");
-        cout << "\n\nНе удалось подключиться к созданной игре\n\n";
+        cout << "\n\nРќРµ СѓРґР°Р»РѕСЃСЊ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ Рє СЃРѕР·РґР°РЅРЅРѕР№ РёРіСЂРµ\n\n";
     }else{
         cout << gid << endl << endl;
         system("pause");
@@ -489,7 +489,7 @@ void show_game_list(){
     request.setBody(stream.str());
     string ans = perform_request(request);
     if(ans != "") cout << endl << ans << endl;
-    else cout << "\nНа данный момент нет доступных игр\n\n";
+    else cout << "\nРќР° РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚ РЅРµС‚ РґРѕСЃС‚СѓРїРЅС‹С… РёРіСЂ\n\n";
     system("pause");
 }
 
@@ -501,7 +501,7 @@ int set_name(string &name){
 
     for(unsigned int i = 0; i < name.size(); i++){
         if(!( (name[i] >= 'A' && name[i] <= 'z')
-        || (name[i] >= 'А' && name[i] <= 'я')
+        || (name[i] >= 'Рђ' && name[i] <= 'СЏ')
         || (name[i] >= '0' && name[i] <= '9') )
         && name[i] != '_' && name[i] != '-' ){
             name = "";
@@ -513,9 +513,9 @@ int set_name(string &name){
 }
 
 void show_online_menu(string name, int error){
-    if(error == 1) cout << "Ошибка, данной команды не существует, повторите ввод: ";
-    else if(error == 2) cout << "Ник содержит только буквы, цифры, _ и -, повторите ввод: ";
-    else if(error == 3) cout << "Ник должен включать от " << MIN_NICK_LENGTH << " до " << MAX_NICK_LENGTH << " букв: ";
+    if(error == 1) cout << "РћС€РёР±РєР°, РґР°РЅРЅРѕР№ РєРѕРјР°РЅРґС‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚, РїРѕРІС‚РѕСЂРёС‚Рµ РІРІРѕРґ: ";
+    else if(error == 2) cout << "РќРёРє СЃРѕРґРµСЂР¶РёС‚ С‚РѕР»СЊРєРѕ Р±СѓРєРІС‹, С†РёС„СЂС‹, _ Рё -, РїРѕРІС‚РѕСЂРёС‚Рµ РІРІРѕРґ: ";
+    else if(error == 3) cout << "РќРёРє РґРѕР»Р¶РµРЅ РІРєР»СЋС‡Р°С‚СЊ РѕС‚ " << MIN_NICK_LENGTH << " РґРѕ " << MAX_NICK_LENGTH << " Р±СѓРєРІ: ";
     else{
         console_clear();
         show_online_intro(name);
@@ -524,30 +524,30 @@ void show_online_menu(string name, int error){
     int code = 0;
     string str; cin >> str;
 
-    if(name == "" || str == "set" || str == "ник"){
+    if(name == "" || str == "set" || str == "РЅРёРє"){
         if(name != "") cin >> str;
 
         code = set_name(str); name = str;
         show_online_menu(name, code);
         return;
-    }else if(str == "create" || str == "создать") create_game(name);
-    else if(str == "connect" || str == "вход"){
+    }else if(str == "create" || str == "СЃРѕР·РґР°С‚СЊ") create_game(name);
+    else if(str == "connect" || str == "РІС…РѕРґ"){
         cin >> str; int gid;
         istringstream mstream(str);
         if(!(mstream >> gid)) gid = 0;
         if(gid > 0) open_connection(name, gid);
-    }else if(str == "list" || str == "список") show_game_list();
-    else if(str != "exit" && str != "выход") code = 1;
+    }else if(str == "list" || str == "СЃРїРёСЃРѕРє") show_game_list();
+    else if(str != "exit" && str != "РІС‹С…РѕРґ") code = 1;
 
     show_online_menu(name, code);
 }
 
 int start_pvp(){
-    cout << "Загадайте слово для вашего собеседника: ";
+    cout << "Р—Р°РіР°РґР°Р№С‚Рµ СЃР»РѕРІРѕ РґР»СЏ РІР°С€РµРіРѕ СЃРѕР±РµСЃРµРґРЅРёРєР°: ";
     string str; cin >> str;
 
     if(s_lower(str) || str.size() < MIN_WORD_LENGTH || str.size() > MAX_WORD_LENGTH){
-        cout << "\nРазрешены только русские слова с длиной [" << MIN_WORD_LENGTH << ", " << MAX_WORD_LENGTH << "] букв\n";
+        cout << "\nР Р°Р·СЂРµС€РµРЅС‹ С‚РѕР»СЊРєРѕ СЂСѓСЃСЃРєРёРµ СЃР»РѕРІР° СЃ РґР»РёРЅРѕР№ [" << MIN_WORD_LENGTH << ", " << MAX_WORD_LENGTH << "] Р±СѓРєРІ\n";
         return start_pvp();
     }
 
@@ -555,10 +555,10 @@ int start_pvp(){
 }
 
 int choose_pvp(){
-    cout << "\nВы хотите начать игру по интернету? (нет - offline): ";
+    cout << "\nР’С‹ С…РѕС‚РёС‚Рµ РЅР°С‡Р°С‚СЊ РёРіСЂСѓ РїРѕ РёРЅС‚РµСЂРЅРµС‚Сѓ? (РЅРµС‚ - offline): ";
     string str; cin >> str;
 
-    if(str[0] == 'y' || str[0] == 'д'){
+    if(str[0] == 'y' || str[0] == 'Рґ'){
         show_online_menu("", 0);
         return 1;
     }
@@ -573,12 +573,12 @@ int main(){
 
     string uans;
     while(cin >> uans){
-        if(uans == "exit" || uans == "выход") break;
-        else if(uans == "pve" || uans == "пве"){
+        if(uans == "exit" || uans == "РІС‹С…РѕРґ") break;
+        else if(uans == "pve" || uans == "РїРІРµ"){
             switch(start_pve()){
                 case 0: return 0;
                 case -1:{
-                    cout << "Ошибка, не удалось начать игру. Выберите режим повторно: ";
+                    cout << "РћС€РёР±РєР°, РЅРµ СѓРґР°Р»РѕСЃСЊ РЅР°С‡Р°С‚СЊ РёРіСЂСѓ. Р’С‹Р±РµСЂРёС‚Рµ СЂРµР¶РёРј РїРѕРІС‚РѕСЂРЅРѕ: ";
                     break;
                 }default:{
                     console_clear();
@@ -587,14 +587,14 @@ int main(){
                 }
             }
         }
-        else if(uans == "pvp" || uans == "пвп"){
+        else if(uans == "pvp" || uans == "РїРІРї"){
                 if(!choose_pvp()) return 0;
                 else{
                     console_clear();
                     show_intro();
                 }
         }
-        else cout << "Ошибка, для начала игры введите pve или pvp: ";
+        else cout << "РћС€РёР±РєР°, РґР»СЏ РЅР°С‡Р°Р»Р° РёРіСЂС‹ РІРІРµРґРёС‚Рµ pve РёР»Рё pvp: ";
     }
 
     return 0;

@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: text/html; charset=cp1251');
-if($_POST['hash'] != "HCXt7xC47HGvVwo_68XX25Tgs789XBZ4fhsP0") exit("#Žøèáêà, äîñòóï çàïðåùåí");
+if($_POST['hash'] != "HCXt7xC47HGvVwo_68XX25Tgs789XBZ4fhsP0") exit("#Ð‹ÑˆÐ¸Ð±ÐºÐ°, Ð´Ð¾ÑÑ‚ÑƒÐ¿ Ð·Ð°Ð¿Ñ€ÐµÑ‰ÐµÐ½");
 
 include_once("mysql/sql_connect.php");
 

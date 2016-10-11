@@ -1,10 +1,10 @@
 <?php
 header('Content-Type: text/html; charset=cp1251');
-if($_POST['hash'] != "HCXt7xC47HGvVwo_68XX25Tgs789XBZ4fhsP0") exit("#Îøèáêà, äîñòóï çàïðåùåí");
+if($_POST['hash'] != "HCXt7xC47HGvVwo_68XX25Tgs789XBZ4fhsP0") exit("#ÐžÑˆÐ¸Ð±ÐºÐ°, Ð´Ð¾ÑÑ‚ÑƒÐ¿ Ð·Ð°Ð¿Ñ€ÐµÑ‰ÐµÐ½");
 
 include_once("mysql/sql_connect.php");
 
 $gid = (int)$_POST['gid'];
-mysqli_query($db, "UPDATE hangman_games SET active=9 WHERE gid='$gid'") or exit("#Íå óäàëîñü ïîäêëþ÷èòüñÿ ê ñåðâåðó, ïîïðîáóéòå ïîçæå");
-exit("Èãðà #".$gid." áûëà óñïåøíî çàêðûòà äëÿ ïîäêëþ÷åíèé");
+mysqli_query($db, "UPDATE hangman_games SET active=9 WHERE gid='$gid'") or exit("#ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒÑÑ Ðº ÑÐµÑ€Ð²ÐµÑ€Ñƒ, Ð¿Ð¾Ð¿Ñ€Ð¾Ð±ÑƒÐ¹Ñ‚Ðµ Ð¿Ð¾Ð·Ð¶Ðµ");
+exit("Ð˜Ð³Ñ€Ð° #".$gid." Ð±Ñ‹Ð»Ð° ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ Ð·Ð°ÐºÑ€Ñ‹Ñ‚Ð° Ð´Ð»Ñ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ð¹");
 ?>

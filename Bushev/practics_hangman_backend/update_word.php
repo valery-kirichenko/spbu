@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: text/html; charset=cp1251');
-if($_POST['hash'] != "HCXt7xC47HGvVwo_68XX25Tgs789XBZ4fhsP0") exit("#Îøèáêà, äîñòóï çàïðåùåí");
+if($_POST['hash'] != "HCXt7xC47HGvVwo_68XX25Tgs789XBZ4fhsP0") exit("#ÐžÑˆÐ¸Ð±ÐºÐ°, Ð´Ð¾ÑÑ‚ÑƒÐ¿ Ð·Ð°Ð¿Ñ€ÐµÑ‰ÐµÐ½");
 
 include_once("mysql/sql_connect.php");
 
@@ -9,7 +9,7 @@ $role = (int)$_POST['role'];
 $tries = (int)$_POST['tries'];
 $letter = mysqli_real_escape_string($db, $_POST['letter']);
 $progress = mysqli_real_escape_string($db, $_POST['progress']);
-if(!isset($progress) || empty($progress)|| !isset($letter) || empty($letter)) exit("#Žøèáêà, ââåäåíî íåêîððåêòíîå ñëîâî");
+if(!isset($progress) || empty($progress)|| !isset($letter) || empty($letter)) exit("#Ð‹ÑˆÐ¸Ð±ÐºÐ°, Ð²Ð²ÐµÐ´ÐµÐ½Ð¾ Ð½ÐµÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ð¾Ðµ ÑÐ»Ð¾Ð²Ð¾");
 
 $win = (int)$_POST['win'];
 $lost = (int)$_POST['lost'];
