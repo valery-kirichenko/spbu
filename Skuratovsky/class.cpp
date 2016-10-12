@@ -24,6 +24,7 @@ Num::~Num()
 int main()
 {
 	Num num1(10,34);
+	num1.~Num();
 	system("pause");
 
 
