@@ -1,7 +1,9 @@
 #include <iostream>
 #include <cstdlib>
-#include <ctime>
+#include <random>
 using namespace std;
+     random_device rd;   // non-deterministic generator  
+     mt19937 gen(rd());
 class Matrix
 
 {   public:
@@ -53,10 +55,10 @@ Matrix Matrix::multiply(Matrix& b)
 };
 Matrix::Matrix()
 {
-	srand(time(0));
+	 
 	for (int i=0; i<3; i++)
 		for (int j=0; j<3; j++)
-			a[i][j]=rand()%3+1;
+			a[i][j]=gen()%10+1;
 };
 int main()
 {
