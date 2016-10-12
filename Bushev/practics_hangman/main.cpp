@@ -28,6 +28,7 @@ const int MIN_WORD_LENGTH = 3;
 const int MAX_WORD_LENGTH = 15;
 
 const int ONLINE_WAIT = 15;
+const int SLEEP_TIME = 1000;
 const int MAX_REQUEST_TRIES = 3;
 
 void show_online_menu(int error);
@@ -49,8 +50,12 @@ bool s_lower(string &str){
     return 0;
 }
 
-bool check_letter(string str, string &ans, char letter){
+bool check_letter(string str, string &ans, char letter, string alphabet_used){
     bool correct = 0;
+
+    for(unsigned int s = 0; s < alphabet_used.size(); s++){
+        if(letter == alphabet_used[s]) return 1;
+    }
 
     for(unsigned int s = 0; s < str.size(); s++){
         if(str[s] == letter){
@@ -60,6 +65,21 @@ bool check_letter(string str, string &ans, char letter){
     }
 
     return correct;
+}
+
+void show_last_letters(char letter, string &alphabet_used){
+    if(letter != '-'){
+        for(unsigned int i = 0; i < alphabet_used.size(); i++){
+            if(alphabet_used[i] == letter){ break; }
+            if(i == alphabet_used.size()-1) alphabet_used += letter;
+        }
+    }
+
+    sort(alphabet_used.begin(), alphabet_used.end());
+    cout << endl << "Открыты буквы: ";
+
+    for(unsigned int i = 0; i < alphabet_used.size(); i++) cout << alphabet_used[i] << " ";
+    cout << endl << "Последняя введенная буква: " << letter << endl;
 }
 
 void show_intro(){
@@ -101,23 +121,31 @@ void show_man(int mmax){
 int start_game(string str){
     string ans = str;
     string stream;
+
+    char last_letter = '-';
     bool correct = 0;
 
+    string alphabet_used;
+    alphabet_used += ans[0];
+    if(ans[0] != ans[ans.size()-1]) alphabet_used += ans[ans.size()-1];
+
     for(unsigned int i = 1; i < ans.size()-1; i++) ans[i] = '*';
-    check_letter(str, ans, ans[0]);
-    check_letter(str, ans, ans[ans.size()-1]);
+    check_letter(str, ans, ans[0], "");
+    check_letter(str, ans, ans[ans.size()-1], "");
 
     for(int i = 0; i < 6; i++){
         show_man(i);
-
-        correct = 0;
+        show_last_letters(last_letter, alphabet_used);
 
         cout << endl << "Вам нужно угадать слово: " << ans << endl;
         cout << "Введите букву: "; cin >> stream;
-        correct = check_letter(str, ans, c_lower(stream[0]));
+
+        last_letter = c_lower(stream[0]);
+        correct = check_letter(str, ans, last_letter, alphabet_used);
 
         if(ans == str){
             show_man(i);
+            show_last_letters(last_letter, alphabet_used);
 
             cout << endl << "Вам нужно угадать слово: " << ans << endl;
             cout << "\nПоздравляем, вы выиграли! Слово отгадано!" << endl;
@@ -129,6 +157,7 @@ int start_game(string str){
     }
 
     show_man(6);
+    show_last_letters(last_letter, alphabet_used);
 
     cout << endl << "Вам нужно угадать слово: " << ans << endl;
     cout << "\nК сожалению, вы не смогли угадать ответ. Правильно: " << str << endl;
@@ -149,12 +178,13 @@ int start_pve(){
         svector.push_back(str);
     }
 
-    if(words == 0) return -1;
+    if(words == 0) return 0;
 
     srand(time(NULL));
     str = svector[rand() % words];
 
-    return start_game(str);
+    while(start_game(str)){ }
+    return 1;
 }
 
 string perform_request(Http::Request request){
@@ -164,6 +194,8 @@ string perform_request(Http::Request request){
     for(int i = 0; i < MAX_REQUEST_TRIES; i++){
         response = http.sendRequest(request);
         if(response.getStatus() == Http::Response::Ok && response.getBody()[0] != '#') break;
+
+        // Sleep(SLEEP_TIME); don't know if it's important, coz this has no effect
     }
 
     return response.getStatus() == Http::Response::Ok ? response.getBody() : "#Ошибка подключения, проверьте соединение";
@@ -197,8 +229,8 @@ bool start_online(string host, string player, int gid, bool role){
     string ans = perform_request(request);
     if(error_connection(ans, gid)) return 0;
 
-    int lsec = 0, sec;
     Clock clock;
+    int sec, lsec = 0;
 
     console_clear();
 
@@ -231,6 +263,7 @@ bool start_online(string host, string player, int gid, bool role){
             if(error_connection(ans, gid)) return 0;
 
             int tries = 6;
+            string alphabet_used;
             string word, progress;
 
             if((role && ans[0] == '1') || (!role && ans[0] == '0')){
@@ -245,8 +278,8 @@ bool start_online(string host, string player, int gid, bool role){
 
                 progress = word;
                 for(unsigned int i = 1; i < progress.size()-1; i++) progress[i] = '*';
-                check_letter(word, progress, progress[0]);
-                check_letter(word, progress, progress[progress.size()-1]);
+                check_letter(word, progress, progress[0], "");
+                check_letter(word, progress, progress[progress.size()-1], "");
 
                 stream << "&word=" << word << "&progress=" << progress << "&tries=6";
                 request.setBody(stream.str());
@@ -263,12 +296,14 @@ bool start_online(string host, string player, int gid, bool role){
                 request.setUri("/9_hangman_backend/status.php");
 
                 int end_type = 0;
+                alphabet_used += word[0];
+                if(word[0] != word[word.size()-1]) alphabet_used += word[word.size()-1];
 
                 while(true){
-                    console_clear();
-
                     ans = perform_request(request);
                     if(error_connection(ans, gid)) return 0;
+
+                    console_clear();
 
                     tries = ans[ans.size()-1] - '0';
                     ans.erase(ans.size()-1, 1);
@@ -283,7 +318,7 @@ bool start_online(string host, string player, int gid, bool role){
                         end_type = -1;
                     }
 
-                    cout << endl << "Последняя введенная буква: " << ans[ans.size()-1] << endl;
+                    show_last_letters(ans[ans.size()-1], alphabet_used);
                     ans.erase(ans.size()-1, 1);
 
                     cout << endl << "Вы загадали слово: " << word << endl;
@@ -297,7 +332,7 @@ bool start_online(string host, string player, int gid, bool role){
                         break;
                     }
 
-                    Sleep(1000);
+                    Sleep(SLEEP_TIME);
                 }
 
                 request.setUri("/9_hangman_backend/letter.php");
@@ -311,14 +346,14 @@ bool start_online(string host, string player, int gid, bool role){
                 while(true){
                     ans = perform_request(request);
                     if(error_connection(ans, gid)) return 0;
-                    if(ans.size() > MIN_WORD_LENGTH) break;
+                    if(ans.size() >= MIN_WORD_LENGTH) break;
                 }
 
                 word = ans;
+                alphabet_used += word[0];
+                if(word[0] != word[word.size()-1]) alphabet_used += word[word.size()-1];
 
                 while(tries > 0){
-                    console_clear();
-
                     stream.str("");
                     stream.clear();
 
@@ -329,12 +364,14 @@ bool start_online(string host, string player, int gid, bool role){
                     ans = perform_request(request);
                     if(error_connection(ans, gid)) return 0;
 
+                    console_clear();
+
                     tries = ans[ans.size()-1] - '0';
                     ans.erase(ans.size()-1, 1);
 
                     show_man(6 - tries);
 
-                    cout << endl << "Последняя введенная буква: " << ans[ans.size()-1] << endl;
+                    show_last_letters(ans[ans.size()-1], alphabet_used);
                     ans.erase(ans.size()-1, 1);
 
                     progress = ans;
@@ -342,10 +379,11 @@ bool start_online(string host, string player, int gid, bool role){
                     cout << endl << "Вам нужно угадать слово: " << progress << endl;
                     cout << "Введите букву: "; cin >> ans;
 
-                    if(!check_letter(word, progress, c_lower(ans[0]))) tries--;
+                    if(!check_letter(word, progress, c_lower(ans[0]), alphabet_used)) tries--;
 
                     if(progress == word){
                         show_man(6 - tries);
+                        show_last_letters(c_lower(ans[0]), alphabet_used);
 
                         cout << endl << "Вам нужно угадать слово: " << word << endl;
                         cout << "\nПоздравляем, вы выиграли! Слово отгадано!" << endl;
@@ -353,6 +391,7 @@ bool start_online(string host, string player, int gid, bool role){
                         stream << "&win=1";
                     }else if(tries <= 0){
                         show_man(6);
+                        show_last_letters(c_lower(ans[0]), alphabet_used);
 
                         cout << endl << "Вам нужно угадать слово: " << progress << endl;
                         cout << "\nК сожалению, вы не смогли угадать ответ. Правильно: " << word << endl;
@@ -371,7 +410,13 @@ bool start_online(string host, string player, int gid, bool role){
             }
 
             cout << "Хотите сыграть еще раз (y - да)? -> "; cin >> ans;
-            return ans[0] == 'y' || ans[0] == 'д';
+
+            if(ans[0] == 'y' || ans[0] == 'д'){
+                close_game(gid);
+                return 1;
+            }
+
+            return 0;
         }
     }
 }
@@ -397,10 +442,11 @@ void waiting_player(string name, int gid){
     console_clear();
 
     Clock clock;
-    int sec = 0, ms = 0, lsec = 0, lms = 0, lstate = 0;
+    int sec = 0, ms, lsec = 0, lms = 0, lstate = 0;
 
+    cout << "Комната игры #" << gid << endl << endl;
     cout << "Ожидание соперника для начала игры... " << LOADING[0] << endl;
-    cout << "Осталось времени до конца: " << LOADING_TIME - sec;
+    cout << "Осталось времени до конца: " << LOADING_TIME;
 
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -409,14 +455,14 @@ void waiting_player(string name, int gid){
         sec = clock.getElapsedTime().asSeconds();
 
         if(lms < ms){
-            SetConsoleCursorPosition(h, {39, 0});
+            SetConsoleCursorPosition(h, {39, 2});
 
             cout << "\b" << LOADING[lstate++ % 4];
             lms = ms + LOADING_PING;
         }
 
         if(lsec < sec){
-            SetConsoleCursorPosition(h, {29, 1});
+            SetConsoleCursorPosition(h, {29, 3});
 
             cout << "\b\b";
 
@@ -545,12 +591,13 @@ void show_online_menu(string name, int error){
         if(gid > 0) open_connection(name, gid);
     }else if(str == "list" || str == "список") show_game_list();
     else if(str != "exit" && str != "выход") code = 1;
+    else return;
 
     show_online_menu(name, code);
 }
 
 int start_pvp(){
-    cout << "Загадайте слово для вашего собеседника: ";
+    cout << "\nЗагадайте слово для вашего собеседника: ";
     string str; cin >> str;
 
     if(s_lower(str) || str.size() < MIN_WORD_LENGTH || str.size() > MAX_WORD_LENGTH){
@@ -561,15 +608,12 @@ int start_pvp(){
     return start_game(str);
 }
 
-int choose_pvp(){
+void choose_pvp(){
     cout << "\nВы хотите начать игру по интернету? (нет - offline): ";
     string str; cin >> str;
 
-    if(str[0] == 'y' || str[0] == 'д'){
-        show_online_menu("", 0);
-        return 1;
-    }
-    return start_pvp();
+    if(str[0] == 'y' || str[0] == 'д') show_online_menu("", 0);
+    else while(start_pvp()){ }
 }
 
 int main(){
@@ -582,24 +626,16 @@ int main(){
     while(cin >> uans){
         if(uans == "exit" || uans == "выход") break;
         else if(uans == "pve" || uans == "пве"){
-            switch(start_pve()){
-                case 0: return 0;
-                case -1:{
-                    cout << "Ошибка, не удалось начать игру. Выберите режим повторно: ";
-                    break;
-                }default:{
-                    console_clear();
-                    show_intro();
-                    break;
-                }
-            }
+            if(!start_pve()) cout << "Ошибка, не удалось начать игру. Выберите режим повторно: ";
+
+            console_clear();
+            show_intro();
         }
         else if(uans == "pvp" || uans == "пвп"){
-                if(!choose_pvp()) return 0;
-                else{
-                    console_clear();
-                    show_intro();
-                }
+            choose_pvp();
+
+            console_clear();
+            show_intro();
         }
         else cout << "Ошибка, для начала игры введите pve или pvp: ";
     }
