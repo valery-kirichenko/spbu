@@ -11,9 +11,9 @@ int main() {
 			std::cin >> t;
 			sum += t;
 		}
-		std::cout << "Сумма элементов " << i << " набора: " << sum << std::endl;
-		sum = 0;
 	}
+
+	std::cout << "Общая сумма элементов равна " << sum << std::endl;
 
 	return 0;
 }
