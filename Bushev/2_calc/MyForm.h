@@ -1,6 +1,6 @@
 #pragma once
 
-namespace VIsualCalc {
+namespace Calc {
 
 	int oper_type;
 
