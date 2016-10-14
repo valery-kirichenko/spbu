@@ -110,8 +110,6 @@ void screen(int scr, std::string message = "", int img = -1, std::string word = 
 			printed += 11;
 			break;
 	}
-
-
 }
 
 std::string alphabetL = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
@@ -170,7 +168,8 @@ void game(std::string word, std::string message = "") {
 	while (attempt < 6) {
 		screen(1, message, attempt, mod_word);
 		message = "";
-		std::cin >> guess;
+		//std::cin >> guess;
+		std::getline(std::cin, guess);
 		printed++;
 		guess = to_lower(guess);
 		if (guess == "false") {
@@ -211,31 +210,32 @@ void game(std::string word, std::string message = "") {
 	}
 }
 
-void play_computer() {
+std::string play_computer() {
 	std::ifstream dict("words.txt");
-	std::string word, mod_word;
-	int word_count = 0;
-	while (std::getline(dict, word))
-        ++word_count; // Calculate lines in the words file (each line is a word)
-	dict.clear();
-	dict.seekg(0, std::ios::beg); // Return to the beggining of the file
-	std::random_device generator;
-	std::uniform_int_distribution<int> distribution(0, word_count);
-	int rand = distribution(generator); // Select random word
-	for (int i = 0; i < rand; i++)
-		std::getline(dict, word);
-	dict.close();
-	game(word, "Слово выбрано случайным образом из словаря.\n");
+    if (dict.is_open()) {
+        std::string word;
+        int word_count = 0;
+        while (std::getline(dict, word))
+            ++word_count; // Calculate lines in the words file (each line is a word)
+        dict.clear();
+        dict.seekg(0, std::ios::beg); // Return to the beginning of the file
+        std::random_device generator;
+        std::uniform_int_distribution<int> distribution(0, word_count);
+        int rand = distribution(generator); // Select random word
+        for (int i = 0; i < rand; i++)
+            std::getline(dict, word);
+        dict.close();
+        game(word, "Слово выбрано случайным образом из словаря.\n");
+        return "";
+    } else {
+        return "Не могу открыть словарь (файл words.txt).\n";
+    }
 }
 
 void play_friend(std::string message = "") {
 	std::string word;
 	screen(2, message);
 	std::cin >> word;
-<<<<<<< Updated upstream
-	std::cout << "\033[2F\033[K"; // Remove word that was entered by second player
-=======
->>>>>>> Stashed changes
 	word = to_lower(word);
 	if (word == "false") {
 		message = "Слово должно состоять из букв русского алфавита\n";
@@ -258,8 +258,7 @@ int main() {
 		printed++;
 		switch (action) {
 			case 1:
-				message = "";
-				play_computer();
+				message = play_computer();
 				break;
 			case 2:
 				message = "";
