@@ -4,7 +4,7 @@
 using namespace std;
 
 class Circle;
-class Square;
+//class Square;
 
 class Square {
 	int side;
