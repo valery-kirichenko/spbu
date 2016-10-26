@@ -1,0 +1,17 @@
+#include <iostream>
+using namespace std;
+
+int main()
+{ int x,y;
+cin >> x >> endl;
+cin >> y >> endl;
+try {
+	if (y==0) {throw 1;}}
+catch (int i)
+	cout << "Error";
+if (y!=0) {
+	cout << x/y;
+}
+
+	return 0;
+}
