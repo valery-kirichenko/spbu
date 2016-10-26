@@ -29,7 +29,7 @@ public:
 		std::cout << "C Constructor with parameter a: " << a << std::endl;
 	}
 
-	Child(int a, int b) : Parent(a ,b) {
+	Child(int a, int b) : Parent(a, b) {
 		std::cout << "C Constructor with 2 parameters a, b: " << a << ", " << b << std::endl;
 	}
 
