@@ -3,22 +3,23 @@
 struct list {
 	int value;
 	list *next;
+	list *prev;
 };
 
-void print_list(list *lst) {
+void print_list(list *lst, bool upside_down = false) {
 	list *p = lst;
 	while (p != nullptr) {
 		std::cout << p << " " << p->value << std::endl;
-		p = p->next;
+		p = upside_down ? p->prev : p->next;
 	}
 }
 
-int get_list_length(list *lst) {
+int get_list_length(list *lst, bool upside_down = false) {
 	int length = 0;
 	list *p = lst;
 	while (p != nullptr) {
 		length++;
-		p = p->next;
+		p = upside_down ? p->prev : p->next;
 	}
 	return length;
 }
@@ -29,34 +30,39 @@ list* insert_item(list *lst, int pos, int value) {
 		list *n = new list;
 		n->value = value;
 		n->next = lst;
+		n->prev = nullptr;
 
 		return n;
 	} else if (pos >= length) {
 		if (pos > length) pos = length;
 		int i = 0;
-		list *prev = lst;
+		list *l = lst;
 		while (i < pos - 1) {
 			i++;
-			prev = prev->next;
+			l = l->next;
 		}
-		prev->next = new list;
-		prev = prev->next;
-		prev->value = value;
-		prev->next = nullptr;
+		list *p = l;
+		l->next = new list;
+		l = l->next;
+		l->prev = p;
+		l->value = value;
+		l->next = nullptr;
 
 		return lst;
 	} else if (pos < length && pos > 0) {
 		int i = 0;
-		list *prev = lst;
+		list *l = lst;
 		while (i < pos - 1) {
 			i++;
-			prev = prev->next;
+			l = l->next;
 		}
-		list *next = prev->next;
-		prev->next = new list;
-		prev = prev->next;
-		prev->value = value;
-		prev->next = next;
+		list *next = l->next;
+		l->next = new list;
+		list *p = l;
+		l = l->next;
+		l->value = value;
+		l->next = next;
+		l->prev = p;
 
 		return lst;
 	} else {
@@ -67,6 +73,7 @@ list* insert_item(list *lst, int pos, int value) {
 list* remove_item(list *lst, int pos) {
 	if (pos == 0) {
 		list *next = lst->next;
+		next->prev = nullptr;
 		delete lst;
 		return next;
 	} else if (pos < get_list_length(lst) && pos > 0) {
@@ -79,22 +86,24 @@ list* remove_item(list *lst, int pos) {
 		list *next = prev->next->next;
 		delete prev->next;
 		prev->next = next;
+		if (next != nullptr) next->prev = prev;
 		return lst;
 	} else {
 		return lst;
 	}
 }
 
-list* search_item(list *lst, int value) {
-	list *prev = lst;
-	int length = get_list_length(lst),
+list* search_item(list *lst, int value, bool upside_down = false) {
+	list *p = lst;
+	int length = get_list_length(lst, upside_down),
 	    i = 0;
-	while (prev->value != value && i < length) {
+
+	while (p->value != value && i < length) {
 		i++;
-		if (i < length) prev = prev->next;
+		if (i < length) p = upside_down ? p->prev : p->next;
 	}
 
-	if (i < length) return prev;
+	if (i < length) return p;
 	else return nullptr;
 }
 
@@ -105,16 +114,18 @@ int main() {
 	list *lst = new list;
 	list *p = lst;
 
+	p->prev = nullptr;
 	std::cin >> p->value;
 
 	for (int i = 0; i < n - 1; i++) {
+		list *n = p;
 		p->next = new list;
 		p = p->next;
+		p->prev = n;
 		std::cin >> p->value;
 	}
 	p->next = nullptr;
 
-	std::cout << "Input ended" << std::endl;
 	print_list(lst);
 
 	int pos, value;
@@ -136,7 +147,38 @@ int main() {
 	if (find != nullptr) std::cout << find << " " << find->value << std::endl;
 	else std::cout << "Not found" << std::endl;
 
-	
+	p = lst;
+	while (p->next != nullptr) p = p->next;
+	std::cout << "Search upside down: Enter value: ";
+	std::cin >> value;
+	find = search_item(p, value, true);
+	if (find != nullptr) std::cout << find << " " << find->value << std::endl;
+	else std::cout << "Not found" << std::endl;
+
+	std::cout << "\n\n===== Задание 3 =====\n\n";
+	std::cin >> n;
+	list *seq = new list;
+	p = seq;
+
+	p->prev = nullptr;
+	std::cin >> p->value;
+
+	for (int i = 0; i < n - 1; i++) {
+		list *n = p;
+		p->next = new list;
+		p = p->next;
+		p->prev = n;
+		std::cin >> p->value;
+	}
+	p->next = nullptr;
+
+	int sum = 0;
+	for (int i = 0; i < n; i++) {
+		sum += seq->value * p->value;
+		seq = seq->next;
+		p = p->prev;
+	}
+	std::cout << "Sum: " << sum << std::endl;
 
 	return 0;
 }
