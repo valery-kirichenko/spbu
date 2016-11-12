@@ -32,30 +32,14 @@ bool Number(Pharmacy &A, Pharmacy &B)
 	return A.number < B.number;
 };
 
-bool z(Pharmacy &A, Pharmacy &B, int &i, int &min)
-{
-
-	bool n = 0;
-	if (unsigned(A.name[i]) > unsigned(B.name[i])) n = 1;
-	else if ((unsigned(A.name[i]) == unsigned(B.name[i]))&(i<min))
-	{
-		i++;
-		z(A, B, i, min);
-	}
-	return n;
-};
 
 bool Name(Pharmacy &A, Pharmacy &B)
 {
-	int i = 1;
-	bool n = 0;	
-	int min = 0;
-	if (A.name.length() < B.name.length()) min = A.name.length();
-	else min = B.name.length();
-	n = z(A, B, i, min);
+	bool n = 0;
+	if (A.name.compare(B.name) < 0) n = 1;
+	else n = 0;
 	return n;
-};
-
+}; 
 
 
 bool Data(Pharmacy &A, Pharmacy &B)
