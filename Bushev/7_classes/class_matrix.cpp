@@ -17,16 +17,16 @@ public:
 
 	void det(){
 		if(size < 1){
-			cout << "Невозможно вычислить det матрицы..." << endl;
+			cout << "Such a little size doesn't support counting det..." << endl;
 		}else{
-			cout << "det вашей матрицы: ";
+			cout << "Your determinator: ";
 
 			if(size == 1) cout << vals[0][0];
 			else if(size == 2) cout << vals[0][0] * vals[1][1] - vals[0][1] * vals[1][0];
-			else if(size == 3) 
-				cout << vals[0][0] * vals[1][1] * vals[2][2] 
-				+ vals[2][0] * vals[0][1] * vals[1][2] 
-				+ vals[0][2] * vals[1][0] * vals[2][1] 
+			else if(size == 3)
+				cout << vals[0][0] * vals[1][1] * vals[2][2]
+				+ vals[2][0] * vals[0][1] * vals[1][2]
+				+ vals[0][2] * vals[1][0] * vals[2][1]
 
 				- vals[0][2] * vals[1][1] * vals[2][0]
 				- vals[2][2] * vals[1][0] * vals[0][1]
@@ -39,8 +39,7 @@ public:
 
 ostream& operator<<(ostream& a, Matrix m){
 	if(m.size < 1) return a;
-
-	cout << "Матрица: " << endl;
+	cout << "Matrix: " << endl;
 
 	for(int i = 0; i < m.size; i++){
 		for(int j = 0; j < m.size; j++){
@@ -58,7 +57,7 @@ ostream& operator<<(ostream& a, Matrix m){
 istream& operator>>(istream& a, Matrix &m){
 	if(m.size < 1) return a;
 
-	cout << "Введите " << m.size*m.size << " элементов: ";
+	cout << "Fill in [" << m.size << "x" << m.size << "] matrix: ";
 
 	for(int i = 0; i < m.size; i++){
 		for(int j = 0; j < m.size; j++){
@@ -73,7 +72,7 @@ Matrix operator+(Matrix a, Matrix b){
 	Matrix *c = new Matrix(0);
 
 	if(a.size != b.size || a.size == 0){
-		cout << "Невозможно сложить данные матрицы" << endl;
+		cout << "Can't perform addition" << endl;
 	}else{
 		c = new Matrix(a.size);
 		c->size = a.size;
@@ -92,7 +91,7 @@ Matrix operator-(Matrix a, Matrix b){
 	Matrix *c = new Matrix(0);
 
 	if(a.size != b.size || a.size == 0){
-		cout << "Невозможно вычесть данные матрицы" << endl;
+		cout << "Can't perform subtraction" << endl;
 	}else{
 		c = new Matrix(a.size);
 		c->size = a.size;
@@ -111,7 +110,7 @@ Matrix operator*(Matrix a, Matrix b){
 	Matrix *c = new Matrix(0);
 
 	if(a.size != b.size || a.size == 0){
-		cout << "Невозможно перемножить данные матрицы" << endl;
+		cout << "Can't perform multiplying" << endl;
 	}else{
 		c = new Matrix(a.size);
 		c->size = a.size;
@@ -133,13 +132,13 @@ int main(){
 
 	int s1, s2;
 
-	cout << "Введите размер матриц: ";
+	cout << "Set a size of the 1st & the 2nd matrix: ";
 	cin >> s1 >> s2;
 
 	Matrix a(s1), b(s2);
 	cin >> a >> b;
 	cout << endl << a << b;
-	
+
 	cout << "a - b: = ";
 	cout << a - b << "a + b: = ";
 	cout << a + b << "a * b: = ";
@@ -149,7 +148,5 @@ int main(){
 	b.det();
 
 	cout << endl;
-	system("pause");
-
 	return 0;
 }
