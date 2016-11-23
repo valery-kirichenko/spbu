@@ -108,6 +108,7 @@ int main() {
 		}
 	}
 	Matrix first(m);
+
 	std::cout << "\n";
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 3; j++) {
@@ -116,8 +117,8 @@ int main() {
 	}
 	Matrix second(m);
 
-	std::cout << "\n+:" << std::endl;
-	(first + second).print_matrix();
+	//std::cout << "\n+:" << std::endl;
+	//(first + second).print_matrix();
 
 	std::cout << "\n*:" << std::endl;
 	(first * second).print_matrix();
