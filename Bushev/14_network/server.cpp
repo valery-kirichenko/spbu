@@ -26,23 +26,23 @@ int main(){
 	SOCKADDR.sin_addr.S_un.S_addr = inet_addr ("127.0.0.1"); 
 	SOCKADDR.sin_port = htons(7878);
 
-	if(bind(s, (sockaddr *) &SOCKADDR, sizeof (SOCKADDR))){
+	if(SOCKET_ERROR == (bind(s, (sockaddr *) &SOCKADDR, sizeof (SOCKADDR)))){
 		cout << "Bind error" << endl;
 		return 1;
 	}
 
 	if (FAILED (listen (s, SOMAXCONN) ) ){ 
 		cout << "Listener error" << endl;
-		 return 1;
+		return 1;
 	}
 
 	SOCKET new_sock;
 	sockaddr_in new_ca;
 	int new_len = sizeof (new_ca);
 	if (FAILED (new_sock = accept (s, (sockaddr* ) &new_ca, &new_len) ) ) {
-		cout << "Error accepting..." << endl;
+		cout << "Connection error..." << endl;
 		return 1;
-	}else cout << "Accepted connection!\n";
+	}else cout << "Connection set\n";
 
 	char* buff = "Get out of here\0";
 	if(SOCKET_ERROR == (send (new_sock, (char*) buff, strlen(buff), 0) ) ){
