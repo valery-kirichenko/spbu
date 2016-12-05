@@ -15,6 +15,36 @@ namespace nd {
 	typedef node* pnode;
 
 	vector <int> sorted;
+	const int szo = 80;
+	vector < vector <int> > out(szo, vector <int>(szo));
+	vector < vector <bool> > outok(szo, vector <bool>(szo));
+	void print2(pnode t, int level, int col) {
+		col = min(max(0, col), szo - 1);
+		if (t == NULL)
+			return;
+		out[level][col] = t->key;
+		outok[level][col] = true;
+		print2(t->left, level + 1, col - szo / (1 << (level + 2)));
+		print2(t->right, level + 1, col + szo / (1 << (level + 2)));
+		if (t->pred == NULL) {
+			for (int i = 0; i < szo; i++) {
+				bool was = false;
+				for (int j = 0; j < szo; j++)
+					if (outok[i][j])
+						was = true;
+				if (was)
+					for (int j = 0; j < szo; j++) {
+						if (outok[i][j])
+							cout << out[i][j];
+						else
+							cout << ' ';
+					}
+				cout << endl;
+				if (!was)
+					break;
+			}
+		}
+	}
 	void writeSorted(pnode t) {
 		if (t == NULL)
 			return;
@@ -104,6 +134,66 @@ namespace nd {
 			cout << i << ' ';
 		cout << endl;
 	}
+	pnode eraseMax(pnode& t) {
+		if (t->right == NULL) {
+			pnode x = t;
+			if (t->pred->right == t)
+				t->pred->right = t->left;
+			else
+				t->pred->left = t->left;
+			return x;
+		}
+		return eraseMax(t->right);
+	}
+	pnode erase(pnode& t) {
+		if (!t || (!t->left && !t->right)) {
+			delete t;
+			return t = NULL;
+		}
+		if (!t->left || !t->right) {
+			pnode tmp = t;
+			t = t->left ? t->left : t->right;
+			delete tmp;
+			return t;
+		}
+		pnode tmp = eraseMax(t->left);
+		pnode lf = t->left, rt = t->right;
+		delete t;
+		t = tmp;
+		t->left = lf;
+		t->right = rt;
+		return t;
+	}
+	int simmetrical(pnode t) {
+		vector <pnode> v[2];
+		v[0].push_back(t);
+		int res = 2;
+		for (int i = 0; ; i++) {
+			v[(i + 1) % 2].clear();
+			int now = v[i % 2].size();
+			bool was = false;
+			for (int j = 0; j < now; j++) {
+				pnode a = v[i % 2][j]->left, b = v[i % 2][j]->right, c = v[i % 2][now - j - 1]->right, d = v[i % 2][now - j - 1]->left;
+				if ((a == NULL) != (c == NULL) || (b == NULL) != (d == NULL))
+					return 0;
+				if (a != NULL) {
+					v[(i + 1) % 2].push_back(a);
+					if (a->key != c->key)
+						res = 1;
+					was = true;
+				}
+				if (b != NULL) {
+					v[(i + 1) % 2].push_back(b);
+					if (b->key != d->key)
+						res = 1;
+					was = true;
+				}
+			}
+			if (!was)
+				break;
+		}
+		return res;
+	}
 };
 
 using namespace nd;
@@ -111,7 +201,7 @@ using namespace nd;
 void treeFunctions() {
 	pnode t = NULL;
 	pnode root = NULL;
-	cout << "Commands:\ninsert <key>\nclear\nprintSorted\nclear\nfind <x>\nheight\nsize\nleaves\ndegree\nprint\nright\nleft\nup\n\n";
+	cout << "Commands:\ninsert <key>\nclear\nprintSorted\nclear\nfind <x>\nheight\nsize\nleaves\ndegree\nprint\nright\nleft\nup\nerase\nsymmetry\n\n";
 	while (true) {
 		cout << "Command: ";
 		string s; cin >> s;
@@ -146,7 +236,10 @@ void treeFunctions() {
 		else if (s == "level")
 			cout << level(t) << endl;
 		else if (s == "print")
-			print(t);
+			if (size(t) > szo/5 || t == NULL)
+				print(t);
+			else
+				print2(t, 0, szo / 2);
 		else if (s == "right")
 			if (t->right != NULL)
 				t = t->right;
@@ -162,6 +255,22 @@ void treeFunctions() {
 				t = t->pred;
 			else
 				cout << "loser\n";
+		else if (s == "erase") {
+			bool b = t == root;
+			t = erase(t);
+			if (b)
+				root = t;
+		}
+		else if (s == "symmetry") {
+			int res = simmetrical(t);
+			if (res == 0)
+				cout << "No symetry";
+			if (res == 1)
+				cout << "Symmetrical structure";
+			if (res == 2)
+				cout << "The most symmetrical tree!";
+			cout << endl;
+		}
 		else
 			cout << "!!!Warning, wrong command!!!\n";
 	}
