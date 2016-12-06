@@ -1,4 +1,4 @@
-// server.cpp: определяет точку входа для консольного приложения.
+// server.cpp: Г®ГЇГ°ГҐГ¤ГҐГ«ГїГҐГІ ГІГ®Г·ГЄГі ГўГµГ®Г¤Г  Г¤Г«Гї ГЄГ®Г­Г±Г®Г«ГјГ­Г®ГЈГ® ГЇГ°ГЁГ«Г®Г¦ГҐГ­ГЁГї.
 //
 
 #include "stdafx.h" 
@@ -16,7 +16,7 @@ int main()
 	setlocale(0, "");
 	WSADATA wsa;
 	sockaddr_in stSockAddr; 
-	char repl[11]="Hello,pidr";
+	char repl[11]="Hello,dear";
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
 	{
 		printf("Failed. Error Code : %d", WSAGetLastError());system("pause");
@@ -25,7 +25,7 @@ int main()
 	int i32SocketFD = socket(AF_INET, SOCK_STREAM,0);
 
 	if (i32SocketFD == -1) {
-		perror("ошибка при создании сокета");system("pause");
+		perror("Г®ГёГЁГЎГЄГ  ГЇГ°ГЁ Г±Г®Г§Г¤Г Г­ГЁГЁ Г±Г®ГЄГҐГІГ ");system("pause");
 		exit(EXIT_FAILURE);
 	}
 
@@ -36,7 +36,7 @@ int main()
 	stSockAddr.sin_addr.s_addr =INADDR_ANY;
 
 	if (bind(i32SocketFD, (struct sockaddr*) &stSockAddr, sizeof(stSockAddr)) == -1) {
-		perror("Ошибка: связывания");system("pause");
+		perror("ГЋГёГЁГЎГЄГ : Г±ГўГїГ§Г»ГўГ Г­ГЁГї");system("pause");
 
 		shutdown(i32SocketFD,1); 
 		exit(EXIT_FAILURE);
@@ -53,7 +53,7 @@ int main()
 		int i32ConnectFD = accept(i32SocketFD, 0, 0);
 
 		if (i32ConnectFD < 0) {
-			perror("Ошибка: принятия");system("pause");
+			perror("ГЋГёГЁГЎГЄГ : ГЇГ°ГЁГ­ГїГІГЁГї");system("pause");
 			shutdown(i32SocketFD, 1);
 			exit(EXIT_FAILURE);
 		}
