@@ -19,8 +19,8 @@ int main()
 	char repl[11]="Hello,dear";
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
 	{
-		printf("Failed. Error Code : %d", WSAGetLastError());system("pause");
-		return 1;
+		perror("Failed.");system("pause");
+		exit(EXIT_FAILURE);
 	}
 	int i32SocketFD = socket(AF_INET, SOCK_STREAM,0);
 
@@ -42,11 +42,7 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 	listen(i32SocketFD, 3);
-	/*if (connect(i32SocketFD, (sockaddr*)&stSockAddr, sizeof(stSockAddr)) < 0) {
-		std::cout << "Connection failed" << std::endl;	system("pause");
-		return 1;
-		
-	}*/
+	
 	int read_size;
 	for (;;)
 	{
@@ -57,21 +53,8 @@ int main()
 			shutdown(i32SocketFD, 1);
 			exit(EXIT_FAILURE);
 		}
-		
-		
-	
-			send(i32ConnectFD, repl, 11, 0);
-		/*read_size = recv(i32ConnectFD, "Hello,pidr", 10, 0);
-		
-		if (read_size == 0) {
-			std::cout << "Client disconnected" << std::endl;
-
-		}
-		else if (read_size == -1) {
-			std::cout << "recv failed" << std::endl;
-
-		}*/
+		send(i32ConnectFD, repl, 11, 0);
 	}
-	system("pause");
+	shutdown(i32SocketFD,1);
 	return 0;
 }
