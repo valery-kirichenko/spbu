@@ -275,28 +275,6 @@ node *maximum(node *ptr)
 	}
 	return ptr;
 }
-void transplant(node *tree, node *u, node *v)
-{
-	if (u == nil) {return;}
-	if (u == u->prev->left) 
-	{
-		u->prev->left = v;
-	}
-	else {u->prev->right = v;}
-	u->prev = v->prev;
-}
-
-void delete_node(node *tree, node *z)
-{
-	node *y = z;
-	node *x;
-
-	if (z->left == nil)
-	{
-		x = z->right;
-		z = z->right;
-	}
-}
 int main()
 {
 	node *tree = new node;
