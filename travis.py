@@ -16,5 +16,5 @@ for i in range(0, len(js)-1):
     process.wait()
 
     if os.path.exists(fl[i]['filename'] + '.' + i) is False:
-	return 1;
+	return 1
     
