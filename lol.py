@@ -6,14 +6,15 @@ import requests
 reqid = os.environ['TRAVIS_PULL_REQUEST']
 js = requests.get('https://api.github.com/repos/valera5505/SPbU/pulls/' + reqid + '/files').json()
 
-for fl in js:
-    if fl['status'] == 'removed':
+for i in range(0, len(js)-1):
+    if fl[i]['status'] == 'removed':
         continue
-    if not fl['filename'].endswith('.cpp'):
+    if not fl[i]['filename'].endswith('.cpp'):
         continue
-    print(fl['filename'] + ' is compiling')
-    process = subprocess.Popen(['g++', '-o', fl['filename'] + '.fuck',fl['filename']], stdout=subprocess.PIPE)
+    print(fl[i]['filename'] + ' is compiling')
+    process = subprocess.Popen(['g++', '-o', fl[i]['filename'] + '.' + i,fl[i]['filename']], stdout=subprocess.PIPE)
     process.wait()
-    process = subprocess.Popen(['./' + fl['filename'] + '.fuck'], stdout=subprocess.PIPE)
-    process.wait()
-	
+
+    if !os.path.exists(fl[i]['filename'] + '.' + i):
+	return 1;
+    
