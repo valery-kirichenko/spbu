@@ -6,7 +6,7 @@ import requests
 reqid = os.environ['TRAVIS_PULL_REQUEST']
 js = requests.get('https://api.github.com/repos/valera5505/SPbU/pulls/' + reqid + '/files').json()
 
-for i in range(0, len(js)-1):
+for i in range(len(js)):
     if js[i]['status'] == 'removed':
         continue
     if not js[i]['filename'].endswith('.cpp'):
