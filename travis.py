@@ -15,6 +15,6 @@ for i in range(0, len(js)-1):
     process = subprocess.Popen(['g++', '-o', fl[i]['filename'] + '.' + i,fl[i]['filename']], stdout=subprocess.PIPE)
     process.wait()
 
-    if os.path.exists(fl[i]['filename'] + '.' + i) is False:
-	return 1
+    if not os.path.exists(fl[i]['filename'] + '.' + i):
+        exit(1)
     
