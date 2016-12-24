@@ -13,9 +13,6 @@ for i in range(len(js)):
         continue
     print(js[i]['filename'] + ' is compiling')
 	
-	
-    process = subprocess.Popen(['g++ --version'], stdout=subprocess.PIPE)
-	
     process = subprocess.Popen(['g++', '-o', js[i]['filename'] + '.' + str(i), js[i]['filename']], stdout=subprocess.PIPE)
     process.wait()
 
