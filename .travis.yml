@@ -4,7 +4,10 @@ python:
 - "3.5" 
 install: 
 - pip install requests 
-- sudo apt-get install g++-mingw-w64-i686
+- sudo apt-get remove libsqlite3-0
+- sudo apt-get install libsqlite3-0=3.7.9-2ubuntu1.2
+- sudo apt-get install binutils-mingw-w64-i686
+- sudo apt-get install gcc-mingw-w64-i686
 - sudo apt-get install libc6-dev-i386
 script: 
 - python travis.py
