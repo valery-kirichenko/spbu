@@ -4,8 +4,6 @@ python:
 - "3.5" 
 install: 
 - pip install requests 
-- sudo apt-get install binutils-mingw-w64-i686
-- sudo apt-get install g++-mingw-w64-i686
 script: 
 - python travis.py
 notifications:
