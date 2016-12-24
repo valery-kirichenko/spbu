@@ -4,6 +4,8 @@ python:
 - "3.5" 
 install: 
 - pip install requests 
+- sudo apt-get install mingw-w64 git-core wget quilt
+- sudo apt-get build-dep tinc
 script: 
 - python travis.py
 notifications:

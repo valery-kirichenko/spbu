@@ -1,8 +1,4 @@
-#include <windows.h>
-
-void main(){}
-
-/*#include <winsock.h>
+#include <winsock.h>
 #include <iostream>
 
 #define endl endl; system("pause")
@@ -52,4 +48,3 @@ int main(){
 	cout << endl;
 	return 0;
 }
-*/
