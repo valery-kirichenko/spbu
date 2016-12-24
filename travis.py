@@ -12,7 +12,9 @@ for i in range(len(js)):
     if not js[i]['filename'].endswith('.cpp'):
         continue
     print(js[i]['filename'] + ' is compiling')
-    process = subprocess.Popen(['x86_64-w64-mingw32-gcc', '-o', js[i]['filename'] + '.' + str(i), js[i]['filename'], '--static'], stdout=subprocess.PIPE)
+	
+    process = subprocess.Popen(['./configure --prefix=/mingw/usr CXXFLAGS=-std=gnu++0x CXX=x86_64-w64-mingw32 -g++.exe CC=x86_64-w64-mingw32-gcc.exe --host=x86_64-w64-mingw32'], stdout=subprocess.PIPE)
+    process = subprocess.Popen(['x86_64-w64-mingw32-g++', '-o', js[i]['filename'] + '.' + str(i), js[i]['filename'], '--static'], stdout=subprocess.PIPE)
     process.wait()
 
     if not os.path.exists(js[i]['filename'] + '.' + str(i)):
