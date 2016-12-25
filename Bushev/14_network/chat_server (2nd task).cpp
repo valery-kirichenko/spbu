@@ -6,6 +6,9 @@
 
 #define cout std::cout
 #define endl std::endl
+#define string std::string
+#define getline std::getline
+#define cin std::cin
 
 // using namespace std; std err
 
