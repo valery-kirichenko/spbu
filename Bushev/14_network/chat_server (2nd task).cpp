@@ -1,16 +1,9 @@
 #include <winsock.h>
 #include <iostream>
 #include <thread>
-
 #include <ostream>
 
-#define cout std::cout
-#define endl std::endl
-#define string std::string
-#define getline std::getline
-#define cin std::cin
-
-// using namespace std; std err
+using namespace std;
 
 const int MAX_SIZE = 2048;
 
