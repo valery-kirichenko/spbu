@@ -4,7 +4,10 @@
 
 #include <ostream>
 
-using namespace std;
+#define cout std::cout
+#define endl std::endl
+
+// using namespace std; std err
 
 const int MAX_SIZE = 2048;
 
