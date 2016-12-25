@@ -13,7 +13,7 @@ for i in range(len(js)):
         continue
     print(js[i]['filename'] + ' is compiling')
 	
-    process = subprocess.Popen(['g++', '-o', js[i]['filename'] + '.' + str(i), js[i]['filename'], '-lws2_32', '-pthreads'], stdout=subprocess.PIPE)
+    process = subprocess.Popen(['g++', '-o', js[i]['filename'] + '.' + str(i), js[i]['filename']], stdout=subprocess.PIPE)
     process.wait()
 
     if not os.path.exists(js[i]['filename'] + '.' + str(i)):
