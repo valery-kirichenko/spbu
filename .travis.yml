@@ -4,6 +4,7 @@ python:
 - "3.5" 
 install: 
 - pip install requests
+- sudo apt-get update
 - sudo apt-get install binutils-mingw-w64-x86-64
 - sudo apt-get install g++-mingw-w64-x86-64
 script: 
