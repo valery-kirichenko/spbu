@@ -1,6 +1,6 @@
 #include <winsock.h>
 #include <iostream>
-#include <pthread>
+#include <thread>
 #include <ostream>
 
 using namespace std;
