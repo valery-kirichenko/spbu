@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include <sstream>
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
@@ -142,7 +143,7 @@ private:
 
 			sockaddr_in clientSockAddr;
 			int			clientSockSize = sizeof(clientSockAddr);
-
+			std::vector <std::thread> vt;
 			while (true) {
 				SOCKET hClientSocket = INVALID_SOCKET;
 				hClientSocket = accept(hSocket, (sockaddr*)(&clientSockAddr), &clientSockSize);
@@ -150,10 +151,10 @@ private:
 				if (hClientSocket == INVALID_SOCKET)
 					throw ROTException("accept function failed.");
 
-				std::thread th(&Server::HandleConnection, this, hClientSocket, std::cref(clientSockAddr));
-				th.join();
+				vt.push_back(std::thread(&Server::HandleConnection, this, hClientSocket, std::cref(clientSockAddr)));
 			}
-
+			for (int i = 0; i < vt.size(); i++)
+				vt[i].join();
 		}
 		catch (ROTException e)
 		{
