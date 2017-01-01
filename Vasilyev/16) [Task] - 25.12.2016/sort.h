@@ -1,8 +1,8 @@
-#pragma once
+п»ї#pragma once
 #ifndef SORT_H
 #define SORT_H
 
-//Сортировка пузырьком.
+//вЂ”РѕСЂС‚РёСЂРѕРІРєР° РїСѓР·С‹СЂСЊРєРѕРј.
 template <typename SOB>
 void bubbleSort(SOB  *arr, unsigned int size, int in_ascending)
 {
@@ -23,7 +23,7 @@ void bubbleSort(SOB  *arr, unsigned int size, int in_ascending)
 		std::cout << "\nFunction got bad parameters!\n";
 }
 
-//Сортировка выбором.
+//вЂ”РѕСЂС‚РёСЂРѕРІРєР° РІС‹Р±РѕСЂРѕРј.
 template <typename SOC>
 void choicesSort(SOC *arr, unsigned int size, int in_ascending)
 {
@@ -47,7 +47,7 @@ void choicesSort(SOC *arr, unsigned int size, int in_ascending)
 		std::cout << "\nFunction got bad parameters!\n";
 }
 
-//Сортировка вставками.
+//вЂ”РѕСЂС‚РёСЂРѕРІРєР° РІСЃС‚Р°РІРєР°РјРё.
 template <typename SOI>
 void insertionSort(SOI *arr, unsigned int size, int in_ascending)
 {
@@ -71,7 +71,7 @@ void insertionSort(SOI *arr, unsigned int size, int in_ascending)
 		std::cout << "\nFunction got bad parameters!\n";
 }
 
-//Быстрая сортировка.
+//Р…С‹СЃС‚СЂР°В¤ СЃРѕСЂС‚РёСЂРѕРІРєР°.
 template <typename SOQ>
 void quickSort(int l, int r, SOQ *arr, int in_ascending)
 {

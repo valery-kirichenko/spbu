@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #ifndef TREE_H
 #define TREE_H
 
@@ -27,7 +27,7 @@ public:
 			deleteSubtree(root);
 	}
 
-	//Добавление элементов/создание дерева.
+	//Р”РѕР±Р°РІР»РµРЅРёРµ СЌР»РµРјРµРЅС‚РѕРІ/СЃРѕР·РґР°РЅРёРµ РґРµСЂРµРІР°.
 	bintree *addNode(TR value, bintree *tree) 
 	{
 		isExist = true;
@@ -44,7 +44,7 @@ public:
 		return tree;
 	}
 
-	//Удаление поддерева с потомками.
+	//РЈРґР°Р»РµРЅРёРµ РїРѕРґРґРµСЂРµРІР° СЃ РїРѕС‚РѕРјРєР°РјРё.
 	void deleteSubtree(bintree *tree) 
 	{
 		if (tree == root)
@@ -58,7 +58,7 @@ public:
 		}
 	}
 
-	//Удаление с изменением структуры дерева.
+	//РЈРґР°Р»РµРЅРёРµ СЃ РёР·РјРµРЅРµРЅРёРµРј СЃС‚СЂСѓРєС‚СѓСЂС‹ РґРµСЂРµРІР°.
 	bintree *deleteNode(TR value, bintree *node)
 	{
 		if (isExist) {
@@ -99,7 +99,7 @@ public:
 		return node;
 	}
 
-	//Наглядная печать.
+	//РќР°РіР»СЏРґРЅР°СЏ РїРµС‡Р°С‚СЊ.
 	void print_Tree(bintree *tree, int level)
 	{
 		if ((tree != nullptr) && (isExist)) {
@@ -111,7 +111,7 @@ public:
 		}
 	}
 
-	//Обход дерева в префиксной форме.
+	//РћР±С…РѕРґ РґРµСЂРµРІР° РІ РїСЂРµС„РёРєСЃРЅРѕР№ С„РѕСЂРјРµ.
 	void printPref(bintree *tree) 
 	{
 		if ((tree != nullptr) && (isExist)) {
@@ -121,7 +121,7 @@ public:
 		}
 	}
 
-	//Обход дерева в инфиксной форме.
+	//РћР±С…РѕРґ РґРµСЂРµРІР° РІ РёРЅС„РёРєСЃРЅРѕР№ С„РѕСЂРјРµ.
 	void printInf(bintree *tree) 
 	{
 		if ((tree != nullptr) && (isExist)) {
@@ -131,7 +131,7 @@ public:
 		}
 	}
 
-	//Обход дерева в постфиксной форме.
+	//РћР±С…РѕРґ РґРµСЂРµРІР° РІ РїРѕСЃС‚С„РёРєСЃРЅРѕР№ С„РѕСЂРјРµ.
 	void printPost(bintree *tree) 
 	{
 		if ((tree != nullptr) && (isExist)) {
@@ -141,7 +141,7 @@ public:
 		}
 	}
 
-	//Подсчёт узлов дерева.
+	//РџРѕРґСЃС‡С‘С‚ СѓР·Р»РѕРІ РґРµСЂРµРІР°.
 	int countElem(bintree *tree) 
 	{
 		int count = 0;
@@ -153,7 +153,7 @@ public:
 		return count;
 	}
 
-	//Подсчёт листьев дерева.
+	//РџРѕРґСЃС‡С‘С‚ Р»РёСЃС‚СЊРµРІ РґРµСЂРµРІР°.
 	int countLeaf(bintree *tree) 
 	{
 		int count = 0;
@@ -166,7 +166,7 @@ public:
 		return count;
 	}
 
-	//Подсчёт высоты дерева.
+	//РџРѕРґСЃС‡С‘С‚ РІС‹СЃРѕС‚С‹ РґРµСЂРµРІР°.
 	int countHeight(bintree *tree) 
 	{
 		int left = 0, right = 0;

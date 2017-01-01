@@ -1,4 +1,4 @@
-#include "stdafx.h"
+п»ї#include "stdafx.h"
 #include <iostream>
 #include <string>
 #include <stdexcept>
@@ -12,7 +12,7 @@
 
 int main()
 {
-	///Тесты
+	///РўРµСЃС‚С‹
 	stackV<int> s1;
 	bool t = s1.empty();
 	s1.print();

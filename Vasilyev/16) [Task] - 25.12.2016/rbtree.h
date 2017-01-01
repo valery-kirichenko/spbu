@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #ifndef RBTREE_H
 #define RBTREE_H
 
@@ -20,15 +20,15 @@ private:
 	tree *nullNode = &emptyNode;
 	tree *root;
 
-	//Левый поворот дерева.
+	//Р›РµРІС‹Р№ РїРѕРІРѕСЂРѕС‚ РґРµСЂРµРІР°.
 	void rotateLeft(tree *node)
 	{
 		tree *right = node->right;
-		//Переносим указатель правого поддерева текущего узла на right.
+		//РџРµСЂРµРЅРѕСЃРёРј СѓРєР°Р·Р°С‚РµР»СЊ РїСЂР°РІРѕРіРѕ РїРѕРґРґРµСЂРµРІР° С‚РµРєСѓС‰РµРіРѕ СѓР·Р»Р° РЅР° right.
 		node->right = right->left;
 		if (right->left != nullNode)
 			right->left->parent = node;
-		//Переносим указатель родителя текущего узла на right.
+		//РџРµСЂРµРЅРѕСЃРёРј СѓРєР°Р·Р°С‚РµР»СЊ СЂРѕРґРёС‚РµР»СЏ С‚РµРєСѓС‰РµРіРѕ СѓР·Р»Р° РЅР° right.
 		if (right != nullNode)
 			right->parent = node->parent;
 		if (node->parent != nullNode) {
@@ -45,15 +45,15 @@ private:
 			node->parent = right;
 	}
 
-	//Правый поворот дерева.
+	//РџСЂР°РІС‹Р№ РїРѕРІРѕСЂРѕС‚ РґРµСЂРµРІР°.
 	void rotateRight(tree *node)
 	{
 		tree *left = node->left;
-		//Переносим указатель левого поддерева текущего узла на left.
+		//РџРµСЂРµРЅРѕСЃРёРј СѓРєР°Р·Р°С‚РµР»СЊ Р»РµРІРѕРіРѕ РїРѕРґРґРµСЂРµРІР° С‚РµРєСѓС‰РµРіРѕ СѓР·Р»Р° РЅР° left.
 		node->left = left->right;
 		if (left->right != nullNode)
 			left->right->parent = node;
-		//Переносим указатель родителя текущего узла на left.
+		//РџРµСЂРµРЅРѕСЃРёРј СѓРєР°Р·Р°С‚РµР»СЊ СЂРѕРґРёС‚РµР»СЏ С‚РµРєСѓС‰РµРіРѕ СѓР·Р»Р° РЅР° left.
 		if (left != nullNode)
 			left->parent = node->parent;
 		if (node->parent != nullNode) {
@@ -83,47 +83,47 @@ public:
 			deleteSubtree(root);
 	}
 	
-	//Восстановление свойств после добавления узла.
+	//Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ СЃРІРѕР№СЃС‚РІ РїРѕСЃР»Рµ РґРѕР±Р°РІР»РµРЅРёСЏ СѓР·Р»Р°.
 	void fixupAdd(tree *node)
 	{
 		tree *uncle;
-		//Текущий узел является красным.
+		//РўРµРєСѓС‰РёР№ СѓР·РµР» СЏРІР»СЏРµС‚СЃСЏ РєСЂР°СЃРЅС‹Рј.
 		while ((node != root) && (node->parent->color == COLOR_RED)) {
 			if (node->parent == node->parent->parent->left) {
-				//Узел находится в левом поддереве "деда".
+				//РЈР·РµР» РЅР°С…РѕРґРёС‚СЃСЏ РІ Р»РµРІРѕРј РїРѕРґРґРµСЂРµРІРµ "РґРµРґР°".
 				uncle = node->parent->parent->right;
 				if (uncle->color == COLOR_RED) {
-					//Случай 1 - "дядя" является красным узлом.
+					//РЎР»СѓС‡Р°Р№ 1 - "РґСЏРґСЏ" СЏРІР»СЏРµС‚СЃСЏ РєСЂР°СЃРЅС‹Рј СѓР·Р»РѕРј.
 					node->parent->color = COLOR_BLACK;
 					uncle->color = COLOR_BLACK;
 					node->parent->parent->color = COLOR_RED;
 					node = node->parent->parent;
 				}
 				else {
-					//Случаи 2 и 3 - "дядя" является чёрным узлом.
+					//РЎР»СѓС‡Р°Рё 2 Рё 3 - "РґСЏРґСЏ" СЏРІР»СЏРµС‚СЃСЏ С‡С‘СЂРЅС‹Рј СѓР·Р»РѕРј.
 					if (node == node->parent->right) {
-						//Преобразуем случай 2 в случай 3.
+						//РџСЂРµРѕР±СЂР°Р·СѓРµРј СЃР»СѓС‡Р°Р№ 2 РІ СЃР»СѓС‡Р°Р№ 3.
 						node = node->parent;
 						rotateLeft(node);
 					}
-					//Случай 3.
+					//РЎР»СѓС‡Р°Р№ 3.
 					node->parent->color = COLOR_BLACK;
 					node->parent->parent->color = COLOR_RED;
 					rotateRight(node->parent->parent);
 				}
 			}
 			else {
-				//Узел находится в правом поддереве "деда".
+				//РЈР·РµР» РЅР°С…РѕРґРёС‚СЃСЏ РІ РїСЂР°РІРѕРј РїРѕРґРґРµСЂРµРІРµ "РґРµРґР°".
 				uncle = node->parent->parent->left;
 				if (uncle->color == COLOR_RED) {
-					//"Дядя" является красным узлом.
+					//"Р”СЏРґСЏ" СЏРІР»СЏРµС‚СЃСЏ РєСЂР°СЃРЅС‹Рј СѓР·Р»РѕРј.
 					node->parent->color = COLOR_BLACK;
 					uncle->color = COLOR_BLACK;
 					node->parent->parent->color = COLOR_RED;
 					node = node->parent->parent;
 				}
 				else {
-					//"Дядя" является чёрным узлом.
+					//"Р”СЏРґСЏ" СЏРІР»СЏРµС‚СЃСЏ С‡С‘СЂРЅС‹Рј СѓР·Р»РѕРј.
 					if (node == node->parent->left) {
 						node = node->parent;
 						rotateRight(node);
@@ -137,13 +137,13 @@ public:
 		root->color = COLOR_BLACK;
 	}
 
-	//Добавление элементов/создание дерева.
+	//Р”РѕР±Р°РІР»РµРЅРёРµ СЌР»РµРјРµРЅС‚РѕРІ/СЃРѕР·РґР°РЅРёРµ РґРµСЂРµРІР°.
 	void addNode(RBTR value)
 	{
 		tree *node = nullNode;
 		tree *parent = nullNode;
 		isExist = true;
-		//Поиск листа для нового элемента.
+		//РџРѕРёСЃРє Р»РёСЃС‚Р° РґР»СЏ РЅРѕРІРѕРіРѕ СЌР»РµРјРµРЅС‚Р°.
 		for (node = root; (node != nullNode) && (node != nullptr);) {
 			parent = node;
 			if (value < node->value)
@@ -173,7 +173,7 @@ public:
 		fixupAdd(node);
 	}
 
-	//Удаление поддерева с потомками.
+	//РЈРґР°Р»РµРЅРёРµ РїРѕРґРґРµСЂРµРІР° СЃ РїРѕС‚РѕРјРєР°РјРё.
 	void deleteSubtree(tree *node)
 	{
 		if (node == root)
@@ -187,7 +187,7 @@ public:
 		}
 	}
 
-	//Восстановление сбалансированности дерева после удаления.
+	//Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ СЃР±Р°Р»Р°РЅСЃРёСЂРѕРІР°РЅРЅРѕСЃС‚Рё РґРµСЂРµРІР° РїРѕСЃР»Рµ СѓРґР°Р»РµРЅРёСЏ.
 	void deleteFixup(tree *node) {
 		while ((node != root) && (node->color == COLOR_BLACK)) {
 			if (node == node->parent->left) {
@@ -246,10 +246,10 @@ public:
 		node->color = COLOR_BLACK;
 	}
 
-	//Удаление с изменением структуры дерева.
+	//РЈРґР°Р»РµРЅРёРµ СЃ РёР·РјРµРЅРµРЅРёРµРј СЃС‚СЂСѓРєС‚СѓСЂС‹ РґРµСЂРµРІР°.
 	void deleteNode(RBTR value) {
 		tree *x, *y, *z;
-		// Находим узел в дереве.
+		// РќР°С…РѕРґРёРј СѓР·РµР» РІ РґРµСЂРµРІРµ.
 		z = root;
 		while (z != nullNode) {
 			if (value == z->value)
@@ -260,21 +260,21 @@ public:
 		if (z == nullNode) 
 			return;
 		if ((z->left == nullNode) || (z->right == nullNode)) {
-			// Ставим Y нулевой узел как ребёнка.
+			// РЎС‚Р°РІРёРј Y РЅСѓР»РµРІРѕР№ СѓР·РµР» РєР°Рє СЂРµР±С‘РЅРєР°.
 			y = z;
 		}
 		else {
-			// Находим в дереве "преемника" с нулевым узлом в качестве ребёнка.
+			// РќР°С…РѕРґРёРј РІ РґРµСЂРµРІРµ "РїСЂРµРµРјРЅРёРєР°" СЃ РЅСѓР»РµРІС‹Рј СѓР·Р»РѕРј РІ РєР°С‡РµСЃС‚РІРµ СЂРµР±С‘РЅРєР°.
 			y = z->right;
 			while (y->left != nullNode) 
 				y = y->left;
 		}
-		// X только единственный ребёнок.
+		// X С‚РѕР»СЊРєРѕ РµРґРёРЅСЃС‚РІРµРЅРЅС‹Р№ СЂРµР±С‘РЅРѕРє.
 		if (y->left != nullNode)
 			x = y->left;
 		else
 			x = y->right;
-		// Удаляем из родительской цепи.
+		// РЈРґР°Р»СЏРµРј РёР· СЂРѕРґРёС‚РµР»СЊСЃРєРѕР№ С†РµРїРё.
 		x->parent = y->parent;
 		if (y->parent)
 			if (y == y->parent->left)
@@ -291,7 +291,7 @@ public:
 	}
 
 
-	//Наглядная печать.
+	//РќР°РіР»СЏРґРЅР°СЏ РїРµС‡Р°С‚СЊ.
 	void print_Tree(tree *node, int level)
 	{
 		if ((node != nullNode) && (isExist)) {
@@ -305,7 +305,7 @@ public:
 		}
 	}
 
-	//Обход дерева в префиксной форме.
+	//РћР±С…РѕРґ РґРµСЂРµРІР° РІ РїСЂРµС„РёРєСЃРЅРѕР№ С„РѕСЂРјРµ.
 	void printPref(tree *node)
 	{
 		if ((node != nullNode) && (isExist)) {
@@ -315,7 +315,7 @@ public:
 		}
 	}
 
-	//Обход дерева в инфиксной форме.
+	//РћР±С…РѕРґ РґРµСЂРµРІР° РІ РёРЅС„РёРєСЃРЅРѕР№ С„РѕСЂРјРµ.
 	void printInf(tree *node)
 	{
 		if ((node != nullNode) && (isExist)) {
@@ -325,7 +325,7 @@ public:
 		}
 	}
 
-	//Обход дерева в постфиксной форме.
+	//РћР±С…РѕРґ РґРµСЂРµРІР° РІ РїРѕСЃС‚С„РёРєСЃРЅРѕР№ С„РѕСЂРјРµ.
 	void printPost(tree *node)
 	{
 		if ((node != nullNode) && (isExist)) {
@@ -335,7 +335,7 @@ public:
 		}
 	}
 
-	//Подсчёт узлов дерева.
+	//РџРѕРґСЃС‡С‘С‚ СѓР·Р»РѕРІ РґРµСЂРµРІР°.
 	int countElem(tree *node)
 	{
 		int count = 0;
@@ -347,7 +347,7 @@ public:
 		return count;
 	}
 
-	//Подсчёт листьев дерева.
+	//РџРѕРґСЃС‡С‘С‚ Р»РёСЃС‚СЊРµРІ РґРµСЂРµРІР°.
 	int countLeaf(tree *node)
 	{
 		int count = 0;
@@ -360,7 +360,7 @@ public:
 		return count;
 	}
 
-	//Подсчёт высоты дерева.
+	//РџРѕРґСЃС‡С‘С‚ РІС‹СЃРѕС‚С‹ РґРµСЂРµРІР°.
 	int countHeight(tree *node)
 	{
 		int left = 0, right = 0;

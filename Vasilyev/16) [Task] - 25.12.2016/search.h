@@ -1,8 +1,8 @@
-#pragma once
+п»ї#pragma once
 #ifndef SEARCH_H
 #define SEARCH_H
 
-//Линейный поиск.
+//Р‹РёРЅРµР№РЅС‹Р№ РїРѕРёСЃРє.
 template <typename SEL>
 int linSearch(SEL *arr, SEL key, unsigned int size)
 {
@@ -16,7 +16,7 @@ int linSearch(SEL *arr, SEL key, unsigned int size)
 	return -1;
 }
 
-//Бинарный поиск.
+//Р…РёРЅР°СЂРЅС‹Р№ РїРѕРёСЃРє.
 template <typename SEB>
 int binSearch(SEB *arr, SEB key, unsigned int size)
 {
