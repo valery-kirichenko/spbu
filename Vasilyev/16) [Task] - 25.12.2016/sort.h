@@ -2,7 +2,7 @@
 #ifndef SORT_H
 #define SORT_H
 
-//—ортировка пузырьком.
+//Сортировка пузырьком.
 template <typename SOB>
 void bubbleSort(SOB  *arr, unsigned int size, int in_ascending)
 {
@@ -23,7 +23,7 @@ void bubbleSort(SOB  *arr, unsigned int size, int in_ascending)
 		std::cout << "\nFunction got bad parameters!\n";
 }
 
-//—ортировка выбором.
+//Сортировка выбором.
 template <typename SOC>
 void choicesSort(SOC *arr, unsigned int size, int in_ascending)
 {
@@ -47,7 +47,7 @@ void choicesSort(SOC *arr, unsigned int size, int in_ascending)
 		std::cout << "\nFunction got bad parameters!\n";
 }
 
-//—ортировка вставками.
+//Сортировка вставками.
 template <typename SOI>
 void insertionSort(SOI *arr, unsigned int size, int in_ascending)
 {
@@ -71,7 +71,7 @@ void insertionSort(SOI *arr, unsigned int size, int in_ascending)
 		std::cout << "\nFunction got bad parameters!\n";
 }
 
-//Ѕыстра¤ сортировка.
+//Быстрая сортировка.
 template <typename SOQ>
 void quickSort(int l, int r, SOQ *arr, int in_ascending)
 {
