@@ -75,15 +75,18 @@ private:
 	}
 };
 
+struct Clt {
+	SOCKET sock;
+	std::string name;
+	Clt(SOCKET sock, std::string name) :sock(sock), name(name) {}
+};
 
-class Server {
-public:
-	Server() {
-		RunServer(DEFAULT_PORT);
-	}
-
-private:
+class LowServer {
+protected:
 	const int  DEFAULT_PORT = 4444;
+	SOCKET 		listenSocket = INVALID_SOCKET;
+	std:: vector <Clt> vc;
+	bool shuttedDown = false;
 
 	std::string GetHostDescription(const sockaddr_in &sockAddr)
 	{
@@ -92,66 +95,74 @@ private:
 		return stream.str();
 	}
 
-	void SetServerSockAddr(sockaddr_in *pSockAddr, int portNumber)
+	void _SetServerSockAddr(sockaddr_in *pSockAddr, int portNumber)
 	{
 		pSockAddr->sin_family = AF_INET;
 		pSockAddr->sin_port = htons(portNumber);
 		pSockAddr->sin_addr.S_un.S_addr = INADDR_ANY;
 	}
 
-	void HandleConnection(SOCKET hClientSocket, const sockaddr_in &sockAddr)
+	void _HandleConnection(SOCKET hClientSocket, sockaddr_in sockAddr, Clt c)
 	{
 		std::cout << "Connected with " << GetHostDescription(sockAddr) << ".\n";
-
 		char tempBuffer[MAX_MESSAGE_SIZE];
-		while (true)
-		{
-			int retval;
-			retval = recv(hClientSocket, tempBuffer, sizeof(tempBuffer), 0);
-			if (retval == 0)
-				break;
-			else if (retval == SOCKET_ERROR)
-				throw ROTException("socket error while receiving.");
-			else
+		try {
+			while (true)
 			{
-				MyProto mp(tempBuffer);
-				mp.out();
-				if (send(hClientSocket, tempBuffer, retval, 0) == SOCKET_ERROR)
-					throw ROTException("socket error while sending.");
+				int retval;
+				retval = recv(hClientSocket, tempBuffer, sizeof(tempBuffer), 0);
+				if (retval == 0) {
+					break;
+				}
+				else if (shuttedDown)
+					break;
+				else if (retval == SOCKET_ERROR)
+					throw ROTException("socket error while receiving.");
+				else
+				{
+					std::cout << "Sended " << GetHostDescription(sockAddr) << ".\n";
+					handleRequest(c, MyProto(tempBuffer));
+				}
 			}
 		}
+		catch (ROTException e) {
+			std::cerr << e.what();
+		}
 		closesocket(hClientSocket);
-		std::cout << "Connection closed.\n";
+		std::cout << "Connection closed " << GetHostDescription(sockAddr) << "\n";
 	}
 
-	bool RunServer(int portNumber)
+	bool _RunServer(int portNumber)
 	{
-		SOCKET 		hSocket = INVALID_SOCKET;
 		bool		bSuccess = true;
 		sockaddr_in	sockAddr = { 0 };
 
 		try
 		{
-			if ((hSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == INVALID_SOCKET)
+			if ((listenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == INVALID_SOCKET)
 				throw ROTException("could not create socket.");
-			SetServerSockAddr(&sockAddr, portNumber);
-			if (bind(hSocket, reinterpret_cast<sockaddr*>(&sockAddr), sizeof(sockAddr)) != 0)
+			_SetServerSockAddr(&sockAddr, portNumber);
+			if (bind(listenSocket, reinterpret_cast<sockaddr*>(&sockAddr), sizeof(sockAddr)) != 0)
 				throw ROTException("could not bind socket.");
 			std::cout << "Adress: " << GetHostDescription(sockAddr) << std::endl;
-			if (listen(hSocket, SOMAXCONN) != 0)
+			if (listen(listenSocket, SOMAXCONN) != 0)
 				throw ROTException("could not put socket in listening mode.");
 
-			sockaddr_in clientSockAddr;
-			int			clientSockSize = sizeof(clientSockAddr);
+
+			
 			std::vector <std::thread> vt;
 			while (true) {
+				sockaddr_in clientSockAddr;
+				int			clientSockSize = sizeof(clientSockAddr);
 				SOCKET hClientSocket = INVALID_SOCKET;
-				hClientSocket = accept(hSocket, (sockaddr*)(&clientSockAddr), &clientSockSize);
-
+				hClientSocket = accept(listenSocket, (sockaddr*)(&clientSockAddr), &clientSockSize);
+				if (shuttedDown)
+					break;
 				if (hClientSocket == INVALID_SOCKET)
 					throw ROTException("accept function failed.");
-
-				vt.push_back(std::thread(&Server::HandleConnection, this, hClientSocket, std::cref(clientSockAddr)));
+				Clt cl(hClientSocket, "Vasya" + std::to_string(rand() % 1000));
+				vc.push_back(cl);
+				vt.push_back(std::thread(&LowServer::_HandleConnection, this, hClientSocket, clientSockAddr, cl));
 			}
 			for (int i = 0; i < vt.size(); i++)
 				vt[i].join();
@@ -162,27 +173,54 @@ private:
 			bSuccess = false;
 		}
 
-		if (hSocket != INVALID_SOCKET)
-			closesocket(hSocket);
+		if (listenSocket != INVALID_SOCKET)
+			closesocket(listenSocket);
 
 		return bSuccess;
 	}
+
+	void _send(SOCKET clientSocket, MyProto mp) {
+		char msgtmp[MAX_MESSAGE_SIZE];
+		int sz = mp.getBytes(msgtmp);
+		try {
+			if (send(clientSocket, msgtmp, sz + 5, 0) == SOCKET_ERROR)
+				throw ROTException("failed to send data.\n");
+		}
+		catch (ROTException e) {
+			std::cerr << e.what();
+		}
+	}
+
+	virtual void handleRequest(Clt cl, MyProto mp) {};
 };
 
-class A {
+class Server:LowServer {
 public:
-	void f() {
-		std::thread t(&A::g, this, 5);
-		t.join();
+	Server() {
 	}
-	void g(int x) {
-		std::cout << x;
+	void start() {
+		_RunServer(DEFAULT_PORT);
+	}
+	void stop() {
+		shuttedDown = true;
+		closesocket(listenSocket);
+		for (int i = 0; i < vc.size(); i++) {
+			shutdown(vc[i].sock, 1);
+			closesocket(vc[i].sock);
+		}
+	}
+	void handleRequest(Clt cl, MyProto mp)override {
+		for (int i = 0; i < vc.size(); i++)
+			_send(vc[i].sock, mp);
 	}
 };
 
 int main()
 {
-	//A a;
-	//a.f();
 	Server s;
+	std::thread th(&Server::start, &s);
+	std::string cmd;
+	while ((std::cin >> cmd), cmd != "exit");
+	s.stop();
+	th.join();
 }
