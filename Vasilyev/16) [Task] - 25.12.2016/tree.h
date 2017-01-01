@@ -136,7 +136,7 @@ public:
 	{
 		if ((tree != nullptr) && (isExist)) {
 			printPost(tree->left);
-			printPost(tree->right)
+			printPost(tree->right);
 			std::cout << tree->value << "\n";
 		}
 	}

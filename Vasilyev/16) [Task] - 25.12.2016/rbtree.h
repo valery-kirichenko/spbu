@@ -330,8 +330,8 @@ public:
 	{
 		if ((node != nullNode) && (isExist)) {
 			printPost(node->left);
-			printPost(node->right)
-				std::cout << node->value << "\n";
+			printPost(node->right);
+			std::cout << node->value << "\n";
 		}
 	}
 
