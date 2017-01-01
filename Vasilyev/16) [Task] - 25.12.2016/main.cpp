@@ -1,5 +1,4 @@
-﻿#include "stdafx.h"
-#include <iostream>
+﻿#include <iostream>
 #include <string>
 #include <stdexcept>
 #include <vector>
