@@ -1,11 +1,15 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <windows.h>
 #include <vector>
 #include <string>
 #include <thread>
 #include <ctime>
+#include <map>
+#include <sstream>
 #include <winsock.h>
+#include "../MyProto.h"
 #pragma comment (lib, "Ws2_32.lib")
 
 const int  MAX_MESSAGE_SIZE = 1024;
@@ -37,48 +41,10 @@ struct {
 	}t;
 }TempWSA;
 
-struct MyProto {
-	std::string sendername;
-	std::string gettername;
-	std::string message;
-
-	MyProto(const char* s) {
-		int start = 0;
-		writeCtoS(s, sendername, start);
-		writeCtoS(s, gettername, start);
-		writeCtoS(s, message, start);
-	}
-	int getBytes(char* req) {
-		int res = 0;
-		writeStoC(sendername, req, res);
-		writeStoC(gettername, req, res);
-		writeStoC(message, req, res, false);
-		req[res] = 0;
-		return res;
-	}
-	void out() {
-		std::cout << "From: " << sendername << "\tTo: " << gettername << "\tMessage: "<< message << std::endl;
-	}
-	MyProto(std::string sendn, std::string getn, std::string msg):sendername(sendn), gettername(getn), message(msg){}
-private:
-	void writeStoC(const std::string& s, char* c, int& start, bool needDel = true) {
-		for (int i = 0; i < s.size(); i++)
-			c[start + i] = s[i];
-		start += s.size();
-		if (needDel)
-			c[start++] = ' ';
-	}
-	void writeCtoS(const char* c, std::string& s, int& start) {
-		while (c[start] != 0 && c[start] != ' ')
-			s += c[start++];
-		start++;
-	}
-};
-
 class LowClient {
 public:
 	bool connectionWorks() {
-		return authorized && servWorks;
+		return connected && servWorks;
 	}
 protected:
 	const int  SERVER_PORT = 4444;
@@ -86,8 +52,9 @@ protected:
 	SOCKET 		hSocket = INVALID_SOCKET;
 	typedef unsigned long IPNumber;
 	bool authorized = false;
+	bool connected = false;
 	bool servWorks = false;
-	void _send(MyProto mp) {
+	void _send(protos::MyProto mp) {
 		if (!connectionWorks() )
 			return;
 		char msgtmp[MAX_MESSAGE_SIZE];
@@ -108,7 +75,7 @@ protected:
 		pSockAddr->sin_addr.S_un.S_addr = inet_addr(cp);
 	}
 	void _Connect() {
-		char		tempBuffer[MAX_MESSAGE_SIZE];
+		char		tempBuffer[MAX_MESSAGE_SIZE] = {};
 		bool		bSuccess = true;
 		_FillSockAddr(&sockAddrServ, SERVER_PORT);
 		try {
@@ -116,7 +83,7 @@ protected:
 				throw HRException("could not create socket.");
 			if (connect(hSocket, (sockaddr*)(&sockAddrServ), sizeof(sockAddrServ)) != 0)
 				throw HRException("could not connect.");
-			authorized = true;
+			connected = true;
 			servWorks = true;
 		}
 		catch (HRException e) {
@@ -125,7 +92,18 @@ protected:
 		}
 	}
 
-	void _receive() {
+	protos::MyProto _request(protos::MyProto mp) {
+		if (!connectionWorks())
+			return protos::MyProto(false);
+		_send(mp);
+		char tempBuffer[MAX_MESSAGE_SIZE];
+		int retval = recv(hSocket, tempBuffer, sizeof(tempBuffer), 0);
+		if (retval == SOCKET_ERROR)
+			throw HRException("socket error while receiving.");
+		return protos::MyProto(tempBuffer);
+	}
+
+	void _startListeningServer() {
 		if (!connectionWorks())
 			return;
 		char tempBuffer[MAX_MESSAGE_SIZE];
@@ -142,7 +120,7 @@ protected:
 				else if (retval == SOCKET_ERROR)
 					throw HRException("socket error while receiving.");
 				else
-					handleReceived(MyProto(tempBuffer));
+					handleReceived(protos::MyProto(tempBuffer));
 			}
 		}
 		catch (HRException e) {
@@ -150,7 +128,7 @@ protected:
 		}
 	}
 
-	virtual void handleReceived(MyProto mp) {};
+	virtual void handleReceived(protos::MyProto mp) {};
 
 	void _shutdown() {
 		if (!connectionWorks())
@@ -164,20 +142,45 @@ protected:
 	}
 };
 
+
 class Client: public LowClient {
 public:
 	Client() {
 	}
 	void Authorize() {
 		_Connect();
+		getName();
 	}
-	void receive() {
-		_receive();
+	void getName() {
+		if (!connectionWorks()) {
+			std::cout << "Connection is not working\n";
+			return;
+		}
+		if (authorized) {
+			std::cout << "You have already authorized\n";
+			return;
+		}
+		std::string name;
+		while (true) {
+			std::cout << "Choose Login: ";
+			std::cin >> name;
+			if (name == "Guest")
+				break;
+			protos::MyProto mp = _request(protos::MyProto(name));
+			if (mp.authAnswer) {
+				authorized = true;
+				break;
+			}
+		}
+		std::cout << "Successful autorization\n";
 	}
-	void send(MyProto mp) {
+	void startListeningServer() {
+		_startListeningServer();
+	}
+	void send(protos::MyProto mp) {
 		_send(mp);
 	}
-	void handleReceived(MyProto mp) override {
+	void handleReceived(protos::MyProto mp) override {
 		mp.out();
 	}
 	void shutdown() {
@@ -187,23 +190,47 @@ private:
 };
 
 void f() {
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	Client client;
 	client.Authorize();
-	std::thread th(&Client::receive, &client);
-	std::string a, b, c;
+	std::thread th(&Client::startListeningServer, &client);
+	std::string b, c;
 	while (client.connectionWorks()) {
-		std::cin >> a >> b >> c;
-		if (a == "exit")
+		std::cin >> b;
+		if (b == "exit")
 			break;
-		client.send(MyProto(a, b, c));
+		getline(std::cin, c);
+		c.clear();
+		while (!c.size())
+			getline(std::cin, c);
+		if (!client.connectionWorks())
+			break;
+		client.send(protos::MyProto("a", b, c));
 	}
 	client.shutdown();
 	th.join();
 }
 
+void gg() {
+	std::string b, c;
+	while (true) {
+		std::cin >> b;
+		if (b == "exit")
+			break;
+		getline(std::cin, c);
+		c.clear();
+		while (!c.size())
+			getline(std::cin, c);
+		protos::MyProto mp = protos::MyProto("asdf", b, c);
+		char req[1024] = {};
+		mp.getBytes(req);
+		protos::MyProto pt(req);
+		std::cout << pt.message;
+	}
+}
 
 int main()
 {
+	//Sleep(10000);
 	f();
 }

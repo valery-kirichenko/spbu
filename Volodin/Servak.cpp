@@ -1,7 +1,11 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <string>
 #include <vector>
+#include <set>
+#include <map>
 #include <sstream>
+#include "../MyProto.h"
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <windows.h>
@@ -37,55 +41,21 @@ struct {
 
 const int  MAX_MESSAGE_SIZE = 1024;
 
-struct MyProto {
-	std::string sendername;
-	std::string gettername;
-	std::string message;
-
-	MyProto(char* s) {
-		int start = 0;
-		writeCtoS(s, sendername, start);
-		writeCtoS(s, gettername, start);
-		writeCtoS(s, message, start);
-	}
-	int getBytes(char* req) {
-		int res = 0;
-		writeStoC(sendername, req, res);
-		writeStoC(gettername, req, res);
-		writeStoC(message, req, res, false);
-		req[res] = 0;
-		return res;
-	}
-	void out() {
-		std::cout << "From: " << sendername << "\tTo: " << gettername << "\tMessage: " << message << std::endl;
-	}
-	MyProto(std::string sendn, std::string getn, std::string msg) :sendername(sendn), gettername(getn), message(msg) {}
-private:
-	void writeStoC(const std::string& s, char* c, int& start, bool needDel = true) {
-		for (int i = 0; i < s.size(); i++)
-			c[start + i] = s[i];
-		start += s.size();
-		if (needDel)
-			c[start++] = ' ';
-	}
-	void writeCtoS(char* c, std::string& s, int& start) {
-		while (c[start] != 0 && c[start] != ' ')
-			s += c[start++];
-		start++;
-	}
-};
-
 struct Clt {
 	SOCKET sock;
-	std::string name;
-	Clt(SOCKET sock, std::string name) :sock(sock), name(name) {}
+	std::string name = NULL;
+	sockaddr_in addr;
+	Clt() {}
+	Clt(SOCKET sock, sockaddr_in sockAddr, std::string name) :sock(sock), name(name), addr(sockAddr) {}
 };
 
 class LowServer {
 protected:
 	const int  DEFAULT_PORT = 4444;
 	SOCKET 		listenSocket = INVALID_SOCKET;
-	std:: vector <Clt> vc;
+	std:: map <int, Clt> cliset;
+	std::map <std::string, int> clbyname;
+	int clientCount = 0;
 	bool shuttedDown = false;
 
 	std::string GetHostDescription(const sockaddr_in &sockAddr)
@@ -102,15 +72,15 @@ protected:
 		pSockAddr->sin_addr.S_un.S_addr = INADDR_ANY;
 	}
 
-	void _HandleConnection(SOCKET hClientSocket, sockaddr_in sockAddr, Clt c)
+	void _HandleConnection(int clientID)
 	{
-		std::cout << "Connected with " << GetHostDescription(sockAddr) << ".\n";
+		std::cout << "Connected with " << GetHostDescription(cliset[clientID].addr) << ".\n";
 		char tempBuffer[MAX_MESSAGE_SIZE];
 		try {
 			while (true)
 			{
 				int retval;
-				retval = recv(hClientSocket, tempBuffer, sizeof(tempBuffer), 0);
+				retval = recv(cliset[clientID].sock, tempBuffer, sizeof(tempBuffer), 0);
 				if (retval == 0) {
 					break;
 				}
@@ -120,16 +90,19 @@ protected:
 					throw ROTException("socket error while receiving.");
 				else
 				{
-					std::cout << "Sended " << GetHostDescription(sockAddr) << ".\n";
-					handleRequest(c, MyProto(tempBuffer));
+					std::cout << "Sended " << GetHostDescription(cliset[clientID].addr) << ".\n";
+					handleRequest(clientID, protos::MyProto(tempBuffer));
 				}
 			}
 		}
 		catch (ROTException e) {
 			std::cerr << e.what();
 		}
-		closesocket(hClientSocket);
-		std::cout << "Connection closed " << GetHostDescription(sockAddr) << "\n";
+		
+		closesocket(cliset[clientID].sock);
+		std::cout << "Connection closed " << GetHostDescription(cliset[clientID].addr) << "\n";
+		clbyname.erase(cliset[clientID].name);
+		cliset.erase(clientID);
 	}
 
 	bool _RunServer(int portNumber)
@@ -160,9 +133,11 @@ protected:
 					break;
 				if (hClientSocket == INVALID_SOCKET)
 					throw ROTException("accept function failed.");
-				Clt cl(hClientSocket, "Vasya" + std::to_string(rand() % 1000));
-				vc.push_back(cl);
-				vt.push_back(std::thread(&LowServer::_HandleConnection, this, hClientSocket, clientSockAddr, cl));
+				clientCount++;
+				std::string name = "$" + std::to_string(clientCount);
+				cliset.insert(std::make_pair(clientCount, Clt(hClientSocket, clientSockAddr, name)));
+				clbyname[name] = clientCount;
+				vt.push_back(std::thread(&LowServer::_HandleConnection, this, clientCount));
 			}
 			for (int i = 0; i < vt.size(); i++)
 				vt[i].join();
@@ -179,7 +154,7 @@ protected:
 		return bSuccess;
 	}
 
-	void _send(SOCKET clientSocket, MyProto mp) {
+	void _send(SOCKET clientSocket, protos::MyProto mp) {
 		char msgtmp[MAX_MESSAGE_SIZE];
 		int sz = mp.getBytes(msgtmp);
 		try {
@@ -191,7 +166,7 @@ protected:
 		}
 	}
 
-	virtual void handleRequest(Clt cl, MyProto mp) {};
+	virtual void handleRequest(int clientID, protos::MyProto mp) {};
 };
 
 class Server:LowServer {
@@ -204,14 +179,30 @@ public:
 	void stop() {
 		shuttedDown = true;
 		closesocket(listenSocket);
-		for (int i = 0; i < vc.size(); i++) {
-			shutdown(vc[i].sock, 1);
-			closesocket(vc[i].sock);
+		for (auto c = cliset.begin(); c != cliset.end(); ++c) {
+			shutdown(c->second.sock, 1);
+			closesocket(c->second.sock);
 		}
 	}
-	void handleRequest(Clt cl, MyProto mp)override {
-		for (int i = 0; i < vc.size(); i++)
-			_send(vc[i].sock, mp);
+	void handleRequest(int clientID, protos::MyProto mp)override {
+		if (mp.type == "Authorize") {
+			if (cliset[clientID].name[0] != '$' || clbyname.count(mp.name)) {
+				_send(cliset[clientID].sock, protos::MyProto(false));
+				return;
+			}
+			clbyname.erase(cliset[clientID].name);
+			clbyname.insert(make_pair(mp.name, clientID));
+			cliset[clientID].name = mp.name;
+			_send(cliset[clientID].sock, protos::MyProto(true));
+		}
+		else if (cliset[clientID].name[0] == '$') {
+			_send(cliset[clientID].sock, protos::MyProto("Server", cliset[clientID].name, "You are not authorized"));
+		}
+		else if (mp.type == "Message")
+			if (clbyname.count(mp.gettername))
+				_send(cliset[clbyname[mp.gettername]].sock, protos::MyProto(cliset[clientID].name, mp.gettername, mp.message));
+			else
+				_send(cliset[clientID].sock, protos::MyProto("Server", cliset[clientID].name, "There is no such user: " + mp.gettername));
 	}
 };
 
