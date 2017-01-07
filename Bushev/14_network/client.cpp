@@ -31,9 +31,9 @@ int main(){
 		return 1;
 	}else cout << "Connection set\n";
 
+	char buff[512];
 	int actual_len = 0;
 	
-	char buff[512];
 	if (SOCKET_ERROR == (actual_len = recv (s, (char* ) &buff, 512, 0 ) ) )  {
 		cout << "Error recieving data" << endl;
 	}else cout << "\nWe got data: \n";
