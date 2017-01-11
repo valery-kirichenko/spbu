@@ -20,7 +20,7 @@ void bubblesort(int * b, int n){
 		show(b,n);
 }
 	void quicksort(int *b,int l,int r){
-		int p = b[1 + (r - l)/2];
+		int p = b[ (r + l)/2];
 		int i = l;
 		int j = r;
 	    while(i<=j){ 
@@ -28,8 +28,8 @@ void bubblesort(int * b, int n){
 			while (b[j] > p) j--;
 			if (i<=j){
 				swap(b[i],b[j]);
-				 i++;
-				 j--;
+				 if (i!=r)i++;
+				 if (j!=l)j--;
 				}
 		}
 		if (i < r )quicksort(b,i,r);
