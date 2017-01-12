@@ -13,7 +13,7 @@ struct node {
 	color col;
 };
 template <typename T>
-void search (T val,node<T> *&tr){
+void search (T val,node<T> *tr){
 	if (!tr){
 		cout << "EMPTY tree " << endl;
 		return;
@@ -23,10 +23,10 @@ void search (T val,node<T> *&tr){
 	else cout << " Yes we found !! " << endl;
 }
 template <typename T>
-void add(T val,node<T> *&tr,node<T> *&nl){
+int  add(T val,node<T> *&tr,node<T> *&nl){
 	if ( !tr){
 		 tr = new node<T>;
-		tr->inf = val;
+		 tr->inf = val;
 		tr->left = nullptr;
 		tr->right = nullptr;
         tr->parent = nl;
@@ -37,10 +37,10 @@ void add(T val,node<T> *&tr,node<T> *&nl){
 			else nl->right = tr;
 		}
 		insert1(tr);
-		return;
+		return 0;
 	}
-     if (val < tr->inf) add (val,tr->left,tr);
-	 if (val >= tr->inf) add (val,tr->right,tr);
+    else if (tr!=nullptr) if (val < tr->inf) add (val,tr->left,tr);
+	else if (tr!=nullptr) if (val >= tr->inf) add (val,tr->right,tr);
 };
 
 template <typename T>
@@ -63,10 +63,10 @@ node<T> *uncle( node<T> *tr)
 	else return g->left;
 };
 template <typename T>
-void rotate_left(node<T> *&P)
+void rotate_left(node<T> *P)
 {
    node<T> *N = P->right;
-   N->parent = P->parent; 
+  if(N!=nullptr) N->parent = P->parent; 
    if (P->parent != nullptr) {
         if (P->parent->left==P)
             P->parent->left = N;
@@ -82,16 +82,20 @@ void rotate_left(node<T> *&P)
 };
 
 template <typename T>
-void rotate_right( node<T> *&P)
+void rotate_right( node<T> *P)
 {
     node<T> *N = P->left;
-    N->parent = P->parent; 
+	node <T> *tmp = P->parent;
+  
     if (P->parent != nullptr) {
-        if (P->parent->left==P)
-            P->parent->left = N;
+        if (tmp->left==P)
+            tmp->left = N;
         else
-            P->parent->right = N;
-    }		
+            tmp->right = N;
+    }
+	node<T> *p = P;
+	if(N != nullptr) N->parent = tmp; 
+	P=p;
     P->left = N->right;
     if (N->right != nullptr)
         N->right->parent = P;
@@ -101,7 +105,7 @@ void rotate_right( node<T> *&P)
 }
 
 template <typename T>
-void insert1(node<T> *&tr){
+void insert1(node<T> *tr){
 	if (tr->parent == nullptr)
 		tr->col=black;
 	else insert2(tr);
@@ -113,7 +117,7 @@ void insert2(node<T> *&tr){
 	else insert3(tr);
 };
 template <typename T>
-void insert3(node<T> *&tr){
+void insert3(node<T> *tr){
 	node<T> *u = uncle(tr);
 	
 	if ((u != nullptr) && (u->col == red) && (tr->parent->col == red)) {
@@ -127,7 +131,7 @@ void insert3(node<T> *&tr){
 	}
 }
 template <typename T>
-void insert4(node<T> *&tr){
+void insert4(node<T> *tr){
 node<T> *g = grandparent(tr);
 
 	if ((tr == tr->parent->right) && (tr->parent == g->left)) {
@@ -141,7 +145,7 @@ node<T> *g = grandparent(tr);
 	insert5(tr);
 };
 template <typename T>
-void insert5(node<T> *&tr){
+void insert5(node<T> *tr){
 	 node<T> *g = grandparent(tr);
      tr->parent->col = black;
 	if(g->parent!=nullptr){
@@ -154,7 +158,7 @@ void insert5(node<T> *&tr){
 	
 };
 template <typename T>
-void print(node<T> *&tr,int k,int l){
+void print(node<T> *tr,int k,int l){
 	if (tr) {
 				if(tr->right) 
 					print(tr->right,k+3,l+3);
@@ -170,7 +174,7 @@ void print(node<T> *&tr,int k,int l){
                }
 	else cout << " Empty tree! " << endl;
 };
-// deleting node
+/*/ deleting node
 template <typename T>
 void del_node(node<T> *&mt, T val) {
 	if ( mt == nullptr) {
@@ -186,7 +190,7 @@ void del_node(node<T> *&mt, T val) {
 		mt = nullptr;
 	}
 }
-
+*/
 template <typename T>
 node<T>* sibling(node<T> *n)
 {
@@ -379,7 +383,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	root->left = nullptr;
     for (int i=0;i<N-1;i++){
 		cin >> vr;
-		add(vr,root,nul);
+		int var = add(vr,root,nul);
 	}
 	print(root,N-1,0);
 	cout << endl << "Enter element u eant delete ";
