@@ -26,10 +26,45 @@ bool binary_search(int* arr, int size, int val)
 	return false;
 
 };
-void bubblesortif (int* arr, int size)
-{
+void bubblesort(int A[], int col){
+	int temp;
+	for (int i = 0; i < col; i++)
+	for (int j = 0; j < col - 1; j++){ 
+		if (A[j] > A[j + 1]){
+			temp = A[j];
+			A[j] = A[j + 1];
+			A[j + 1] = temp; 
+		}
+	}
 
-
+};
+void insertion_sort (int arr[], int length){
+	 	int j, temp;
+		
+	for (int i = 0; i < length; i++){
+		j = i;
+		
+		while (j > 0 && arr[j] < arr[j-1]){
+			  temp = arr[j];
+			  arr[j] = arr[j-1];
+			  arr[j-1] = temp;
+			  j--;
+			  }
+		}
+};
+void selectionSort(int arr[], int n) {
+      int i, j, minIndex, tmp;    
+      for (i = 0; i < n - 1; i++) {
+            minIndex = i;
+            for (j = i + 1; j < n; j++)
+                  if (arr[j] < arr[minIndex])
+                        minIndex = j;
+            if (minIndex != i) {
+                  tmp = arr[i];
+                  arr[i] = arr[minIndex];
+                  arr[minIndex] = tmp;
+            }
+      }
 };
 int main()
 {
