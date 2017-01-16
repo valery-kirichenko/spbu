@@ -1,6 +1,7 @@
 #include "bintree.h"
 #include <iostream>
 #include <queue>
+#include <cmath>
 
 using namespace std;
 

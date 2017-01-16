@@ -254,11 +254,13 @@ void rbtm::space_print(rbtree *mt, int start_level) {
 		space_print(mt->left, start_level + 1);
 		for (int i = 0; i < start_level; i++) cout << "   ";
 
+#if (!defined __linux__)
 		// изменяем цвет консоли и текста в ней
 		if (mt->color == black) SetConsoleTextAttribute(hCons, (WORD)((0 << 4) | 7));		// black = white :(
 		else SetConsoleTextAttribute(hCons, (WORD)((0 << 4) | 4));							// 7 - gray / 4 - red
+#endif
 
-																							// показываем значение текущего узла
+		// показываем значение текущего узла
 		cout << mt->field << "\n";
 
 		// выводим правую ветку, сдвигаясь на один уровень
@@ -272,7 +274,9 @@ void rbtm::show_tree(rbtree *mt, int print_type) {
 		space_print(mt, 0);
 		//else as_tree_print(mt, 0);
 
+#if (!defined __linux__)
 		SetConsoleTextAttribute(hCons, (WORD)((0 << 4) | 7));
+#endif
 	}
 	else cout << "Tree is not created" << endl;
 	cout << endl;

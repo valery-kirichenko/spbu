@@ -1,7 +1,11 @@
 #pragma once
 
 #include <iostream>
+
+
+#if (!defined __linux__)
 #include <windows.h>
+#endif
 
 typedef int type;
 typedef enum { red, black } nodeColor;
@@ -28,8 +32,11 @@ private:
 	rbtree emptyNode = { NULL, nullptr, nullptr, nullptr, black };
 	rbtree *nil = &emptyNode;
 
+	
+#if (!defined __linux__)
 	// handle to change color
 	HANDLE hCons = hCons = GetStdHandle(STD_OUTPUT_HANDLE);
+#endif
 
 	// rotation
 	void rotate_left(rbtree *node);
