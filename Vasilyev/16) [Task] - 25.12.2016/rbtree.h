@@ -70,19 +70,6 @@ private:
 			node->parent = left;
 	}
 
-public:
-	rbtreeV()
-	{
-		root = nullNode;
-		isExist = false;
-	}
-
-	~rbtreeV()
-	{
-		if (isExist)
-			deleteSubtree(root);
-	}
-	
 	//Восстановление свойств после добавления узла.
 	void fixupAdd(tree *node)
 	{
@@ -135,56 +122,6 @@ public:
 			}
 		}
 		root->color = COLOR_BLACK;
-	}
-
-	//Добавление элементов/создание дерева.
-	void addNode(RBTR value)
-	{
-		tree *node = nullNode;
-		tree *parent = nullNode;
-		isExist = true;
-		//Поиск листа для нового элемента.
-		for (node = root; (node != nullNode) && (node != nullptr);) {
-			parent = node;
-			if (value < node->value)
-				node = node->left;
-			else if (value > node->value)
-				node = node->right;
-			else
-				return;
-		}
-		node = new tree;
-		node->value = value;
-		node->color = COLOR_RED;
-		node->parent = parent;
-		node->left = nullNode;
-		node->right = nullNode;
-
-		if (parent != nullNode) {
-			if (value < parent->value)
-				parent->left = node;
-			else
-				parent->right = node;
-		}
-		else {
-			root = node;
-		}
-
-		fixupAdd(node);
-	}
-
-	//Удаление поддерева с потомками.
-	void deleteSubtree(tree *node)
-	{
-		if (node == root)
-			isExist = false;
-		if (node != nullNode) {
-			if (node->left != nullNode)
-				deleteSubtree(node->left);
-			if (node->right != nullNode)
-				deleteSubtree(node->right);
-			delete node;
-		}
 	}
 
 	//Восстановление сбалансированности дерева после удаления.
@@ -246,6 +183,70 @@ public:
 		node->color = COLOR_BLACK;
 	}
 
+	//Удаление поддерева с потомками.
+	void deleteSubtree(tree *node)
+	{
+		if (node == root)
+			isExist = false;
+		if (node != nullNode) {
+			if (node->left != nullNode)
+				deleteSubtree(node->left);
+			if (node->right != nullNode)
+				deleteSubtree(node->right);
+			delete node;
+		}
+	}
+
+public:
+	rbtreeV()
+	{
+		root = nullNode;
+		isExist = false;
+	}
+
+	~rbtreeV()
+	{
+		if (isExist)
+			deleteSubtree(root);
+	}
+
+	//Добавление элементов/создание дерева.
+	void addNode(RBTR value)
+	{
+		tree *node = nullNode;
+		tree *parent = nullNode;
+		isExist = true;
+		//Поиск листа для нового элемента.
+		for (node = root; (node != nullNode) && (node != nullptr);) {
+			parent = node;
+			if (value < node->value)
+				node = node->left;
+			else if (value > node->value)
+				node = node->right;
+			else
+				return;
+		}
+		node = new tree;
+		node->value = value;
+		node->color = COLOR_RED;
+		node->parent = parent;
+		node->left = nullNode;
+		node->right = nullNode;
+
+		if (parent != nullNode) {
+			if (value < parent->value)
+				parent->left = node;
+			else
+				parent->right = node;
+		}
+		else {
+			root = node;
+		}
+
+		fixupAdd(node);
+	}
+
+
 	//Удаление с изменением структуры дерева.
 	void deleteNode(RBTR value) {
 		tree *x, *y, *z;
@@ -257,7 +258,7 @@ public:
 			else
 				z = (value < z->value) ? z->left : z->right;
 		}
-		if (z == nullNode) 
+		if (z == nullNode)
 			return;
 		if ((z->left == nullNode) || (z->right == nullNode)) {
 			// Ставим Y нулевой узел как ребёнка.
@@ -266,7 +267,7 @@ public:
 		else {
 			// Находим в дереве "преемника" с нулевым узлом в качестве ребёнка.
 			y = z->right;
-			while (y->left != nullNode) 
+			while (y->left != nullNode)
 				y = y->left;
 		}
 		// X только единственный ребёнок.
@@ -276,7 +277,7 @@ public:
 			x = y->right;
 		// Удаляем из родительской цепи.
 		x->parent = y->parent;
-		if (y->parent)
+		if (y->parent && y->parent != nullNode || (countElem(root) == 2 && y != root))
 			if (y == y->parent->left)
 				y->parent->left = x;
 			else
@@ -287,6 +288,8 @@ public:
 			z->value = y->value;
 		if (y->color == COLOR_BLACK)
 			deleteFixup(x);
+		if (y == root)
+			isExist = false;
 		delete y;
 	}
 
