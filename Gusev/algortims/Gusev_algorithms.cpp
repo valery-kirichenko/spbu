@@ -2,7 +2,7 @@
 #include <iostream>
 #include <climits>
 #include <string>
-#include <Windows.h>
+//#include <Windows.h>
 #include <fstream>
 #include <vector>
 //#include<bits/stdc++.h>
@@ -15,7 +15,7 @@ using namespace std;
 
 mt19937 rnd(time(NULL));
 
-HANDLE hconsole = GetStdHandle(STD_OUTPUT_HANDLE);
+//HANDLE hconsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 template<typename T>
 int linear_search(T* left,T* right,T val){
@@ -347,11 +347,11 @@ class rbt{
 				R->show(len + k + 1);
 			for (int i = 0; i < len; i++)
 				putchar(' ');
-			if (col == 0)
-				SetConsoleTextAttribute(hconsole, (WORD)(15));
-			else
-				SetConsoleTextAttribute(hconsole, (WORD)(12));
-			cout << val << '\n';
+			//if (col == 0)
+			//	SetConsoleTextAttribute(hconsole, (WORD)(15));
+			//else
+			//	SetConsoleTextAttribute(hconsole, (WORD)(12));
+			cout << '(' << col << ')' << val << '\n';
 			if (L != NULL)
 				L->show(len + k + 1);
 		}
@@ -633,7 +633,7 @@ public:
 			cout << "empty\n";
 		else
 			root->show(0);
-		SetConsoleTextAttribute(hconsole, (WORD)(15));
+		//SetConsoleTextAttribute(hconsole, (WORD)(15));
 	}
 	void erase(int val){
 		if (root != NULL){
@@ -730,7 +730,7 @@ void tree_work(){
 			A.insert(pos, val);
 			break;
 		case 2:
-			cout << "insert value\n";
+			cout << "insert deleting value\n";
 			cin >> val;
 			A.erase(val);
 			break;
@@ -758,7 +758,7 @@ void bintree_work(){
 			A.insert(val);
 			break;
 		case 2:
-			cout << "insert value\n";
+			cout << "insert delenting value\n";
 			cin >> val;
 			A.erase(val);
 			break;
@@ -786,7 +786,7 @@ void rbt_work(){
 			A.insert(val);
 			break;
 		case 2:
-			cout << "insert value\n";
+			cout << "insert deleting value\n";
 			cin >> val;
 			A.erase(val);
 			break;
