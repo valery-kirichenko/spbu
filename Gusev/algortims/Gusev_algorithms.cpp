@@ -7,7 +7,7 @@
 #include <vector>
 //#include<bits/stdc++.h>
 #include<algorithm>
-#include<conio.h>
+//#include<conio.h>
 #include<random>
 #include<time.h>
 
@@ -711,7 +711,8 @@ void array_work(){
 			return;
 		else
 			cout << "error\n";
-		_getch();
+		//_getch();
+		system("pause");
 	}
 }
 
@@ -738,7 +739,8 @@ void tree_work(){
 			return ;
 		default: 
 			cout << "incorrect format";
-			_getch();
+			//_getch();
+			system("pause");
 		}
 	}
 }
@@ -766,7 +768,8 @@ void bintree_work(){
 			return;
 		default:
 			cout << "incorrect format";
-			_getch();
+			//_getch();
+			system("pause");
 		}
 	}
 }
@@ -794,7 +797,8 @@ void rbt_work(){
 			return;
 		default:
 			cout << "incorrect format";
-			_getch();
+			//_getch();
+			system("pause");
 		}
 	}
 }
@@ -816,6 +820,7 @@ void start_tree_work(){
 		break;
 	default:
 		cout << "non_correct input format\n";
+		system("pause");
 	}
 }
 
@@ -846,7 +851,8 @@ int main() {/*
 			return 0;
 		default:
 			cout << "incorrrect input data\n";
-			_getch();
+			//_getch();
+			system("pause");
 		}
 	}
 	return 0;
