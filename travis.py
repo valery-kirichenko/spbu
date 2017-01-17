@@ -13,8 +13,8 @@ f.close();
 
 if os.path('stdafx.h'):
     print('created')
-else
-    print('failed')
+
+print('abvgd')
 
 for i in range(len(js)):
     if js[i]['status'] == 'removed':
