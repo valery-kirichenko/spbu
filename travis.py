@@ -13,8 +13,8 @@ for i in range(len(js)):
         continue
     print(js[i]['filename'] + ' is compiling')
     
-	print(os.path.dirname(file) + '<')
-	
+    print(os.path.dirname(file) + '<')
+
     if not os.path.exists(os.path.dirname(file) + '/stdafx.h'):
         f = open(os.path.dirname(file) + '/stdafx.h', 'a+')
         f.write('#include <stdio.h>\n')
