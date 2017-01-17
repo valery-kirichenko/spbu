@@ -6,12 +6,12 @@ import requests
 reqid = os.environ['TRAVIS_PULL_REQUEST']
 js = requests.get('https://api.github.com/repos/valera5505/SPbU/pulls/' + reqid + '/files').json()
 
-f = open('stdafx.h', 'a+')
+f = open('Bushev/stdafx.h', 'a+')
 f.write('#include <stdio.h>')
 f.write('#include <tchar.h>')
 f.close();
 
-if os.path.exists('stdafx.h'):
+if os.path.exists('Bushev/stdafx.h'):
     print('created')
 
 print('abvgd')
