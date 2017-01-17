@@ -13,8 +13,9 @@ for i in range(len(js)):
         continue
     print(js[i]['filename'] + ' is compiling')
 
-    if not os.path.exists(s.path.dirname(js[i]['filename']) + '/stdafx.h'):
-        f = open(s.path.dirname(js[i]['filename']) + '/stdafx.h', 'a+')
+    if not os.path.exists(os.path.dirname(js[i]['filename']) + '/stdafx.h'):
+        f = open(os.path.dirname(js[i]['filename']) + '/stdafx.h', 'a+')
+        f.write('#include <stdio.h>')
         f.close();
     
     process = subprocess.Popen(['g++-6', '-o', js[i]['filename'] + '.' + str(i), js[i]['filename'], '-std=c++14', '-pthread'], stdout=subprocess.PIPE)
