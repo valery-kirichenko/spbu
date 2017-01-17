@@ -9,6 +9,12 @@ js = requests.get('https://api.github.com/repos/valera5505/SPbU/pulls/' + reqid 
 f = open('stdafx.h', 'a+')
 f.write('#include <stdio.h>')
 f.write('#include <tchar.h>')
+f.close();
+
+if os.path.isfile('stdafx.h'):
+    print('created')
+else
+    print('failed')
 
 for i in range(len(js)):
     if js[i]['status'] == 'removed':
