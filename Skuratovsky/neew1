@@ -1,0 +1,113 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+ 
+class Vector
+{ 
+private:
+	int minI;
+    int maxI;
+	int length;
+    int* data;
+    
+public:
+	
+    Vector(int minIndex, int maxIndex);
+    Vector(int len);
+    ~Vector();
+    int get(int index);
+    int setvalue(int index, int value);
+    void show();
+    void divide(int el);
+    void multiply(int el);
+	void add(const Vector&b);
+	void subtract(const Vector&b);
+
+};
+Vector::Vector(int minIndex, int maxIndex)
+    
+{
+	minI=minIndex;
+	maxI=maxIndex-1;
+    length = maxI + 1 - minI;
+    data = new int[length];
+ 
+    for (int i = 0; i < length; i++)
+        data[i] = 0;
+}
+Vector::Vector(int len):
+    minI(0),maxI(len-1)
+{
+    data = new int[len];
+    length = len;
+    for(int i = 0; i < len; i++)
+        data[i] = 0;
+}
+int Vector::get(int index)
+{
+    if (index < minI || index > maxI)
+        return -1;
+    else
+        return data[index - minI];
+}
+int Vector::setvalue(int index, int value)
+{
+    if (index < minI || index > maxI)
+        return -1;
+    else
+        data[index - minI] = value;
+}
+Vector::~Vector()
+{
+    delete[] data;
+}
+void Vector::show()
+{
+    cout << "vector : " << endl << "Length = " << length << "\t Indices " << minI << " to " << maxI << endl;
+    for (int i = 0; i < length; i++)
+    {
+        cout << data[i] << " ";
+    }
+    cout << endl;
+}
+void Vector::divide(int val)
+{
+    for (int i = 0; i < length; i++)
+    {
+        data[i] /= val;
+    }
+}
+ 
+void Vector::multiply(int val)
+{
+    for (int i = 0; i < length; i++)
+    {
+        data[i] *= val;
+    }
+}
+void Vector::add(const Vector& b)
+{
+	if (this->minI==b.minI && this->maxI == b.maxI) for(int i=0; i<this->length; i++) this->data[i]+=b.data[i]; 
+}
+void Vector::subtract(const Vector& b)
+{
+	if (this->minI==b.minI && this->maxI == b.maxI) for(int i=0; i<this->length; i++) this->data[i]-=b.data[i]; 
+}
+int main()
+{
+    ifstream fin("input.txt");
+	int n;
+	fin>>n;
+	Vector a(n);
+	int sentinel;
+	for (int i=0; i<n; i++)
+	{
+		fin>>sentinel;
+        a.setvalue(i,sentinel);
+	}
+	a.show();
+	a.multiply(100);
+	a.show();
+	system("pause");
+    return 0;
+}
