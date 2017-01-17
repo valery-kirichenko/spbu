@@ -12,11 +12,9 @@ for i in range(len(js)):
     if not js[i]['filename'].endswith('.cpp'):
         continue
     print(js[i]['filename'] + ' is compiling')
-    
-    print(os.path.dirname(file) + '<')
 
-    if not os.path.exists(os.path.dirname(file) + '/stdafx.h'):
-        f = open(os.path.dirname(file) + '/stdafx.h', 'a+')
+    if not os.path.exists(os.path.split(js[i]['filename'])[0] + '/stdafx.h'):
+        f = open(os.path.split(js[i]['filename'])[0] + '/stdafx.h', 'a+')
         f.write('#include <stdio.h>\n')
         f.write('#include <tchar.h>')
         f.close();
