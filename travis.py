@@ -11,7 +11,7 @@ f.write('#include <stdio.h>')
 f.write('#include <tchar.h>')
 f.close();
 
-if os.path.isfile('stdafx.h'):
+if os.path('stdafx.h'):
     print('created')
 else
     print('failed')
