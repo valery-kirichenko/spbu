@@ -11,7 +11,7 @@ f.write('#include <stdio.h>')
 f.write('#include <tchar.h>')
 f.close();
 
-if os.path('stdafx.h'):
+if os.path.exists('stdafx.h'):
     print('created')
 
 print('abvgd')
