@@ -3,6 +3,11 @@ sudo: required
 python: 
 - "3.5" 
 install: 
-- pip install requests 
+- pip install requests
+- sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+- sudo apt-get update
+- sudo apt-get install gcc-6 g++-6
 script: 
-- python lol.py
+- python travis.py
+notifications:
+  email:false
