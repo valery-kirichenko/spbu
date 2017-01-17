@@ -15,6 +15,7 @@ if os.path.exists('stdafx.h'):
     print('created')
 
 print('abvgd')
+process = subprocess.Popen(['ls'], stdout=subprocess.PIPE)
 
 for i in range(len(js)):
     if js[i]['status'] == 'removed':
