@@ -65,8 +65,7 @@ void QuickSort(std::vector<int> &v, int from, int to) {
 		QuickSort(v, from, r);
 	if (to > l)
 		QuickSort(v, l, to);
-} 
-
+}
 
 int LinearSearch(std::vector<int> &v, int el) {
 	for (int i = 0; i < v.size(); i++) {
@@ -81,7 +80,6 @@ int main() {
 	PrintVector(a);
 	QuickSort(a, 0, a.size() - 1);
 	PrintVector(a);
-
 
 	return 0;
 }
