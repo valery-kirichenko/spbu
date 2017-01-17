@@ -6,7 +6,7 @@ import requests
 reqid = os.environ['TRAVIS_PULL_REQUEST']
 js = requests.get('https://api.github.com/repos/valera5505/SPbU/pulls/' + reqid + '/files').json()
 
-f = open('stdafx.h')
+f = open('stdafx.h', 'a+')
 f.write('#include <stdio.h>')
 f.write('#include <tchar.h>')
 
