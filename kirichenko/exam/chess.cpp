@@ -209,7 +209,7 @@ void PrintBoard() {
 	for (int i = 0; i < 8; i++) {
 		std::cout << std::abs(i - 8) << " | ";
 		for (int j = 0; j < 8; j++) {
-			std::cout << figures[board[i][j] + ((pboard[i][j] == WHITE) ? 7 : 0)] << " ";
+			std::cout << figures[board[i][j] + ((pboard[i][j] == BLACK) ? 7 : 0)] << " ";
 		}
 		std::cout << std::endl;
 	}
