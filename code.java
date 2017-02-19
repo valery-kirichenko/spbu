@@ -6,59 +6,64 @@ public class Tree {
         private Leaf left;
         private Leaf right;
         Leaf() {
-            data = 0;
-            left = null;
-            right = null;
+            this.data = 0;
+            this.left = null;
+            this.right = null;
         }
     }
+
     private int numOfLeaves;
     private int tempData;
     private Leaf tempLeaf;
     private Leaf root;
+
     Tree() {
-        tempLeaf = null;
-        tempData = 0;
-        numOfLeaves = 0;
+        this.tempLeaf = new Leaf();
+        this.root = new Leaf();
+        this.tempData = 0;
+        this.numOfLeaves = 0;
     }
+
     public void addleaf(int x) {
-        if (numOfLeaves == 0) {
-            root.data = x;
-            root.left = null;
-            root.right = null;
-            numOfLeaves = 1;
-            tempLeaf = root;
-            tempData = x;
+        if (this.numOfLeaves == 0) {
+            this.root.data = x;
+            this.root.left = null;
+            this.root.right = null;
+            this.numOfLeaves = 1;
+            this.tempLeaf = root;
+            this.tempData = x;
         }
         else {
             recursionFunction(x);
         }
     }
+
     private void recursionFunction(int x) {
-        if (x >= tempData) {
-            if (tempLeaf.left == null) {
+        if (x >= this.tempData) {
+            if (this.tempLeaf.left == null) {
                 Leaf newLeaf = new Leaf();
                 newLeaf.data = x;
                 newLeaf.left = null;
                 newLeaf.right = null;
-                tempLeaf.left = newLeaf;
-                tempLeaf = root;
+                this.tempLeaf.left = newLeaf;
+                this.tempLeaf = this.root;
             }
-            if (tempLeaf.left != null) {
-                tempLeaf = tempLeaf.left;
+            if (this.tempLeaf.left != null) {
+                this.tempLeaf = tempLeaf.left;
                 recursionFunction(x);
             }
         }
-        if (x < tempData) {
-            if (tempLeaf.right == null) {
+        if (x < this.tempData) {
+            if (this.tempLeaf.right == null) {
                 Leaf newLeaf = new Leaf();
                 newLeaf.data = x;
                 newLeaf.left = null;
                 newLeaf.right = null;
-                tempLeaf.right = newLeaf;
-                tempLeaf = root;
+                this.tempLeaf.right = newLeaf;
+                this.tempLeaf = this.root;
             }
-            if (tempLeaf.right != null) {
-                tempLeaf = tempLeaf.right;
+            if (this.tempLeaf.right != null) {
+                this.tempLeaf = this.tempLeaf.right;
                 recursionFunction(x);
             }
         }
