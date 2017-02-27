@@ -17,7 +17,7 @@ for i in range(len(js)):
     process.wait()
 
     if not os.path.exists(js[i]['filename'][0:-4] + 'class'):
-        print("Error in: " + js[i]['filename'][0:-4] + 'class');
+        exit(1);
     else:
         print("success");
     
