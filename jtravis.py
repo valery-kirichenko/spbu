@@ -12,12 +12,12 @@ for i in range(len(js)):
     if not js[i]['filename'].endswith('.java'):
         continue
     print(js[i]['filename'] + ' is compiling')
-    
-    process = subprocess.Popen(['javac', js[i]['filename'] + '.' + str(i), js[i]['filename']], stdout=subprocess.PIPE)
+	
+    process = subprocess.Popen(['javac', js[i]['filename']], stdout=subprocess.PIPE)
     process.wait()
 
-    if not os.path.exists(js[i]['filename'] + '.' + str(i)):
-        exit(1)
+    if not os.path.exists(js[i]['filename'][0:-4] + 'class'):
+        exit(1);
     else:
         print("success");
     
