@@ -16,8 +16,8 @@ for i in range(len(js)):
     process = subprocess.Popen(['javac', js[i]['filename']], stdout=subprocess.PIPE)
     process.wait()
 
-    if not os.path.exists(js[i]['filename'] + '.class'):
-        print("error");
+    if not os.path.exists(js[i]['filename'][0:-4] + 'class'):
+        print("Error in: " + js[i]['filename'][0:-4] + 'class');
     else:
         print("success");
     
