@@ -2,140 +2,137 @@ package MyBank;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-public class FileBaseInterpreter {
-    ArrayList<Client> acl;
-    ArrayList<Credit> acr;
-    Singleton sn;
-    String clientsFile, creditsFile;
-    FileBaseInterpreter(String clientsFile, String creditsFile, Singleton sn){
+class FileBaseInterpreter {
+    private String clientsFile, creditsFile;
+    FileBaseInterpreter(String clientsFile, String creditsFile){
         this.clientsFile = clientsFile;
         this.creditsFile = creditsFile;
-        this.sn = sn;
     }
 
-    public void interpret(){
-        clientRead();
-        creditReadAndAssign();
+    void interpret(){
+        for (String s : readFile(clientsFile, "\n"))
+            try { addClient(parseClient(s)); }
+            catch (Exception ignored){}
+        for (String s : readFile(creditsFile, "&"))
+            try { addCredit(parseCredit(s)); }
+            catch (Exception ignored) {}
+
         checkMergeClient();
-        sn.aclient = acl;
     }
 
-    private void creditReadAndAssign() {
-        URL url = Thread.currentThread().getContextClassLoader().getResource(creditsFile);
-        File file = new File(url.getPath());
-        try (Scanner sc = new Scanner(file);){
-            String s = sc.nextLine();
-            String[] al = s.split("&");
-            for (String t : al)
-                try {
-                    addCredit(t);
-                }
-                catch (StringIndexOutOfBoundsException siobe){
-                }
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    private void addCredit(Credit cr) {
+        for (Client cl : ClientStorage.getClientList())
+            if (cr.getClientId() == cl.getId())
+                cl.getCredits().add(cr);
     }
 
-    private void addCredit(String s) {
+    private Credit parseCredit(String s){
         Credit cr = new Credit();
         s = s.substring(7);
-        cr.clientId = Integer.parseInt(s.substring(0, s.indexOf('|')));
+        cr.setClientId(Integer.parseInt(s.substring(0, s.indexOf('|'))));
         s = s.substring(s.indexOf('|') + 1);
-        cr.sum = Double.parseDouble(s.substring(0, s.indexOf(',')));
+        cr.setSum(Double.parseDouble(s.substring(0, s.indexOf(','))));
         s = s.substring(s.indexOf(',') + 1);
-        cr.percent = Double.parseDouble(s.substring(0, s.indexOf('%')));
+        cr.setPercent(Double.parseDouble(s.substring(0, s.indexOf('%'))));
         s = s.substring(s.indexOf('%') + 2);
-        cr.sumPaid = Double.parseDouble(s.substring(0, s.indexOf('^')));
+        cr.setSumPaid(Double.parseDouble(s.substring(0, s.indexOf('^'))));
         s = s.substring(s.indexOf('^') + 1);
-        cr.sumToPay = Double.parseDouble(s.substring(0, s.indexOf('_')));
+        cr.setSumToPay(Double.parseDouble(s.substring(0, s.indexOf('_'))));
         s = s.substring(s.indexOf('_') + 3);
         try {
-            cr.dateToClose = (new SimpleDateFormat("yyyy-MM-dd")).parse(s);
+            cr.setDateToClose((new SimpleDateFormat("yyyy-MM-dd")).parse(s));
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        return cr;
+    }
 
-        for (Client cl : acl)
-            if (cr.clientId == cl.id)
-                cl.credits.add(cr);
+    private Client parseClient(String s){
+        Client cl = new Client();
 
+        s.indexOf("");
+        cl.setId(Integer.parseInt(s.substring(0, s.indexOf('-'))));
+        s = s.substring(s.lastIndexOf('>') + 1);
+        cl.setName(s.substring(0, s.indexOf('-')));
+        s = s.substring(s.indexOf('-') + 3);
+        cl.setFamily(s.substring(0, s.indexOf('\\')));
+        s = s.substring(s.indexOf('\\') + 2);
+        cl.setFather(s.substring(0, s.indexOf('~')));
+        s = s.substring(s.indexOf('~') + 4);
+        cl.setPhone(s.substring(0, s.indexOf('=')));
+        s = s.substring(s.indexOf('=') + 2);
+        cl.setPassport(Integer.parseInt(s.substring(0, s.indexOf('_'))));
+        s = s.substring(s.indexOf('_') + 3);
+        try {
+            cl.setBirthDate((new SimpleDateFormat("yyyy-MM-dd")).parse(s.indexOf('=') == -1 ? s : s.substring(0, s.indexOf('='))));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (s.indexOf('=') != -1){
+            cl.setHasoldpas(true);
+            s = s.substring(s.indexOf('=') + 2);
+            cl.setOldpas(Integer.parseInt(s));
+        }
+        else cl.setHasoldpas(false);
+
+        return cl;
+    }
+
+    private void addClient(Client cl) {
+        ClientStorage.getClientList().add(cl);
     }
 
     private void checkMergeClient() {
-        ArrayList<Client> nacl = new ArrayList<Client>();
-        for (Client c1: acl) {
+        List<Client> nacl = new ArrayList<Client>();
+        for (Client c1: ClientStorage.getClientList()) {
             boolean was = false;
             for (Client c2 : nacl) {
                 boolean eq = false;
-                if (c1.passport == c2.passport)
+                if (c1.getPassport() == c2.getPassport())
                     eq = true;
-                if (c2.hasoldpas && c1.passport == c2.oldpas)
+                if (c2.isHasoldpas() && c1.getPassport() == c2.getOldpas())
                     eq = true;
-                if (c1.hasoldpas && c2.passport == c1.oldpas) {
+                if (c1.isHasoldpas() && c2.getPassport() == c1.getOldpas()) {
                     eq = true;
-                    c2.passport = c1.passport;
-                    c2.oldpas = c1.oldpas;
+                    c2.setPassport(c1.getPassport());
+                    c2.setOldpas(c1.getOldpas());
                 }
                 if (eq) {
-                    for (Credit cr : c1.credits)
-                        cr.clientId = c2.id;
-                    c2.credits.addAll(c1.credits);
+                    for (Credit cr : c1.getCredits())
+                        cr.setClientId(c2.getId());
+                    c2.getCredits().addAll(c1.getCredits());
                     was = true;
                 }
             }
             if (!was)
                 nacl.add(c1);
         }
-        acl = nacl;
+        ClientStorage.setClientList(nacl);
     }
 
-    private void clientRead() {
-        acl = new ArrayList<Client>();
-        URL url = Thread.currentThread().getContextClassLoader().getResource(clientsFile);
-        File file = new File(url.getPath());
-        try (Scanner sc = new Scanner(file);){
-            while (sc.hasNext())
-                addClient(sc.nextLine());
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void addClient(String s) {
-        Client cl = new Client();
-        s.indexOf("");
-        cl.id = Integer.parseInt(s.substring(0, s.indexOf('-')));
-        s = s.substring(s.lastIndexOf('>') + 1);
-        cl.name = s.substring(0, s.indexOf('-'));
-        s = s.substring(s.indexOf('-') + 3);
-        cl.family = s.substring(0, s.indexOf('\\'));
-        s = s.substring(s.indexOf('\\') + 2);
-        cl.father = s.substring(0, s.indexOf('~'));
-        s = s.substring(s.indexOf('~') + 4);
-        cl.phone = s.substring(0, s.indexOf('='));
-        s = s.substring(s.indexOf('=') + 2);
-        cl.passport = Integer.parseInt(s.substring(0, s.indexOf('_')));
-        s = s.substring(s.indexOf('_') + 3);
+    private String[] readFile(String fileName, String del){
+        String[] res = new String[0];
+        URL url = Thread.currentThread().getContextClassLoader().getResource(fileName);
         try {
-            cl.birthDate = (new SimpleDateFormat("yyyy-MM-dd")).parse(s.indexOf('=') == -1 ? s : s.substring(0, s.indexOf('=')));
-        } catch (ParseException e) {
+            String now = "";
+            Scanner sc = new Scanner(new File(url.getPath()));
+            while (sc.hasNext())
+                now += sc.nextLine() + '\n';
+            res = now.split(del);
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        if (s.indexOf('=') != -1){
-            cl.hasoldpas = true;
-            s = s.substring(s.indexOf('=') + 2);
-            cl.oldpas = Integer.parseInt(s);
-        }
-        else cl.hasoldpas = false;
-        acl.add(cl);
+        return res;
     }
 }
