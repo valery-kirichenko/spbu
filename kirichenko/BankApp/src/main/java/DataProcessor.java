@@ -1,10 +1,10 @@
-import java.util.ArrayList;
+import java.util.List;
 
 class DataProcessor {
-    private ArrayList<Client> clients;
-    private ArrayList<Credit> credits;
+    private List<Client> clients;
+    private List<Credit> credits;
 
-    DataProcessor(ArrayList<Client> cl, ArrayList<Credit> cr) {
+    DataProcessor(List<Client> cl, List<Credit> cr) {
         clients = cl;
         credits = cr;
     }

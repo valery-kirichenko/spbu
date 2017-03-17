@@ -2,11 +2,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 class DataReader {
-    ArrayList<Client> readClients(URL url) {
-        ArrayList<Client> clients = new ArrayList<>();
+    List<Client> readClients(URL url) {
+        List<Client> clients = new ArrayList<>();
         try (Scanner sc = new Scanner(new File(url.getPath()))) {
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
@@ -50,8 +51,8 @@ class DataReader {
         return clients;
     }
 
-    ArrayList<Credit> readCredits(URL url) {
-        ArrayList<Credit> credits = new ArrayList<>();
+    List<Credit> readCredits(URL url) {
+        List<Credit> credits = new ArrayList<>();
 
         try (Scanner sc = new Scanner(new File(url.getPath())).useDelimiter("\\Z")) {
             String fileData = sc.next();

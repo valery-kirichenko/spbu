@@ -1,15 +1,12 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
-
-/**
- * Created by valera5505 on 10.03.17.
- */
+import java.util.List;
 
 public class Client {
     private int id, passport, oldPassport;
     private String firstName, lastName, middleName, phoneNumber;
-    private LocalDate birthdate;
-    private ArrayList<Credit> credits = new ArrayList<>();
+    private LocalDate birthDate;
+    private List<Credit> credits = new ArrayList<>();
 
     public Client() { }
 
@@ -41,11 +38,11 @@ public class Client {
         return phoneNumber;
     }
 
-    public LocalDate getBirthdate() {
-        return birthdate;
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
-    public ArrayList<Credit> getCredits() {
+    public List<Credit> getCredits() {
         return credits;
     }
 
@@ -77,12 +74,12 @@ public class Client {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setBirthdate(LocalDate birthdate) {
-        this.birthdate = birthdate;
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
     }
 
     public void setBirthdate(String birthdate) {
-        this.birthdate = LocalDate.parse(birthdate);
+        this.birthDate = LocalDate.parse(birthdate);
     }
 
     public void addCredit(Credit credit) {
@@ -92,7 +89,7 @@ public class Client {
     @Override
     public String toString() {
         String result = id + " | " + lastName + " " + firstName + " " + middleName + " | "
-                + birthdate.getDayOfMonth() + "." + birthdate.getMonthValue() + "." + birthdate.getYear() + " | "
+                + birthDate.getDayOfMonth() + "." + birthDate.getMonthValue() + "." + birthDate.getYear() + " | "
                 + phoneNumber + " | " + passport + " | " + oldPassport + "\nCredits:\n";
         for (Credit credit : credits) {
             result += credit.getTotal() + " | " + credit.getRate() + " | " + credit.getPaid() + " | "
