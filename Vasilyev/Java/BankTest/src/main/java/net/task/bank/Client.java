@@ -2,15 +2,16 @@ package net.task.bank;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class Client {
     //ID в старой системе, Имя, Отчество, Фамилия, телефон, номер паспорта, номер старого паспорта(если есть), дата рождения в формате ISO
     private int id, passport, oldPassport;
-    private String name, lastname, middlename, phone;
-    private Date birthday;
+    private String name, lastName, middleName, phone;
+    private Date birthDay;
     public boolean isDeleted = false;
-    private ArrayList<Credit> credits = new ArrayList<>();
+    private List<Credit> credits = new ArrayList<>();
 
     Client() {
     }
@@ -23,12 +24,12 @@ public class Client {
         this.name = name;
     }
 
-    void setMiddlename(String middlename) {
-        this.middlename = middlename;
+    void setMiddleName(String middlename) {
+        this.middleName = middlename;
     }
 
-    void setLastname(String lastname) {
-        this.lastname = lastname;
+    void setLastName(String lastname) {
+        this.lastName = lastname;
     }
 
     void setPassport(int passport) {
@@ -44,7 +45,7 @@ public class Client {
     }
 
     void setBirthday(Date birthday) {
-        this.birthday = birthday;
+        this.birthDay = birthday;
     }
 
     void addCredit(Credit credit) {
@@ -60,12 +61,12 @@ public class Client {
         return this.name;
     }
 
-    public String getMiddlename() {
-        return this.middlename;
+    public String getMiddleName() {
+        return this.middleName;
     }
 
-    public String getLastname() {
-        return this.lastname;
+    public String getLastName() {
+        return this.lastName;
     }
 
     public int getPassport() {
@@ -80,11 +81,11 @@ public class Client {
         return this.phone;
     }
 
-    public Date getBirthday() {
-        return this.birthday;
+    public Date getBirthDay() {
+        return this.birthDay;
     }
 
-    public ArrayList<Credit> getCredits() {
+    public List<Credit> getCredits() {
         return credits;
     }
 
@@ -92,13 +93,13 @@ public class Client {
     @Override
     public String toString() {
         if (this.getOldPassport() == 0) {
-            return (this.getId() + " " + this.getName() + " " + this.getMiddlename() + " " +
-                    this.getLastname() + " " + this.getPhone() + " " + this.getPassport() + " "
-                    + this.getBirthday());
+            return (this.getId() + " " + this.getName() + " " + this.getMiddleName() + " " +
+                    this.getLastName() + " " + this.getPhone() + " " + this.getPassport() + " "
+                    + this.getBirthDay());
         } else {
-            return (this.getId() + " " + this.getName() + " " + this.getMiddlename() + " " +
-                    this.getLastname() + " " + this.getPhone() + " " + this.getPassport() + " "
-                    + this.getBirthday() + " " + this.getOldPassport());
+            return (this.getId() + " " + this.getName() + " " + this.getMiddleName() + " " +
+                    this.getLastName() + " " + this.getPhone() + " " + this.getPassport() + " "
+                    + this.getBirthDay() + " " + this.getOldPassport());
         }
     }
 }

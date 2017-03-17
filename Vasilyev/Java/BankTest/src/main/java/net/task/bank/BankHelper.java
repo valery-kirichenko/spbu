@@ -4,79 +4,58 @@ import com.sun.istack.internal.Nullable;
 
 import java.time.Instant;
 import java.util.ArrayList;
-
-import static net.task.bank.DataStore.countNull;
+import java.util.List;
 
 
 public class BankHelper implements ClientHelper {
-    public ArrayList<Credit> nullPointerCredits = new ArrayList<>();
+    public static List<Credit> nullPointerCredits = new ArrayList<>();
 
     @Override
-    @Nullable
-    public ArrayList<String> getListDebtors(DataStore dataStore) {
-        ArrayList<String> debtors = new ArrayList<>();
-        ArrayList<Integer> idDebtors = new ArrayList<>();
+    public List<Client> getListDebtors() {
+        List<Client> debtors = new ArrayList<>();
         Instant now = Instant.now();
-        boolean isEmpty = true;
-        int count = 0;
 
-        for (Credit credit : dataStore.credits)
-            if (now.isAfter(credit.getClosingDate().toInstant()) &&
-                    (credit.getPaidSum() < credit.getNeedPaid()) &&
-                    !idDebtors.contains(credit.getId())) {
-                String nameFromId = dataStore.getNameFromId(credit.getId());
-                if (nameFromId != null) {
-                    debtors.add(credit.getId() + " " + nameFromId);
-                    idDebtors.add(credit.getId());
-                    isEmpty = false;
-                } else if (!nullPointerCredits.contains(credit)) {
-                    boolean check = true;
-                    for (Credit creditNull : nullPointerCredits)
-                        if (credit.getId() == creditNull.getId())
-                            check = false;
-                    nullPointerCredits.add(credit);
-                    count++;
-                    System.out.println(count + ") Found new unpaid credits with null id!");
-                    if (!check)
-                        countNull--;
-                }
-            }
+        for (Client client : DataStore.clients)
+            if (client.getCredits().size() > 0)
+                for (Credit credit : client.getCredits())
+                    if (now.isAfter(credit.getClosingDate().toInstant()) &&
+                            (credit.getPaidSum() < credit.getNeedPaid())) {
+                        debtors.add(client);
+                        break;
+                    }
 
-        return isEmpty ? null : debtors;
+        return debtors;
     }
 
     @Override
-    @Nullable
-    public ArrayList<Credit> getListUnpaidCredits(DataStore dataStore) {
-        ArrayList<Credit> unpaidCredits = new ArrayList<>();
+    public List<Credit> getListUnpaidCredits() {
+        List<Credit> unpaidCredits = new ArrayList<>();
         Instant now = Instant.now();
-        boolean isEmpty = true;
 
-        for (Credit credit : dataStore.credits)
+        for (Credit credit : DataStore.credits)
             if (now.isAfter(credit.getClosingDate().toInstant())
                     && (credit.getPaidSum() < credit.getNeedPaid())) {
                 unpaidCredits.add(credit);
-                isEmpty = false;
             }
 
-        return isEmpty ? null : unpaidCredits;
+        return unpaidCredits;
     }
 
     @Override
     @Nullable
-    public ArrayList<Credit> getListUnpaidCreditsOfClient(DataStore dataStore, int id) {
-        for (Client client : dataStore.clients)
+    public List<Credit> getListUnpaidCreditsOfClient(int id) {
+        for (Client client : DataStore.clients)
             if (client.getId() == id)
                 return client.getCredits();
-
+        System.out.println("Client with id " + id + " doesn't exist!");
         return null;
     }
 
     @Override
-    public double getTotalDebt(DataStore dataStore, int id) {
+    public double getTotalDebt(int id) {
         double debt = 0;
 
-        for (Credit credit : dataStore.credits)
+        for (Credit credit : DataStore.credits)
             if (id == credit.getId())
                 debt += credit.getNeedPaid() - credit.getPaidSum();
 

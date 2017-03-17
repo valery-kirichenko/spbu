@@ -1,14 +1,13 @@
 package net.task.bank;
 
-
-import java.util.ArrayList;
+import java.util.List;
 
 public interface ClientHelper {
-    ArrayList<String> getListDebtors(DataStore dataStore);
+    List<Client> getListDebtors();
 
-    ArrayList<Credit> getListUnpaidCredits(DataStore dataStore);
+    List<Credit> getListUnpaidCredits();
 
-    ArrayList<Credit> getListUnpaidCreditsOfClient(DataStore dataStore, int id);
+    List<Credit> getListUnpaidCreditsOfClient(int id);
 
-    double getTotalDebt(DataStore dataStore, int id);
+    double getTotalDebt(int id);
 }

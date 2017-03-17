@@ -11,16 +11,17 @@ import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 
 import java.io.*;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 
 
-public class DataStore {
+public final class DataStore {
     //Создать класс, который умеет собирать данные из файлов в общую базу данных,
     //притом дублирующиеся пользователи должны быть объединены, а буква ё должна быть заменена на е. (!)
     //Не потеряйте кредиты из аккаунтов дублей. Merge клиентов лучше оформить отдельным методом.
-    public ArrayList<Client> clients = new ArrayList<>();
-    public ArrayList<Credit> credits = new ArrayList<>();
-    public ArrayList<Integer> deletedClients = new ArrayList<>();
+    public static List<Client> clients = new ArrayList<>();
+    public static List<Credit> credits = new ArrayList<>();
     public static int countNull = 0;
 
     DataStore() {
@@ -30,7 +31,7 @@ public class DataStore {
     //Результат повторного заведения одних и тех же пользователей.
     //Может быть несколько пользователей у которых новый паспорт и старый паспорт совпадает
     //(пользователь сменил паспорт, завели новый аккаунт, притом может даже поменяться фамилия).
-    public void mergeDuplicate() {
+    public static void mergeDuplicate() {
         int countDup = 0, countError = 0;
 
         for (Client client1 : clients) {
@@ -43,7 +44,6 @@ public class DataStore {
                             }
                         }
                         countDup++;
-                        //deletedClients.add(client2.getId());
                         client2.isDeleted = true;
                         break;
                     } else if (client1.getOldPassport() == client2.getPassport()) {
@@ -53,7 +53,6 @@ public class DataStore {
                             }
                         }
                         countError++;
-                        //deletedClients.add(client2.getId());
                         client2.isDeleted = true;
                         break;
                     }
@@ -62,11 +61,29 @@ public class DataStore {
         }
         System.out.println("Number of duplicates: " + countDup + " real duplicates, " +
                 countError + " confusion with passports.");
-        ArrayList<Client> newClients = new ArrayList<>();
+        List<Client> newClients = new ArrayList<>();
         for (Client client : clients)
             if (!client.isDeleted)
                 newClients.add(client);
         clients = newClients;
+
+        Instant now = Instant.now();
+        int count = 0;
+
+        List<Credit> newCredits = new ArrayList<>();
+        for (Credit credit : credits) {
+            if (DataStore.getNameFromId(credit.getId()) != null)
+                newCredits.add(credit);
+            if (now.isAfter(credit.getClosingDate().toInstant()) &&
+                    (credit.getPaidSum() < credit.getNeedPaid())) {
+                if (DataStore.getNameFromId(credit.getId()) == null) {
+                    BankHelper.nullPointerCredits.add(credit);
+                    count++;
+                    System.out.println(count + ") Found new unpaid credit with null id!");
+                }
+            }
+        }
+        credits = newCredits;
 
         for (Client client : clients)
             for (Credit credit : credits)
@@ -74,16 +91,16 @@ public class DataStore {
                     client.addCredit(credit);
     }
 
-    public void outDataToTxt(FileOutputStream outClients, FileOutputStream outCredits) throws IOException {
+    public static void outDataToTxt(FileOutputStream outClients, FileOutputStream outCredits) throws IOException {
         for (Client client : clients) {
             if (client.getOldPassport() == 0) {
-                outClients.write((client.getId() + " " + client.getName() + " " + client.getMiddlename() + " " +
-                        client.getLastname() + " " + client.getPhone() + " " + client.getPassport() + " "
-                        + client.getBirthday() + "\n").getBytes());
+                outClients.write((client.getId() + " " + client.getName() + " " + client.getMiddleName() + " " +
+                        client.getLastName() + " " + client.getPhone() + " " + client.getPassport() + " "
+                        + client.getBirthDay() + "\n").getBytes());
             } else {
-                outClients.write((client.getId() + " " + client.getName() + " " + client.getMiddlename() + " " +
-                        client.getLastname() + " " + client.getPhone() + " " + client.getPassport() + " "
-                        + client.getBirthday() + " " + client.getOldPassport() + "\n").getBytes());
+                outClients.write((client.getId() + " " + client.getName() + " " + client.getMiddleName() + " " +
+                        client.getLastName() + " " + client.getPhone() + " " + client.getPassport() + " "
+                        + client.getBirthDay() + " " + client.getOldPassport() + "\n").getBytes());
             }
         }
 
@@ -94,17 +111,17 @@ public class DataStore {
         }
     }
 
-    public void outDataToCsv(CSVWriter writerClients, CSVWriter writerCredits) throws IOException {
+    public static void outDataToCsv(CSVWriter writerClients, CSVWriter writerCredits) throws IOException {
         for (Client client : clients) {
             if (client.getOldPassport() == 0) {
-                String[] entries = (client.getId() + " " + client.getName() + " " + client.getMiddlename() + " " +
-                        client.getLastname() + " " + client.getPhone() + " " + client.getPassport() + " "
-                        + client.getBirthday()).split(" ");
+                String[] entries = (client.getId() + " " + client.getName() + " " + client.getMiddleName() + " " +
+                        client.getLastName() + " " + client.getPhone() + " " + client.getPassport() + " "
+                        + client.getBirthDay()).split(" ");
                 writerClients.writeNext(entries);
             } else {
-                String[] entries = (client.getId() + " " + client.getName() + " " + client.getMiddlename() + " " +
-                        client.getLastname() + " " + client.getPhone() + " " + client.getPassport() + " "
-                        + client.getBirthday() + " " + client.getOldPassport()).split(" ");
+                String[] entries = (client.getId() + " " + client.getName() + " " + client.getMiddleName() + " " +
+                        client.getLastName() + " " + client.getPhone() + " " + client.getPassport() + " "
+                        + client.getBirthDay() + " " + client.getOldPassport()).split(" ");
                 writerClients.writeNext(entries);
             }
         }
@@ -117,7 +134,7 @@ public class DataStore {
         }
     }
 
-    public void outDataToExcel(FileOutputStream outFile) throws IOException {
+    public static void outDataToExcel(FileOutputStream outFile) throws IOException {
 
         // создание самого excel файла в памяти
         HSSFWorkbook workbook = new HSSFWorkbook();
@@ -170,11 +187,11 @@ public class DataStore {
             Row rowFile = sheetClients.createRow(rowNumClients);
             rowFile.createCell(0).setCellValue(client.getId());
             rowFile.createCell(1).setCellValue(client.getName());
-            rowFile.createCell(2).setCellValue(client.getMiddlename());
-            rowFile.createCell(3).setCellValue(client.getLastname());
+            rowFile.createCell(2).setCellValue(client.getMiddleName());
+            rowFile.createCell(3).setCellValue(client.getLastName());
             rowFile.createCell(4).setCellValue(client.getPhone());
             rowFile.createCell(5).setCellValue(client.getPassport());
-            rowFile.createCell(6).setCellValue(client.getBirthday());
+            rowFile.createCell(6).setCellValue(client.getBirthDay());
             rowFile.getCell(6).setCellStyle(dateStyle);
             if (client.getOldPassport() != 0) {
                 rowFile.createCell(7).setCellValue(client.getOldPassport());
@@ -200,23 +217,23 @@ public class DataStore {
         System.out.println("Excel file was successfully created!");
     }
 
-    public void changeName() {
+    public static void changeClientInfo() {
         for (Client client : clients) {
             if (client.getName().contains("ё"))
                 client.setName(client.getName().replace('ё', 'е'));
-            if (client.getMiddlename().contains("ё"))
-                client.setMiddlename(client.getMiddlename().replace('ё', 'е'));
-            if (client.getLastname().contains("ё"))
-                client.setLastname(client.getLastname().replace('ё', 'е'));
+            if (client.getMiddleName().contains("ё"))
+                client.setMiddleName(client.getMiddleName().replace('ё', 'е'));
+            if (client.getLastName().contains("ё"))
+                client.setLastName(client.getLastName().replace('ё', 'е'));
         }
     }
 
     @Nullable
-    public String getNameFromId(int id) {
+    public static String getNameFromId(int id) {
         for (Client client : clients)
             if (id == client.getId())
-                return (client.getName() + " " + client.getMiddlename() + " " + client.getLastname());
-        countNull++;
+                return (client.getName() + " " + client.getMiddleName() + " " + client.getLastName());
+        countNull++; // Счётчик кредитов, у которых нет id среди клиентов.
         return null;
     }
 }
