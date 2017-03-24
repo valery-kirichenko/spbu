@@ -47,7 +47,7 @@ public class ClientHelper implements ClientHelping {
     }
 
     public void printClient(Client cl){
-        System.out.println(String.format("\tPassport: %d Name: %s %s %s Birthdate: ", cl.getPasport(), cl.getFamily(), cl.getName(),
+        System.out.println(String.format("\tPassport: %s Name: %s %s %s Birthdate: ", cl.getPassport(), cl.getFamily(), cl.getName(),
                 cl.getFather()) + (new SimpleDateFormat("dd.MM.yyyy")).format(cl.getBirthDate()));
     }
 

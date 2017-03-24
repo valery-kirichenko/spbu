@@ -9,9 +9,9 @@ import java.util.List;
  */
 public class Client {
     private int id;
-    private int pasport;
+    private String passport;
     private boolean hasoldpas;
-    private int oldpas;
+    private String oldpas;
     private Date birthDate;
     private String name;
     private String family;
@@ -27,12 +27,12 @@ public class Client {
         this.id = id;
     }
 
-    public int getPasport() {
-        return pasport;
+    public String getPassport() {
+        return passport;
     }
 
-    public void setPasport(int pasport) {
-        this.pasport = pasport;
+    public void setPassport(String passport) {
+        this.passport = passport;
     }
 
     public boolean isHasoldpas() {
@@ -43,11 +43,11 @@ public class Client {
         this.hasoldpas = hasoldpas;
     }
 
-    public int getOldpas() {
+    public String getOldpas() {
         return oldpas;
     }
 
-    public void setOldpas(int oldpas) {
+    public void setOldpas(String oldpas) {
         this.oldpas = oldpas;
     }
 

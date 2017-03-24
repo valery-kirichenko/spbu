@@ -23,8 +23,8 @@ public class ExcelWriter {
     }
 
     private void writeCredits() {
-        List<String> lsnames = new ArrayList(Arrays.asList(
-                "ID клиента", "Сумма", "Сумма к оплате", "Выплачено", "Процент", "Дата закрытия"
+        List<String> lsnames = new ArrayList<>(Arrays.asList(
+                "ID Клиента", "Сумма", "Сумма к оплате", "Оплачено", "Процент", "Дата закрытия"
         ));
         List<String> fieldsNames = new ArrayList<>(Arrays.asList(
                 "clientId", "sum", "sumToPay", "sumPaid", "percent", "dateToClose"
@@ -39,11 +39,11 @@ public class ExcelWriter {
     }
 
     private void writeClients(){
-        List<String> lsnames = new ArrayList(Arrays.asList(
+        List<String> lsnames = new ArrayList<>(Arrays.asList(
                 "ID", "Фамилия", "Имя", "Отчество", "Паспорт", "Телефон", "Дата рождения", "Старый паспорт"
         ));
         List<String> fieldsNames = new ArrayList<>(Arrays.asList(
-                "id", "family", "name", "father", "pasport", "phone", "birthDate", "oldpas"
+                "id", "family", "name", "father", "passport", "phone", "birthDate", "oldpas"
         ));
 
         List<Object> lob = new ArrayList<>();

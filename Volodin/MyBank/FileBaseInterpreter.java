@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 class FileBaseInterpreter {
@@ -68,7 +69,7 @@ class FileBaseInterpreter {
         s = s.substring(s.indexOf('~') + 4);
         cl.setPhone(s.substring(0, s.indexOf('=')));
         s = s.substring(s.indexOf('=') + 2);
-        cl.setPasport(Integer.parseInt(s.substring(0, s.indexOf('_'))));
+        cl.setPassport(s.substring(0, s.indexOf('_')));
         s = s.substring(s.indexOf('_') + 3);
         try {
             cl.setBirthDate((new SimpleDateFormat("yyyy-MM-dd")).parse(s.indexOf('=') == -1 ? s : s.substring(0, s.indexOf('='))));
@@ -78,7 +79,7 @@ class FileBaseInterpreter {
         if (s.indexOf('=') != -1){
             cl.setHasoldpas(true);
             s = s.substring(s.indexOf('=') + 2);
-            cl.setOldpas(Integer.parseInt(s));
+            cl.setOldpas(s);
         }
         else cl.setHasoldpas(false);
 
@@ -95,13 +96,13 @@ class FileBaseInterpreter {
             boolean was = false;
             for (Client c2 : nacl) {
                 boolean eq = false;
-                if (c1.getPasport() == c2.getPasport())
+                if (Objects.equals(c1.getPassport(), c2.getPassport()))
                     eq = true;
-                if (c2.isHasoldpas() && c1.getPasport() == c2.getOldpas())
+                if (c2.isHasoldpas() && Objects.equals(c1.getPassport(), c2.getOldpas()))
                     eq = true;
-                if (c1.isHasoldpas() && c2.getPasport() == c1.getOldpas()) {
+                if (c1.isHasoldpas() && Objects.equals(c2.getPassport(), c1.getOldpas())) {
                     eq = true;
-                    c2.setPasport(c1.getPasport());
+                    c2.setPassport(c1.getPassport());
                     c2.setOldpas(c1.getOldpas());
                 }
                 if (eq) {
