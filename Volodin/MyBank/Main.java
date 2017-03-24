@@ -5,11 +5,17 @@ package MyBank;
  */
 public class Main {
     public static void main(String[] args) {
-        FileBaseInterpreter rd = new FileBaseInterpreter("clients.omg", "credits.omg");
+        doThings();
+    }
+
+    private static void doThings() {
+        FileBaseInterpreter rd = new FileBaseInterpreter("testcli.omg", "credits.omg");
         rd.interpret();
-        ClientHelper ch = new ClientHelper();
-        ch.printLossUsers();
-        ch.printLossCredits();
-        ch.printRandomLosses();
+//        ClientHelper ch = new ClientHelper();
+//        ch.printLossUsers();
+//        ch.printLossCredits();
+//        ch.printRandomLosses();
+        ExcelWriter ev = new ExcelWriter();
+        ev.write();
     }
 }

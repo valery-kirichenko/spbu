@@ -1,12 +1,8 @@
 package MyBank;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -72,7 +68,7 @@ class FileBaseInterpreter {
         s = s.substring(s.indexOf('~') + 4);
         cl.setPhone(s.substring(0, s.indexOf('=')));
         s = s.substring(s.indexOf('=') + 2);
-        cl.setPassport(Integer.parseInt(s.substring(0, s.indexOf('_'))));
+        cl.setPasport(Integer.parseInt(s.substring(0, s.indexOf('_'))));
         s = s.substring(s.indexOf('_') + 3);
         try {
             cl.setBirthDate((new SimpleDateFormat("yyyy-MM-dd")).parse(s.indexOf('=') == -1 ? s : s.substring(0, s.indexOf('='))));
@@ -99,13 +95,13 @@ class FileBaseInterpreter {
             boolean was = false;
             for (Client c2 : nacl) {
                 boolean eq = false;
-                if (c1.getPassport() == c2.getPassport())
+                if (c1.getPasport() == c2.getPasport())
                     eq = true;
-                if (c2.isHasoldpas() && c1.getPassport() == c2.getOldpas())
+                if (c2.isHasoldpas() && c1.getPasport() == c2.getOldpas())
                     eq = true;
-                if (c1.isHasoldpas() && c2.getPassport() == c1.getOldpas()) {
+                if (c1.isHasoldpas() && c2.getPasport() == c1.getOldpas()) {
                     eq = true;
-                    c2.setPassport(c1.getPassport());
+                    c2.setPasport(c1.getPasport());
                     c2.setOldpas(c1.getOldpas());
                 }
                 if (eq) {
