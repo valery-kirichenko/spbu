@@ -1,3 +1,6 @@
+import com.sun.istack.internal.Nullable;
+
+import java.util.ArrayList;
 import java.util.List;
 
 class DataProcessor {
@@ -40,15 +43,23 @@ class DataProcessor {
         }
     }
 
-    void assignCredits() {
+    @Nullable
+    List<Credit> assignCredits() {
+        List<Credit> creditsWithoutClients = new ArrayList<>();
         for (Credit credit : credits) {
+            boolean set = false;
             int id = credit.getId();
             for (Client client : clients) {
                 if (client.getId() == id) {
                     client.addCredit(credit);
+                    set = true;
                     break;
                 }
             }
+            if (!set) {
+                creditsWithoutClients.add(credit);
+            }
         }
+        return creditsWithoutClients.size() != 0 ? creditsWithoutClients : null;
     }
 }
