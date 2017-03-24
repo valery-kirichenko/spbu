@@ -24,7 +24,7 @@ public class ExcelWriter {
 
     private void writeCredits() {
         List<String> lsnames = new ArrayList<>(Arrays.asList(
-                "ID Клиента", "Сумма", "Сумма к оплате", "Оплачено", "Процент", "Дата закрытия"
+                "ID РљР»РёРµРЅС‚Р°", "РЎСѓРјРјР°", "РЎСѓРјРјР° Рє РѕРїР»Р°С‚Рµ", "РћРїР»Р°С‡РµРЅРѕ", "РџСЂРѕС†РµРЅС‚", "Р”Р°С‚Р° Р·Р°РєСЂС‹С‚РёСЏ"
         ));
         List<String> fieldsNames = new ArrayList<>(Arrays.asList(
                 "clientId", "sum", "sumToPay", "sumPaid", "percent", "dateToClose"
@@ -40,7 +40,7 @@ public class ExcelWriter {
 
     private void writeClients(){
         List<String> lsnames = new ArrayList<>(Arrays.asList(
-                "ID", "Фамилия", "Имя", "Отчество", "Паспорт", "Телефон", "Дата рождения", "Старый паспорт"
+                "ID", "Р¤Р°РјРёР»РёСЏ", "РРјСЏ", "РћС‚С‡РµСЃС‚РІРѕ", "РџР°СЃРїРѕСЂС‚", "РўРµР»РµС„РѕРЅ", "Р”Р°С‚Р° СЂРѕР¶РґРµРЅРёСЏ", "РЎС‚Р°СЂС‹Р№ РїР°СЃРїРѕСЂС‚"
         ));
         List<String> fieldsNames = new ArrayList<>(Arrays.asList(
                 "id", "family", "name", "father", "passport", "phone", "birthDate", "oldpas"
