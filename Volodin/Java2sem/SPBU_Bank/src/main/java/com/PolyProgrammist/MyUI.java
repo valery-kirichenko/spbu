@@ -8,10 +8,8 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
+import com.vaadin.ui.components.grid.ItemClickListener;
 
 import javax.servlet.annotation.WebServlet;
 
@@ -30,6 +28,7 @@ public class MyUI extends UI {
         FileBaseInterpreter rd = new FileBaseInterpreter("testcli.omg", "credits.omg");
         rd.interpret();
         final VerticalLayout layout = new VerticalLayout();
+        layout.setSizeFull();
         System.out.println("lol");
 
         Grid<ClientInf> grClients = new Grid<>();
@@ -52,25 +51,39 @@ public class MyUI extends UI {
         grCredits.addColumn(CreditInf::getPercent).setCaption("Percent");
         grCredits.addColumn(CreditInf::getDateToClose).setCaption("Date to close");
 
-        Button bClients = new Button("Clients");
-        Button bCredits = new Button("Credits");
+        Grid<CreditInf> grNowUser = new Grid<>();
+        grNowUser.addColumn(CreditInf::getClientId).setCaption("ClientID");
+        grNowUser.addColumn(CreditInf::getSum).setCaption("Sum");
+        grNowUser.addColumn(CreditInf::getSumToPay).setCaption("Sum to pay");
+        grNowUser.addColumn(CreditInf::getSumPaid).setCaption("Sum paid");
+        grNowUser.addColumn(CreditInf::getPercent).setCaption("Percent");
+        grNowUser.addColumn(CreditInf::getDateToClose).setCaption("Date to close");
 
-        VerticalLayout vl = new VerticalLayout();
-
-        bClients.addClickListener(event->{
-            vl.removeAllComponents();
-            vl.addComponent(grClients);
+        TabSheet ts = new TabSheet();
+        layout.addComponent(ts);
+        ts.addTab(grClients, "Clients");
+        ts.addTab(grCredits, "Credits");
+        //ts.addTab(grNowUser, "NowClient");
+        grClients.setSizeFull();
+        grCredits.setSizeFull();
+        grNowUser.setSizeFull();
+        grClients.addItemClickListener(new ItemClickListener<ClientInf>() {
+            @Override
+            public void itemClick(Grid.ItemClick<ClientInf> itemClick) {
+                grNowUser.setItems(itemClick.getItem().getCredits());
+                ts.addTab(grNowUser, "NowClient");
+                ts.setSelectedTab(grNowUser);
+            }
         });
-        bCredits.addClickListener(event->{
-            vl.removeAllComponents();
-            vl.addComponent(grCredits);
+
+        ts.addSelectedTabChangeListener(new TabSheet.SelectedTabChangeListener() {
+            @Override
+            public void selectedTabChange(TabSheet.SelectedTabChangeEvent selectedTabChangeEvent) {
+                if (!ts.getSelectedTab().equals(grNowUser))
+                    ts.removeComponent(grNowUser);
+
+            }
         });
-
-        layout.addComponent(bClients);
-        layout.addComponent(bCredits);
-        layout.addComponent(vl);
-
-        
         setContent(layout);
     }
 
