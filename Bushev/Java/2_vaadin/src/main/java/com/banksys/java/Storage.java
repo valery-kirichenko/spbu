@@ -77,7 +77,7 @@ public class Storage {
 
                 statement.close();
                 connection.commit();
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 System.err.println(e.getClass().getName() + ": " + e.getMessage());
                 System.exit(0);
@@ -227,10 +227,10 @@ public class Storage {
         statement.executeUpdate();
     }
 
-    public void rewriteData(){
-        openConnection();
-
+    public void rewriteData() {
         try {
+            if (connection == null || connection.isClosed()) openConnection();
+
             statement = connection.prepareStatement("DELETE FROM " + CLIENTS_TABLE);
             statement.executeUpdate();
             statement = connection.prepareStatement("DELETE FROM " + CREDITS_TABLE);
@@ -243,7 +243,7 @@ public class Storage {
 
             statement.close();
             connection.commit();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
