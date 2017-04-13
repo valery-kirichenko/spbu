@@ -3,7 +3,6 @@ package com.PolyProgrammist;
 import FromFile.ClientInf;
 import FromFile.ClientStorage;
 import FromFile.CreditInf;
-import FromFile.FileBaseInterpreter;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
@@ -12,6 +11,9 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.components.grid.ItemClickListener;
 
 import javax.servlet.annotation.WebServlet;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window 
@@ -22,17 +24,37 @@ import javax.servlet.annotation.WebServlet;
  */
 @Theme("mytheme")
 public class MyUI extends UI {
+    private final VerticalLayout layout = new VerticalLayout();
+
+    private void addNewClient(){
+        VerticalLayout vl = new VerticalLayout();
+        List<> ts = Arrays.asList(ClientInf::setFamily, ClientInf::setName, ClientInf::setFather);
+        TextField name = new TextField("Name");
+        Button b = new Button("OK");
+        b.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                if (name.getValue().equals(""))
+                    return;
+                ClientInf cl = new ClientInf();
+                cl.setName(name.getValue());
+                System.out.println(cl.getName());
+                layout.removeComponent(vl);
+            }
+        });
+
+
+        vl.addComponent(name);
+        vl.addComponent(b);
+        layout.addComponent(vl, 1);
+    }
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        FileBaseInterpreter rd = new FileBaseInterpreter("testcli.omg", "credits.omg");
-        rd.interpret();
-        final VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
         System.out.println("lol");
 
         Grid<ClientInf> grClients = new Grid<>();
-        grClients.setItems(ClientStorage.getClientList());
 
         grClients.addColumn(ClientInf::getId).setCaption("ID");
         grClients.addColumn(ClientInf::getName).setCaption("Name");
@@ -42,7 +64,6 @@ public class MyUI extends UI {
         grClients.addColumn(ClientInf::getPhone).setCaption("Phone");
 
         Grid<CreditInf> grCredits = new Grid<>();
-        grCredits.setItems(ClientStorage.getCreditList());
 
         grCredits.addColumn(CreditInf::getClientId).setCaption("ClientID");
         grCredits.addColumn(CreditInf::getSum).setCaption("Sum");
@@ -51,13 +72,17 @@ public class MyUI extends UI {
         grCredits.addColumn(CreditInf::getPercent).setCaption("Percent");
         grCredits.addColumn(CreditInf::getDateToClose).setCaption("Date to close");
 
-        Grid<CreditInf> grNowUser = new Grid<>();
-        grNowUser.addColumn(CreditInf::getClientId).setCaption("ClientID");
-        grNowUser.addColumn(CreditInf::getSum).setCaption("Sum");
-        grNowUser.addColumn(CreditInf::getSumToPay).setCaption("Sum to pay");
-        grNowUser.addColumn(CreditInf::getSumPaid).setCaption("Sum paid");
-        grNowUser.addColumn(CreditInf::getPercent).setCaption("Percent");
-        grNowUser.addColumn(CreditInf::getDateToClose).setCaption("Date to close");
+        grClients.setItems(ClientStorage.getClientList());
+        grCredits.setItems(ClientStorage.getCreditList());
+
+        Button bNewClient = new Button("New Client");
+        bNewClient.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent clickEvent) {
+                addNewClient();
+            }
+        });
+        layout.addComponent(bNewClient);
 
         TabSheet ts = new TabSheet();
         layout.addComponent(ts);
@@ -66,24 +91,14 @@ public class MyUI extends UI {
         //ts.addTab(grNowUser, "NowClient");
         grClients.setSizeFull();
         grCredits.setSizeFull();
-        grNowUser.setSizeFull();
         grClients.addItemClickListener(new ItemClickListener<ClientInf>() {
             @Override
             public void itemClick(Grid.ItemClick<ClientInf> itemClick) {
-                grNowUser.setItems(itemClick.getItem().getCredits());
-                ts.addTab(grNowUser, "NowClient");
-                ts.setSelectedTab(grNowUser);
+                grCredits.setItems(itemClick.getItem().getCredits());
+                ts.setSelectedTab(grCredits);
             }
         });
 
-        ts.addSelectedTabChangeListener(new TabSheet.SelectedTabChangeListener() {
-            @Override
-            public void selectedTabChange(TabSheet.SelectedTabChangeEvent selectedTabChangeEvent) {
-                if (!ts.getSelectedTab().equals(grNowUser))
-                    ts.removeComponent(grNowUser);
-
-            }
-        });
         setContent(layout);
     }
 

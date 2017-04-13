@@ -23,4 +23,11 @@ public class ClientStorage {
             lcf.addAll(cl.getCredits());
         return lcf;
     }
+
+    static{
+        try {
+            FileBaseInterpreter rd = new FileBaseInterpreter("testcli.omg", "credits.omg");
+            rd.interpret();
+        } catch (Exception ignored){}
+    }
 }
