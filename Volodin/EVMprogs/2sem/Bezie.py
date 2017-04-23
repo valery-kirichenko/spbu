@@ -1,25 +1,55 @@
+from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import Qt
+
 from PyQt5.QtGui import QBrush
 from PyQt5.QtGui import QColor
 from PyQt5.QtGui import QPainter
 from PyQt5.QtGui import QPalette
 from PyQt5.QtGui import QPen
 from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QHBoxLayout
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QVBoxLayout
 from PyQt5.QtWidgets import QWidget
 from scipy.special import binom
 import sys
+import random
 
 class Drawer(QWidget):
     def __init__(self):
         super().__init__()
         self.dots = []
 
-        layout = QVBoxLayout()
+
+        self.timer = QTimer()
+
+
+        layout = QHBoxLayout()
+        b = QPushButton('Random')
+        b.clicked.connect(self.remake_random)
+        layout.setAlignment(Qt.AlignTop)
+        inter = QPushButton('Interval')
+        inter.clicked.connect(self.interstart)
+        stp = QPushButton('Stop')
+        stp.clicked.connect(self.stoptimer)
+        layout.addWidget(b)
+        layout.addWidget(inter)
+        layout.addWidget(stp)
+
         self.setLayout(layout)
         self.setFixedSize(1200, 900)
         self.show()
+
+    def stoptimer(self):
+        self.timer.stop()
+
+    def interstart(self):
+        self.timer.stop()
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.make_random)
+        self.timer.start(1000)
+        self.make_random()
 
     def paintEvent(self, QPaintEvent):
         painter = QPainter(self)
@@ -40,11 +70,24 @@ class Drawer(QWidget):
             painter.drawLine(self.dots[i][0], self.dots[i][1], self.dots[i+1][0], self.dots[i+1][1])
 
     def mousePressEvent(self, QMouseEvent):
+        self.timer.stop()
         if len(self.dots) > 30:
             QMessageBox.about(self, 'Stop', 'It is good enough, stop please')
             return
         t = (QMouseEvent.pos().x(), QMouseEvent.pos().y())
         self.dots.append(t)
+        self.update()
+
+    def remake_random(self):
+        self.timer.stop()
+        self.make_random()
+
+    def make_random(self):
+        r = random.randint(4, 12)
+        self.dots = []
+        t = 100
+        for i in range(r):
+            self.dots.append((random.randint(t, self.width() - t), random.randint(t, self.height() - t)))
         self.update()
 
     def get_curve(self, ver):

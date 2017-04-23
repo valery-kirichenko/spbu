@@ -11,9 +11,6 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.components.grid.ItemClickListener;
 
 import javax.servlet.annotation.WebServlet;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Function;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window 
@@ -28,7 +25,6 @@ public class MyUI extends UI {
 
     private void addNewClient(){
         VerticalLayout vl = new VerticalLayout();
-        List<> ts = Arrays.asList(ClientInf::setFamily, ClientInf::setName, ClientInf::setFather);
         TextField name = new TextField("Name");
         Button b = new Button("OK");
         b.addClickListener(new Button.ClickListener() {
