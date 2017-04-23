@@ -581,12 +581,17 @@ void the11() {
 	task11f();
 }
 
+void the12() {
+	chess();
+}
+
 int main() {
 	//the10sub1();
 	//the10sub2();
 	//the10sub3outvar();
 	//the10sub3withvar();
 	//the11();
+	//the12();
 }
 
 //the10sub1
