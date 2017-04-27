@@ -1,7 +1,12 @@
 import sys, random
+
+from PyQt5.QtGui import QPalette
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QMainWindow, QFrame, QDesktopWidget, QApplication
 from PyQt5.QtCore import Qt, QBasicTimer, pyqtSignal
 from PyQt5.QtGui import QPainter, QColor
+from PyQt5.QtWidgets import QVBoxLayout
 
 
 class Tetris(QMainWindow):
@@ -19,9 +24,9 @@ class Tetris(QMainWindow):
 
         self.tboard.start()
 
-        self.resize(180, 380)
+        self.resize(400, 800)
         self.center()
-        self.setWindowTitle('Tetris')
+        self.setPalette(QPalette(QColor(0xFFFFFF)))
         self.show()
 
     def center(self):
@@ -278,22 +283,22 @@ class Board(QFrame):
         return True
 
     def drawSquare(self, painter, x, y, shape):
-        colorTable = [0x000000, 0xCC6666, 0x66CC66, 0x6666CC,
-                      0xCCCC66, 0xCC66CC, 0x66CCCC, 0xDAAA00]
+        colorTable = [0x000000, 0x00FF00, 0x0000FF, 0xFF0000,
+                      0xFFFF00, 0xFF00FF, 0x00FFFF, 0xCCCCCC]
 
         color = QColor(colorTable[shape])
         painter.fillRect(x + 1, y + 1, self.squareWidth() - 2,
                          self.squareHeight() - 2, color)
 
-        painter.setPen(color.lighter())
-        painter.drawLine(x, y + self.squareHeight() - 1, x, y)
-        painter.drawLine(x, y, x + self.squareWidth() - 1, y)
+        #painter.setPen(color.lighter())
+        painter.drawLine(x, y + self.squareHeight(), x, y)
+        painter.drawLine(x, y, x + self.squareWidth(), y)
 
-        painter.setPen(color.darker())
-        painter.drawLine(x + 1, y + self.squareHeight() - 1,
-                         x + self.squareWidth() - 1, y + self.squareHeight() - 1)
-        painter.drawLine(x + self.squareWidth() - 1,
-                         y + self.squareHeight() - 1, x + self.squareWidth() - 1, y + 1)
+        #painter.setPen(color.darker())
+        painter.drawLine(x, y + self.squareHeight(),
+                         x + self.squareWidth(), y + self.squareHeight())
+        painter.drawLine(x + self.squareWidth(),
+                         y + self.squareHeight(), x + self.squareWidth(), y)
 
 
 class Tetrominoe(object):
