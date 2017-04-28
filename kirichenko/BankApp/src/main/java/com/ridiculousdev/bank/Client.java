@@ -1,3 +1,5 @@
+package com.ridiculousdev.bank;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +9,10 @@ public class Client {
     private String firstName, lastName, middleName, phoneNumber;
     private LocalDate birthDate;
     private List<Credit> credits = new ArrayList<>();
+    private boolean paid = true, dodger = false;
 
-    public Client() { }
+    public Client() {
+    }
 
     public String getFirstName() {
         return firstName;
@@ -34,6 +38,10 @@ public class Client {
         return passport;
     }
 
+    public String getPassportString() {
+        return Integer.toString(passport);
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -46,12 +54,24 @@ public class Client {
         return credits;
     }
 
+    public boolean isPaid() {
+        return paid;
+    }
+
+    public boolean isDodger() {
+        return dodger;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
 
     public void setPassport(int passport) {
         this.passport = passport;
+    }
+
+    public void setPassport(String passport) {
+        this.passport = Integer.parseInt(passport);
     }
 
     public void setOldPassport(int oldPassport) {
@@ -78,12 +98,24 @@ public class Client {
         this.birthDate = birthDate;
     }
 
-    public void setBirthdate(String birthdate) {
-        this.birthDate = LocalDate.parse(birthdate);
+    public void setBirthDate(String birthDate) {
+        this.birthDate = LocalDate.parse(birthDate);
     }
 
     public void addCredit(Credit credit) {
+        if (!credit.isPaid()) this.paid = false;
+        if (credit.isDodger()) this.dodger = true;
+        credit.setParent(this);
         this.credits.add(credit);
+    }
+
+    public void updateStatus() {
+        this.paid = true;
+        this.dodger = false;
+        for (Credit credit : credits) {
+            if (!credit.isPaid()) this.paid = false;
+            if (credit.isDodger()) this.dodger = true;
+        }
     }
 
     @Override

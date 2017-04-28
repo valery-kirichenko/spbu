@@ -1,3 +1,7 @@
+package com.ridiculousdev.bank;
+
+import org.springframework.context.annotation.Configuration;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -5,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+@Configuration
 class DataReader {
     List<Client> readClients(URL url) {
         List<Client> clients = new ArrayList<>();
@@ -35,7 +40,7 @@ class DataReader {
                             t.setPassport(Integer.parseInt(token));
                             break;
                         case 6:
-                            t.setBirthdate(token);
+                            t.setBirthDate(token);
                             break;
                         case 7:
                             t.setOldPassport(Integer.parseInt(token));

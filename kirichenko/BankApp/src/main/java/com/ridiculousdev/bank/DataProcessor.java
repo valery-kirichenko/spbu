@@ -1,4 +1,4 @@
-import com.sun.istack.internal.Nullable;
+package com.ridiculousdev.bank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,6 @@ class DataProcessor {
         }
     }
 
-    @Nullable
     List<Credit> assignCredits() {
         List<Credit> creditsWithoutClients = new ArrayList<>();
         for (Credit credit : credits) {

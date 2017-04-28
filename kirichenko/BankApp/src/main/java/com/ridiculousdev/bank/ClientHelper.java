@@ -1,3 +1,5 @@
+package com.ridiculousdev.bank;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
