@@ -1,14 +1,13 @@
 package net.task.bank.models;
 
-import java.time.Instant;
-import java.util.Date;
+import java.time.LocalDate;
 
 
 public class Credit {
     //ID клиента, сумма, процент, уже выплаченная сумма, сумма к выплате, дата закрытия.
     private int clientID;
     private double amount, paidSum, needPaid, percent;
-    private Date closingDate;
+    private LocalDate closingDate;
 
     public Credit() {
     }
@@ -33,7 +32,7 @@ public class Credit {
         this.needPaid = needPaid;
     }
 
-    public void setClosingDate(Date closingDate) {
+    public void setClosingDate(LocalDate closingDate) {
         this.closingDate = closingDate;
     }
 
@@ -58,25 +57,25 @@ public class Credit {
         return this.needPaid;
     }
 
-    public Date getClosingDate() {
+    public LocalDate getClosingDate() {
         return this.closingDate;
     }
 
     public boolean isOverdue() {
-        Instant now = Instant.now();
-        return now.isAfter(this.getClosingDate().toInstant()) &&
+        LocalDate now = LocalDate.now();
+        return now.isAfter(this.getClosingDate()) &&
                 (this.getPaidSum() < this.getNeedPaid());
     }
 
     public boolean isMayBeOverdue() {
-        Instant now = Instant.now();
-        return now.isBefore(this.getClosingDate().toInstant()) &&
+        LocalDate now = LocalDate.now();
+        return now.isBefore(this.getClosingDate()) &&
                 (this.getPaidSum() < this.getNeedPaid());
     }
 
     @Override
     public String toString() {
-        return this.getClientID() + " " + this.getAmount() + " " + this.getPercent() +
-                " " + this.getPaidSum() + " " + this.getNeedPaid() + " " + this.getClosingDate();
+        return this.getClientID() + " " + this.getAmount() + " " + this.getPercent() + " " +
+                this.getPaidSum() + " " + this.getNeedPaid() + " " + this.getClosingDate();
     }
 }

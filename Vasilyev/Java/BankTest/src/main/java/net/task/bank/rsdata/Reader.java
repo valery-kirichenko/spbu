@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface Reader {
     List<Client> readClients(File fileClients);
+
     List<Credit> readCredits(File fileCredits);
 }

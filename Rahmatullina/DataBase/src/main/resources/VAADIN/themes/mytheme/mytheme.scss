@@ -30,15 +30,16 @@
 // Example variants can be copy/pasted from https://vaadin.com/wiki/-/wiki/Main/Valo+Examples
 
 @import "../valo/valo.scss";
-
 @mixin mytheme {
   @include valo;
 
-  .mayBeOverdue td {
-    background: #fdd835;
-  }
-
-  .overdue td {
-    background: #ff4848;
-  }
+  // Insert your own theme rules here
+.dead td{
+background : #FDD835;
 }
+
+.expired td{
+background : #FF5252;
+}
+}
+

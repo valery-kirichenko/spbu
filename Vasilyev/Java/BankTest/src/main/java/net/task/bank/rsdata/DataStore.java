@@ -6,9 +6,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -37,14 +38,14 @@ public class DataStore implements Storage {
         for (Client client1 : clients) {
             for (Client client2 : clients) {
                 if (!client1.equals(client2) && !client1.isDeleted && !client2.isDeleted) {
-                    if (client1.getPassport() == client2.getPassport()) {
+                    if (Objects.equals(client1.getPassport(), client2.getPassport())) {
                         for (Credit credit2 : client2.getCredits()) {
                             credit2.setClientId(client1.getID());
                         }
                         countDup++;
                         client2.isDeleted = true;
                         break;
-                    } else if (client1.getOldPassport() == client2.getPassport()) {
+                    } else if (Objects.equals(client1.getOldPassport(), client2.getPassport())) {
                         for (Credit credit2 : client2.getCredits()) {
                             credit2.setClientId(client1.getID());
                         }
@@ -63,14 +64,14 @@ public class DataStore implements Storage {
                 newClients.add(client);
         clients = newClients;
 
-        Instant now = Instant.now();
+        LocalDate now = LocalDate.now();
         int count = 0;
 
         List<Credit> newCredits = new ArrayList<>();
         for (Credit credit : credits) {
             if (getNameFromId(credit.getClientID()) != null)
                 newCredits.add(credit);
-            if (now.isAfter(credit.getClosingDate().toInstant()) &&
+            if (now.isAfter(credit.getClosingDate()) &&
                     (credit.getPaidSum() < credit.getNeedPaid())) {
                 if (getNameFromId(credit.getClientID()) == null) {
                     nullPointerCredits.add(credit);

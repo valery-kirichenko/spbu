@@ -16,7 +16,7 @@ public class CreditRowMapper implements RowMapper<Credit> {
         credit.setPercent(resultSet.getDouble("percent"));
         credit.setPaidSum(resultSet.getDouble("paidSum"));
         credit.setNeedPaid(resultSet.getDouble("needPaid"));
-        credit.setClosingDate(resultSet.getTimestamp("closingDate"));
+        credit.setClosingDate(resultSet.getDate("closingDate").toLocalDate());
 
         return credit;
     }
