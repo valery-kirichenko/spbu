@@ -41,19 +41,19 @@ public class MyUI extends UI {
         final VerticalLayout layoutClient = new VerticalLayout();
         final VerticalLayout layoutCredit = new VerticalLayout();
 
-        TextField сlientId = new TextField("Enter client id");
-        TextField сlientName = new TextField("Enter Client name");
-        TextField clientSurName = new TextField("Enter SurName");
-        TextField clientMidName = new TextField("Enter MidName");
-        TextField clientPhone = new TextField("Enter phone");
-        TextField clientPassport = new TextField("Enter Passport");
-        TextField clientDate = new TextField("Enter client date.For example:2017-12-01");
-        TextField clientOldPassport = new TextField("Enter Old Passport");
-        TextField сreditLoan = new TextField("Enter Credit Loan");
-        TextField creditPercent = new TextField("Enter Credit Percent");
-        TextField creditPaidSum = new TextField("Enter Credit Paid Sum");
-        TextField creditWholeLoan = new TextField("Enter Credit Whole Loan");
-        TextField creditDate = new TextField("Enter Credit Date.For Example : 2017-01-01");
+        TextField сlientId = new TextField("Enter client id");сlientId.setValue("12121212");
+        TextField сlientName = new TextField("Enter Client name");сlientName.setValue("Jamal");
+        TextField clientSurName = new TextField("Enter SurName");clientSurName.setValue("Jaoel");
+        TextField clientMidName = new TextField("Enter MidName");clientMidName.setValue("Savage");
+        TextField clientPhone = new TextField("Enter phone");clientPhone.setValue("89818325441");
+        TextField clientPassport = new TextField("Enter Passport");clientPassport.setValue("8012345766");
+        TextField clientDate = new TextField("Enter client date.For example:2017-12-01");clientDate.setValue("1998-09-09");
+        TextField clientOldPassport = new TextField("Enter Old Passport");clientOldPassport.setValue("8012345611");
+        TextField сreditLoan = new TextField("Enter Credit Loan");сreditLoan.setValue("1000");
+        TextField creditPercent = new TextField("Enter Credit Percent");creditPercent.setValue("6");
+        TextField creditPaidSum = new TextField("Enter Credit Paid Sum");creditPaidSum.setValue("555");
+        TextField creditWholeLoan = new TextField("Enter Credit Whole Loan");creditWholeLoan.setValue("1001");
+        TextField creditDate = new TextField("Enter Credit Date.For Example : 2017-01-01");creditDate.setValue("1998-01-01");
 
         Button buttonAddClient = new Button("Add Client");
         Button buttonAddCredit = new Button("Add Credit");
