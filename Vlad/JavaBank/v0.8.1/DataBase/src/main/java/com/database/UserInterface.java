@@ -2,6 +2,7 @@ package com.database;
 
 import com.database.Cells.Client;
 import com.database.Cells.Credit;
+import com.vaadin.annotations.Theme;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
@@ -12,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
 import java.util.Set;
 
+@Theme("mytheme")
 @SpringUI
 public class UserInterface extends UI {
 

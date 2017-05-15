@@ -22,7 +22,7 @@ public class Machine {
         assembler(oldCl, oldCr);
         hotConvert(allClients);
         sort(allClients);
-        System.out.println("Merger has been created");
+        //System.out.println("Merger has been created");
         return allClients;
     }
 
