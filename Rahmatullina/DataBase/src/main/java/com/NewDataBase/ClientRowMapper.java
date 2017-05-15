@@ -20,18 +20,6 @@ public class ClientRowMapper implements RowMapper<Clients>{
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        client.setName(resultSet.getString("first_name"));
-        client.setSurName(resultSet.getString("last_name"));
-        client.setId(resultSet.getString("id"));
-        client.setMidName(resultSet.getString("mid_name"));
-        client.setPhone(resultSet.getString("phone"));
-        client.setNewPassport(resultSet.getString("new_passport"));
-        try {
-            client.setData(resultSet.getString("dat"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        client.setOldPassport(resultSet.getString("old_passport"));
 
         return client;
     }

@@ -15,10 +15,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@Service
-@Theme("valo")
-@SpringUI(path = "")
-@Configuration
+
+@Theme("mytheme")
+@SpringUI
 public class MyUI extends UI {
 
 
@@ -81,8 +80,8 @@ public class MyUI extends UI {
         grid2.addColumn(Credits::getCreditData).setCaption("Data").setWidth(400);
 
 
-        //grid.setStyleGenerator(client -> expiryClients.checkClient(client) ? "dead" : null);
-        //grid2.setStyleGenerator(credit -> showExpiry.getExpiryCredits(credit) ? "expired" : null);
+        grid.setStyleGenerator(client -> expiryClients.checkClient(client) ? "dead" : null);
+        grid2.setStyleGenerator(credit -> showExpiry.getExpiryCredits(credit) ? "expired" : null);
 
 
         buttonDodjers.addClickListener(clickEvent -> {
@@ -103,10 +102,17 @@ public class MyUI extends UI {
 
             buttonAddCredit.addClickListener(clickEvent -> {
                 try {
-                    creditController.saveNewCredit(new Credits(event.getItem().getClientId(), сreditLoan.getValue(),
-                            creditPercent.getValue(),creditPaidSum.getValue(),creditWholeLoan.getValue(),creditDate.getValue()));
-                } catch (ParseException e) {
+                    if (сreditLoan.getValue().isEmpty() || creditPercent.getValue().isEmpty() ||
+                            creditPaidSum.getValue().isEmpty() || creditWholeLoan.getValue().isEmpty() ||
+                            creditDate.getValue().isEmpty())
+                        throw new Exception();
+                    else {
+                        creditController.saveNewCredit(new Credits(event.getItem().getClientId(), сreditLoan.getValue(),
+                                creditPercent.getValue(), creditPaidSum.getValue(), creditWholeLoan.getValue(), creditDate.getValue()));
+                    }
+                } catch (Exception e) {
                     e.printStackTrace();
+                    Notification.show("Incorrect data for new credit!");
                 }
                 grid2.setItems(creditController.getByClientID(event.getItem().getClientId()));
                 сreditLoan.clear();
@@ -122,15 +128,23 @@ public class MyUI extends UI {
         buttonAddClient.addClickListener(clickEvent -> {
 
             try {
-                Clients newClient = new Clients(сlientId.getValue(), сlientName.getValue(), clientSurName.getValue(), clientMidName.getValue(),
-                        clientPhone.getValue(), clientPassport.getValue(), clientDate.getValue(), clientOldPassport.getValue());
-                clientController.saveNewClient(newClient);
+                if (сlientName.getValue().isEmpty() || clientSurName.getValue().isEmpty() ||
+                        clientMidName.getValue().isEmpty() || clientPhone.getValue().isEmpty() ||
+                        clientPassport.getValue().isEmpty() || clientDate.getValue().isEmpty() || clientOldPassport.getValue().isEmpty())
+                    throw new Exception();
+                else {
+                    Clients newClient = new Clients(сlientId.getValue(), сlientName.getValue(), clientSurName.getValue(), clientMidName.getValue(),
+                            clientPhone.getValue(), clientPassport.getValue(), clientDate.getValue(), clientOldPassport.getValue());
+                    clientController.saveNewClient(newClient);
 
-                grid.setItems(clientController.getAllClients());
-                grid.getSelectionModel().select(newClient);
-            } catch (ParseException e) {
-                e.printStackTrace();
+                    grid.setItems(clientController.getAllClients());
+                    grid.getSelectionModel().select(newClient);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                Notification.show("Incorrect data for new client!");
             }
+
             сlientId.clear();
             сlientName.clear();
             clientSurName.clear();

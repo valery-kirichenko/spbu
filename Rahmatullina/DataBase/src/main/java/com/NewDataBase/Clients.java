@@ -19,23 +19,23 @@ public class Clients {
     private String newPassport;
     private String oldPassport;
     private DateFormat format;
+    private List<Credits> credit;
     private Date data;
     private String data2;
-    private List<Credits> credit;
 
-    public Clients(String i, String nm, String surNm, String midNm, String ph, String newPas, String dt, String oldPas) throws ParseException {
+    public Clients(String id, String name, String surName, String midName, String phone, String newPassport, String date, String oldPassport) throws ParseException {
 
-        id = i;
-        name = nm;
-        surName = surNm;
-        midName = midNm;
-        phone = ph;
-        oldPassport = oldPas;
-        newPassport = newPas;
-        credit = new ArrayList<Credits>();
-        format = new SimpleDateFormat("yyyy-MM-dd");
-        data = format.parse(dt);
-        data2 = dt;
+        this.id = id;
+        this.name = name;
+        this.surName = surName;
+        this.midName = midName;
+        this.phone = phone;
+        this.credit= new ArrayList();
+        this.oldPassport = oldPassport;
+        this.newPassport = newPassport;
+        this.format = new SimpleDateFormat("yyyy-MM-dd");
+        this.data = format.parse(date);
+        this.data2 = date;
     }
 
     public String getClientId() {
@@ -68,19 +68,15 @@ public class Clients {
 
     public String getData2(){ return data2; }
 
-    public List<Credits> getCredit() {
-        return credit;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setName(String nm) {
-        name = nm;
+    public void setSurName(String surName) {
+        this.surName = surName;
     }
 
-    public void setSurName(String surnm) {
-        surName = surnm;
-    }
-
-    public void setId(String ids){ id = ids;}
+    public void setId(String id){ this.id = id;}
 
     public void setMidName(String midName) {
         this.midName = midName;
@@ -109,4 +105,11 @@ public class Clients {
                 '}';
     }
 
+    public List<Credits> getCredit() {
+        return credit;
+    }
+
+    public void setCredit(List<Credits> credit) {
+        this.credit = credit;
+    }
 }

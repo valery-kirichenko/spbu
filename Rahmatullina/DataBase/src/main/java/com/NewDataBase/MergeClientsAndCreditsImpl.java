@@ -20,35 +20,36 @@ public class MergeClientsAndCreditsImpl implements MergeClientAndCredit {
 
 
         }
-        Vector<Integer> indexMass = new Vector();
-        Integer clientIndex = 0;
+        Vector<Integer> MassiveOfIndexes = new Vector();
+        Integer clientIndex1 = 0;
         for (Clients client1 : listClient) {
             for (Clients client2 : listClient) {
-                if ((client1.getClientId().equals(client2.getClientId()) != true) && client1.getNewPassport().equals(client2.getNewPassport())) {
+                if ((client1.getClientId().equals(client2.getClientId()) != true) && client1.getOldPassport().equals(client2.getNewPassport())) {
                     client1.getCredit().addAll(client2.getCredit());
-                    indexMass.add(clientIndex);
+                    MassiveOfIndexes.add(clientIndex1);
                 }
-                clientIndex++;
+                clientIndex1++;
             }
-            clientIndex = 0;
+            clientIndex1 = 0;
         }
-        for (Integer clieIndex : indexMass)
-            listClient.remove(clieIndex);
+        for (Integer i : MassiveOfIndexes)
+            listClient.remove(i);
 
-        indexMass.clear();
-        clientIndex = 0;
+        MassiveOfIndexes.clear();
+        clientIndex1 = 0;
+
         for (Clients client1 : listClient) {
             for (Clients client2 : listClient) {
                 if (client1.getOldPassport().equals(client2.getNewPassport())) {
                     client1.getCredit().addAll(client2.getCredit());
-                    indexMass.add(clientIndex);
+                    MassiveOfIndexes.add(clientIndex1);
                 }
-                clientIndex++;
+                clientIndex1++;
             }
-            clientIndex = 0;
+            clientIndex1 = 0;
         }
-        for (Integer clieIndex : indexMass)
-            listClient.remove(clieIndex);
+        for (Integer i : MassiveOfIndexes)
+            listClient.remove(i);
     }
     public void getReplace(List<Clients> listClient) {
 

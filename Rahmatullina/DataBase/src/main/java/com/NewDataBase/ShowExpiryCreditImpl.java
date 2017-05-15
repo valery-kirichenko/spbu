@@ -18,8 +18,8 @@ public class ShowExpiryCreditImpl implements ShowExpiryCredit{
             boolean expired = false;
             Date now = new Date();
             float wholeLoan = Float.parseFloat(credit.getWholeLoan());
-            float paidSumm = Float.parseFloat(credit.getPaidSum());
-            if (now.after(credit.getCreditData()) && paidSumm < wholeLoan) {
+            float paidSum = Float.parseFloat(credit.getPaidSum());
+            if (now.after(credit.getCreditData()) && paidSum < wholeLoan) {
                     expired = true;
                 }
 

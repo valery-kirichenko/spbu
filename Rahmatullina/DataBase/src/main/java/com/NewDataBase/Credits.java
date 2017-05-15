@@ -3,6 +3,8 @@ package com.NewDataBase;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -15,19 +17,19 @@ public class Credits {
     private String percent;
     private String paidSum;
     private String wholeLoan;
-    private DateFormat format;
     private Date data;
-    private String data2;
+    private DateFormat format;
+    private String dataString;
 
-    public Credits(String i, String ln, String perc, String pSum, String whloan, String dt) throws ParseException {
-        id = i;
-        loan = ln;
-        percent = perc;
-        paidSum = pSum;
-        wholeLoan = whloan;
-        format = new SimpleDateFormat("yyyy-MM-dd");
-        data = format.parse(dt);
-        data2 = dt;
+    public Credits(String id, String loan, String percent, String paidSum, String wholeLoan, String date) throws ParseException {
+        this.id = id;
+        this.loan = loan;
+        this.percent = percent;
+        this.paidSum = paidSum;
+        this.wholeLoan = wholeLoan;
+        this.format = new SimpleDateFormat("yyyy-MM-dd");
+        this.data = format.parse(date);
+        this.dataString = date;
     }
 
     public String getId() { return id; }
@@ -49,7 +51,7 @@ public class Credits {
     }
 
     public String getCrediitData2() {
-        return data2;
+        return dataString;
     }
 
     public Date getCreditData(){ return data; }

@@ -2,6 +2,7 @@ package com.NewDataBase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
 /**
  * Created by Я on 05.05.2017.
  */
-@Repository
+@Configuration
 public class DataBase implements CommandLineRunner {
     @Autowired
     JdbcTemplate template;
@@ -27,7 +28,7 @@ public class DataBase implements CommandLineRunner {
     public void run(String... strings) throws Exception {
 
         template.execute("DROP TABLE IF EXISTS clients");
-        template.execute("CREATE TABLE clients(" +
+        template.execute("CREATE TABLE   clients(" +
                 "id VARCHAR(255), first_name VARCHAR(255), last_name VARCHAR(255)," +
                 " mid_name VARCHAR(255),phone VARCHAR(255), new_passport VARCHAR(255)," +
                 "dat VARCHAR(255) , old_passport VARCHAR(255))");

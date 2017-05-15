@@ -25,8 +25,8 @@ public class ShowClientWithExpiryCreditImpl implements ShowClientWithExpiryCredi
             Date now = new Date();
             for(Credits credit : listCredit){
                 float wholeLoan = Float.parseFloat(credit.getWholeLoan());
-                float paidSumm = Float.parseFloat(credit.getPaidSum());
-                if (now.after(credit.getCreditData()) && paidSumm < wholeLoan) {
+                float paidSum = Float.parseFloat(credit.getPaidSum());
+                if (now.after(credit.getCreditData()) && paidSum < wholeLoan) {
                     haveExpiryCredit =  true;
                 }
             }

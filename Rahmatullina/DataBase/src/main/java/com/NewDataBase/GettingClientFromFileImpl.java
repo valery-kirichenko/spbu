@@ -33,13 +33,16 @@ public class GettingClientFromFileImpl implements GettingClientFromFile {
             str1 = sc1.nextLine();
             String arr1[] = str1.split("->>>>|---|\\\\\\\\|~~~~|==|___");
             if (arr1.length == 8) {
-                Clients cl = null;
-                cl = new Clients(arr1[0], arr1[1], arr1[2], arr1[3], arr1[4], arr1[5], arr1[6], arr1[7]);
-                listClients.add(cl);
+                if(arr1[0]!=""&& arr1[1]!=""&& arr1[2]!=""&& arr1[3]!=""&& arr1[4]!=""&& arr1[5]!=""&& arr1[6]!=""&& arr1[7]!="") {
+                    Clients client = new Clients(arr1[0], arr1[1], arr1[2], arr1[3], arr1[4], arr1[5], arr1[6], arr1[7]);
+                    listClients.add(client);
+                }
             }
             if (arr1.length == 7) {
-                Clients cl = new Clients(arr1[0], arr1[1], arr1[2], arr1[3], arr1[4], arr1[5], arr1[6], "");
-                listClients.add(cl);
+                if(arr1[0]!=""&& arr1[1]!=""&& arr1[2]!=""&& arr1[3]!=""&& arr1[4]!=""&& arr1[5]!=""&& arr1[6]!="") {
+                    Clients cl = new Clients(arr1[0], arr1[1], arr1[2], arr1[3], arr1[4], arr1[5], arr1[6], "");
+                    listClients.add(cl);
+                }
             }
         }
         merge.getMerge(listClients,getListCredit.getCredit());
