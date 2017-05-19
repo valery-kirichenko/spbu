@@ -9,6 +9,7 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
+import java.net.URL;
 
 @Theme("mytheme")
 @SpringUI
@@ -31,7 +32,8 @@ public class UserInterface extends UI {
            restClient.doBigBlast();
         });
 
-        FileResource fileResource = new FileResource(new File("C:\\Users\\Vladislav\\Documents\\JavaProjects\\Client\\src\\main\\resources\\justdoit.mp4"));
+        URL VIDEOPATH = Thread.currentThread().getContextClassLoader().getResource("justdoit.mp4");
+        FileResource fileResource = new FileResource(new File(VIDEOPATH.getPath()));
         Video vd = new Video();
         vd.setWidth("1280px");
         vd.setHeight("720px");
