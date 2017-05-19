@@ -21,8 +21,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Optional;
 
 
@@ -109,6 +107,13 @@ public class MyUI extends UI {
         final Grid<Client> outTableClients = new Grid<>();
         final Grid<Credit> outTableCredits = new Grid<>();
 
+        TextField firstNameEditor = new TextField();
+        TextField lastNameEditor = new TextField();
+        TextField middleNameEditor = new TextField();
+        TextField phoneEditor = new TextField();
+        TextField passportEditor = new TextField();
+        TextField oldPassportEditor = new TextField();
+
         final Label copyright = new Label("© All rights reserved, V. V. Vasilyev; " +
                 "Valery Kirichenko (https://t.me/valera5505); 2017");
 
@@ -116,11 +121,12 @@ public class MyUI extends UI {
         outTableCredits.setWidth("1800px");
         outTableCredits.setHeight("250px");
         outTableCredits.addColumn(Credit::getClientID).setCaption("ID").setWidth(100);
-        outTableCredits.addColumn(Credit::getAmount).setCaption("Amount");
-        outTableCredits.addColumn(Credit::getPercent).setCaption("Percent");
-        outTableCredits.addColumn(Credit::getPaidSum).setCaption("Paid Sum");
-        outTableCredits.addColumn(Credit::getNeedPaid).setCaption("Need Paid");
-        outTableCredits.addColumn(Credit::getClosingDate).setCaption("Closing Date");
+        outTableCredits.addColumn(Credit::getAmount).setCaption("Amount");//.setEditorComponent(amountEditor.getOptionalValue(), Credit::setAmount);
+        outTableCredits.addColumn(Credit::getPercent).setCaption("Percent");//.setEditorComponent(percentEditor, Credit::setPercent);
+        outTableCredits.addColumn(Credit::getPaidSum).setCaption("Paid Sum");//.setEditorComponent(paidSumEditor, Credit::setPaidSum);
+        outTableCredits.addColumn(Credit::getNeedPaid).setCaption("Need Paid");//.setEditorComponent(needPaidEditor, Credit::setNeedPaid);
+        outTableCredits.addColumn(Credit::getClosingDate).setCaption("Closing Date")
+                .setEditorComponent(closingDate, Credit::setClosingDate);
         outTableCredits.getEditor().setEnabled(true);
         outTableCredits.setStyleGenerator(credit -> credit.isOverdue() ? "overdue" :
                 (credit.isMayBeOverdue() ? "mayBeOverdue" : null));
@@ -128,13 +134,20 @@ public class MyUI extends UI {
         outTableClients.setWidth("1800px");
         outTableClients.setHeight("350px");
         outTableClients.addColumn(Client::getID).setCaption("ID").setWidth(100);
-        outTableClients.addColumn(Client::getFirstName).setCaption("First Name");
-        outTableClients.addColumn(Client::getMiddleName).setCaption("Middle Name");
-        outTableClients.addColumn(Client::getLastName).setCaption("Last Name");
-        outTableClients.addColumn(Client::getPhone).setCaption("Phone");
-        outTableClients.addColumn(Client::getPassport).setCaption("Passport");
-        outTableClients.addColumn(Client::getOldPassport).setCaption("Old Passport");
-        outTableClients.addColumn(Client::getBirthday).setCaption("Birthday");
+        outTableClients.addColumn(Client::getFirstName).setCaption("First Name")
+                .setEditorComponent(firstNameEditor, Client::setFirstName);
+        outTableClients.addColumn(Client::getMiddleName).setCaption("Middle Name")
+                .setEditorComponent(middleNameEditor, Client::setMiddleName);
+        outTableClients.addColumn(Client::getLastName).setCaption("Last Name")
+                .setEditorComponent(lastNameEditor, Client::setLastName);
+        outTableClients.addColumn(Client::getPhone).setCaption("Phone")
+                .setEditorComponent(phoneEditor, Client::setPhone);
+        outTableClients.addColumn(Client::getPassport).setCaption("Passport")
+                .setEditorComponent(passportEditor, Client::setPassport);
+        outTableClients.addColumn(Client::getOldPassport).setCaption("Old Passport")
+                .setEditorComponent(oldPassportEditor, Client::setOldPassport);
+        outTableClients.addColumn(Client::getBirthday).setCaption("Birthday")
+                .setEditorComponent(birthday, Client::setBirthday);
         outTableClients.getEditor().setEnabled(true);
         outTableClients.setStyleGenerator(client -> client.isDebtor() ? "overdue" :
                 (client.isMayBeDebtor() ? "mayBeOverdue" : null)
@@ -166,16 +179,15 @@ public class MyUI extends UI {
                         if (maxId < clientFor.getID() || (maxId == -1)) {
                             maxId = clientFor.getID();
                         }
-                    maxId = (maxId != -1? ++maxId : 0);
+                    maxId = (maxId != -1 ? ++maxId : 0);
                     client.setID(maxId);
                     client.setFirstName(name.getValue());
                     client.setLastName(lastName.getValue());
                     client.setMiddleName(middleName.getValue());
                     client.setPhone(phone.getValue());
-                    client.setPassport(Integer.parseInt(passport.getValue()));
-                    client.setBirthday(Date.from(birthday.getValue().
-                            atStartOfDay(ZoneId.systemDefault()).toInstant()));
-                    client.setOldPassport(Integer.parseInt(oldPassport.getValue()));
+                    client.setPassport(passport.getValue());
+                    client.setBirthday(birthday.getValue());
+                    client.setOldPassport(oldPassport.getValue());
 
                     clientsController.saveNewClient(client);
                     dataStore.getClientList().add(client);
@@ -203,8 +215,7 @@ public class MyUI extends UI {
                     credit.setPercent(Double.parseDouble(percent.getValue()));
                     credit.setPaidSum(Double.parseDouble(paidSum.getValue()));
                     credit.setNeedPaid(Double.parseDouble(needPaid.getValue()));
-                    credit.setClosingDate(Date.from(closingDate.getValue().
-                            atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                    credit.setClosingDate(closingDate.getValue());
 
                     creditsController.saveNewCredit(credit);
                     dataStore.getCreditList().add(credit);

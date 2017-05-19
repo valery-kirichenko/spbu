@@ -16,9 +16,9 @@ public class ClientRowMapper implements RowMapper<Client> {
         client.setMiddleName(resultSet.getString("middleName"));
         client.setLastName(resultSet.getString("lastName"));
         client.setPhone(resultSet.getString("phone"));
-        client.setPassport(resultSet.getInt("passport"));
-        client.setOldPassport(resultSet.getInt("oldPassport"));
-        client.setBirthday(resultSet.getTimestamp("birthDay"));
+        client.setPassport(resultSet.getString("passport"));
+        client.setOldPassport(resultSet.getString("oldPassport"));
+        client.setBirthday(resultSet.getDate("birthDay").toLocalDate());
 
         return client;
     }

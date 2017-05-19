@@ -1,15 +1,15 @@
 package net.task.bank.models;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
 public class Client {
     //ID в старой системе, Имя, Отчество, Фамилия, телефон, номер паспорта, номер старого паспорта(если есть), дата рождения в формате ISO
-    private int ID, passport, oldPassport;
-    private String firstName, lastName, middleName, phone;
-    private Date birthday;
+    private int ID;
+    private String firstName, lastName, middleName, phone, passport, oldPassport;
+    private LocalDate birthday;
     public boolean isDeleted = false;
     private List<Credit> credits = new ArrayList<>();
 
@@ -32,11 +32,11 @@ public class Client {
         this.lastName = lastName;
     }
 
-    public void setPassport(int passport) {
+    public void setPassport(String passport) {
         this.passport = passport;
     }
 
-    public void setOldPassport(int oldPassport) {
+    public void setOldPassport(String oldPassport) {
         this.oldPassport = oldPassport;
     }
 
@@ -44,7 +44,7 @@ public class Client {
         this.phone = phone;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 
@@ -87,11 +87,11 @@ public class Client {
         return this.lastName;
     }
 
-    public int getPassport() {
+    public String getPassport() {
         return this.passport;
     }
 
-    public int getOldPassport() {
+    public String getOldPassport() {
         return this.oldPassport;
     }
 
@@ -99,7 +99,7 @@ public class Client {
         return this.phone;
     }
 
-    public Date getBirthday() {
+    public LocalDate getBirthday() {
         return this.birthday;
     }
 
@@ -110,14 +110,14 @@ public class Client {
 
     @Override
     public String toString() {
-        if (this.getOldPassport() == 0) {
+        if (this.getOldPassport() != null) {
             return (this.getID() + " " + this.getFirstName() + " " + this.getMiddleName() + " " +
-                    this.getLastName() + " " + this.getPhone() + " " + this.getPassport() + " "
-                    + this.getBirthday());
+                    this.getLastName() + " " + this.getPhone() + " " + this.getPassport() + " " +
+                    this.getBirthday());
         } else {
             return (this.getID() + " " + this.getFirstName() + " " + this.getMiddleName() + " " +
-                    this.getLastName() + " " + this.getPhone() + " " + this.getPassport() + " "
-                    + this.getBirthday() + " " + this.getOldPassport());
+                    this.getLastName() + " " + this.getPhone() + " " + this.getPassport() + " " +
+                    this.getBirthday() + " " + this.getOldPassport());
         }
     }
 }

@@ -34,8 +34,6 @@
 @mixin mytheme {
   @include valo;
 
-  // Insert your own theme rules here
-
   .mayBeOverdue td {
     background: #fdd835;
   }
