@@ -10,8 +10,7 @@ import java.util.*;
 @Service
 public class Machine {
 
-    private static final URL CLIENTPATH = Thread.currentThread().getContextClassLoader().getResource("clients.omg");
-    private static final URL CREDITPATH = Thread.currentThread().getContextClassLoader().getResource("credit.omg");
+    private static final String PATH = "C:\\Users\\Vladislav\\Documents\\JavaProjects\\Client\\src\\main\\resources";
     private List<Client> allClients;
     private List<Client> oldCl;
     private List<Credit> oldCr;
@@ -96,7 +95,8 @@ public class Machine {
 
     private List<Client> getClientList() {
         List<Client> clients = new ArrayList<>();
-        File fileClients = new File(CLIENTPATH.getPath());
+        URL PATH = Thread.currentThread().getContextClassLoader().getResource("clients.omg");
+        File fileClients = new File(PATH.getPath());
         Scanner fileScannerForClients = null;
         Scanner lineScannerForClients;
         String stringForClients;
@@ -132,7 +132,8 @@ public class Machine {
 
     private List<Credit> getCreditsList() {
         List<Credit> credits = new ArrayList<>();
-        File fileCredits = new File(CREDITPATH.getPath());
+        URL PATH = Thread.currentThread().getContextClassLoader().getResource("credits.omg");
+        File fileCredits = new File(PATH.getPath());
         Scanner fileScannerForCredits = null;
         Scanner lineScannerForCredits;
         String stringForCredits;
