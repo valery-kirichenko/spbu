@@ -1,1 +1,0 @@
-The main rule of the programmer: "If it works - so don't touch it".
