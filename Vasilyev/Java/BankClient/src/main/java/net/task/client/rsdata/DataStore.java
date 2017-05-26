@@ -21,7 +21,7 @@ public class DataStore implements Storage {
     private List<Client> clients;
     private List<Credit> credits;
     public List<Credit> nullPointerCredits = new ArrayList<>();
-    public int countNull = 0;
+    public Integer countNull = 0;
 
     DataStore() {
     }
@@ -33,7 +33,7 @@ public class DataStore implements Storage {
 
     @Override
     public void mergeDuplicate() {
-        int countDup = 0, countError = 0;
+        Integer countDup = 0, countError = 0;
 
         for (Client client1 : clients) {
             for (Client client2 : clients) {
@@ -43,14 +43,14 @@ public class DataStore implements Storage {
                             credit2.setClientID(client1.getID());
                         }
                         countDup++;
-                        client2.isDeleted = true;
+                        client2.isDeleted = Boolean.TRUE;
                         break;
                     } else if (Objects.equals(client1.getOldPassport(), client2.getPassport())) {
                         for (Credit credit2 : client2.getCredits()) {
                             credit2.setClientID(client1.getID());
                         }
                         countError++;
-                        client2.isDeleted = true;
+                        client2.isDeleted = Boolean.TRUE;
                         break;
                     }
                 }
@@ -65,7 +65,7 @@ public class DataStore implements Storage {
         clients = newClients;
 
         LocalDate now = LocalDate.now();
-        int count = 0;
+        Integer count = 0;
 
         List<Credit> newCredits = new ArrayList<>();
         for (Credit credit : credits) {
@@ -84,7 +84,7 @@ public class DataStore implements Storage {
 
         for (Client client : clients)
             for (Credit credit : credits)
-                if (credit.getClientID() == client.getID())
+                if (Objects.equals(credit.getClientID(), client.getID()))
                     client.addCredit(credit);
     }
 
@@ -110,13 +110,13 @@ public class DataStore implements Storage {
     }
 
     @Override
-    public String getNameFromId(int id) {
+    public String getNameFromId(Integer id) {
         String result = null;
-        boolean isFound = false;
+        Boolean isFound = Boolean.FALSE;
         for (Client client : clients)
-            if (id == client.getID()) {
+            if (Objects.equals(id, client.getID())) {
                 result = client.getFirstName() + " " + client.getMiddleName() + " " + client.getLastName();
-                isFound = true;
+                isFound = Boolean.TRUE;
             }
         if (isFound)
             countNull++; // Счётчик кредитов, у которых нет id среди клиентов.
@@ -124,10 +124,10 @@ public class DataStore implements Storage {
     }
 
     @Override
-    public Client getClient(int id) {
+    public Client getClient(Integer id) {
         Client clientResult = new Client();
         for (Client client : clients)
-            if (id == client.getID())
+            if (Objects.equals(id, client.getID()))
                 clientResult = client;
         return clientResult;
     }

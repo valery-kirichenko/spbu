@@ -1,5 +1,6 @@
 package net.task.bank.sdata;
 
+import net.task.bank.converter.Currency;
 import net.task.bank.models.Client;
 import net.task.bank.models.Credit;
 
@@ -15,9 +16,9 @@ public interface Storage {
 
     void changeClientInfo();
 
-    String getNameFromId(int id);
+    String getNameFromId(Integer ID);
 
-    Client getClient(int id);
+    Client getClient(Integer ID);
 
     void setClientList(List<Client> clientList);
 
@@ -26,4 +27,6 @@ public interface Storage {
     List<Client> getClientList();
 
     List<Credit> getCreditList();
+
+    List<Credit> creditUpdate(Currency newCurrency, Integer ID);
 }
