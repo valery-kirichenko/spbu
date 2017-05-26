@@ -10,7 +10,6 @@ import java.util.*;
 @Service
 public class Machine {
 
-    private static final String PATH = "C:\\Users\\Vladislav\\Documents\\JavaProjects\\Client\\src\\main\\resources";
     private List<Client> allClients;
     private List<Client> oldCl;
     private List<Credit> oldCr;
@@ -23,7 +22,6 @@ public class Machine {
         assembler(oldCl, oldCr);
         hotConvert(allClients);
         sort(allClients);
-        //System.out.println("Merger has been created");
         return allClients;
     }
 
