@@ -1,7 +1,12 @@
 package net.task.bank.sdata;
 
+import net.task.bank.converter.Currency;
+import net.task.bank.converter.CurrencyService;
+import net.task.bank.dao.CreditRowMapper;
 import net.task.bank.models.Client;
 import net.task.bank.models.Credit;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
@@ -14,6 +19,12 @@ import java.util.Objects;
 
 @Service
 public class DataStore implements Storage {
+    @Autowired
+    private JdbcTemplate template;
+
+    @Autowired
+    private CurrencyService currencyService;
+
     //Пользователи содержат битые записи. Может быть несколько записей с одинаковым номером паспорта и именем фамилией.
     //Результат повторного заведения одних и тех же пользователей.
     //Может быть несколько пользователей у которых новый паспорт и старый паспорт совпадает
@@ -21,7 +32,7 @@ public class DataStore implements Storage {
     private List<Client> clients;
     private List<Credit> credits;
     public List<Credit> nullPointerCredits = new ArrayList<>();
-    public int countNull = 0;
+    public Integer countNull = 0;
 
     DataStore() {
     }
@@ -33,7 +44,7 @@ public class DataStore implements Storage {
 
     @Override
     public void mergeDuplicate() {
-        int countDup = 0, countError = 0;
+        Integer countDup = 0, countError = 0;
 
         for (Client client1 : clients) {
             for (Client client2 : clients) {
@@ -43,14 +54,14 @@ public class DataStore implements Storage {
                             credit2.setClientID(client1.getID());
                         }
                         countDup++;
-                        client2.isDeleted = true;
+                        client2.isDeleted = Boolean.TRUE;
                         break;
                     } else if (Objects.equals(client1.getOldPassport(), client2.getPassport())) {
                         for (Credit credit2 : client2.getCredits()) {
                             credit2.setClientID(client1.getID());
                         }
                         countError++;
-                        client2.isDeleted = true;
+                        client2.isDeleted = Boolean.TRUE;
                         break;
                     }
                 }
@@ -65,21 +76,12 @@ public class DataStore implements Storage {
         clients = newClients;
 
         LocalDate now = LocalDate.now();
-        int count = 0;
-        int cred = 0;
-        int addcred = 0;
-        int cout = 0;
-        int co = 0;
+        Integer count = 0;
 
         List<Credit> newCredits = new ArrayList<>();
         for (Credit credit : credits) {
-            cred++;
-            if (getNameFromId(credit.getClientID()) != null) {
+            if (getNameFromId(credit.getClientID()) != null)
                 newCredits.add(credit);
-                addcred++;
-            }
-            else
-                co++;
             if (now.isAfter(credit.getClosingDate()) &&
                     (credit.getPaidSum() < credit.getNeedPaid())) {
                 if (getNameFromId(credit.getClientID()) == null) {
@@ -87,19 +89,13 @@ public class DataStore implements Storage {
                     count++;
                     System.out.println(count + ") Found new unpaid credit with null id!");
                 }
-                cout++;
             }
         }
-        System.out.println("Cred = " + cred);
-        System.out.println("AddCred = " + addcred);
-        System.out.println("cout = " + cout);
-        System.out.println("count = " + count);
-        System.out.println("co = " + co);
         credits = newCredits;
 
         for (Client client : clients)
             for (Credit credit : credits)
-                if (credit.getClientID() == client.getID())
+                if (Objects.equals(credit.getClientID(), client.getID()))
                     client.addCredit(credit);
     }
 
@@ -125,13 +121,13 @@ public class DataStore implements Storage {
     }
 
     @Override
-    public String getNameFromId(int id) {
+    public String getNameFromId(Integer id) {
         String result = null;
-        boolean isFound = false;
+        Boolean isFound = Boolean.FALSE;
         for (Client client : clients)
-            if (id == client.getID()) {
+            if (Objects.equals(id, client.getID())) {
                 result = client.getFirstName() + " " + client.getMiddleName() + " " + client.getLastName();
-                isFound = true;
+                isFound = Boolean.TRUE;
             }
         if (isFound)
             countNull++; // Счётчик кредитов, у которых нет id среди клиентов.
@@ -139,10 +135,10 @@ public class DataStore implements Storage {
     }
 
     @Override
-    public Client getClient(int id) {
+    public Client getClient(Integer id) {
         Client clientResult = new Client();
         for (Client client : clients)
-            if (id == client.getID())
+            if (Objects.equals(id, client.getID()))
                 clientResult = client;
         return clientResult;
     }
@@ -159,7 +155,7 @@ public class DataStore implements Storage {
         if (clients != null) {
             for (Client client : clients) {
                 for (Credit credit : credits) {
-                    if (credit.getClientID() == client.getID()) {
+                    if (Objects.equals(credit.getClientID(), client.getID())) {
                         client.addCredit(credit);
                     }
                 }
@@ -175,5 +171,22 @@ public class DataStore implements Storage {
     @Override
     public List<Credit> getCreditList() {
         return credits;
+    }
+
+    @Override
+    public List<Credit> creditUpdate(Currency newCurrency, Integer ID) {
+        List<Credit> creditUpdatedList = template.query("SELECT * FROM credits WHERE clientID = " + ID,
+                new CreditRowMapper());
+        System.out.println(newCurrency);
+        System.out.println(Currency.RUB);
+        if (!newCurrency.equals(Currency.RUB)) {
+            Double multiplication = currencyService.getRate(Currency.RUB, newCurrency);
+            for (Credit credit : creditUpdatedList) {
+                credit.setAmount(credit.getAmount() * multiplication);
+                credit.setNeedPaid(credit.getNeedPaid() * multiplication);
+                credit.setPaidSum(credit.getPaidSum() * multiplication);
+            }
+        }
+        return creditUpdatedList;
     }
 }

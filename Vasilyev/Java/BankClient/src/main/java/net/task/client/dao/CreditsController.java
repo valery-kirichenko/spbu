@@ -6,5 +6,5 @@ import net.task.client.models.Credit;
 public interface CreditsController {
     void createCredit(Credit credit);
 
-    void deleteCredit(int id);
+    void deleteCredit(Integer id);
 }

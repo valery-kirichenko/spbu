@@ -24,12 +24,12 @@ public class ClientsRestController {
     }
 
     @RequestMapping(value = "/client/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable(name = "id") int clientID) {
+    public void delete(@PathVariable(name = "id") Integer clientID) {
         controller.deleteClient(clientID);
     }
 
     @RequestMapping(value = "/client/{id}", method = RequestMethod.GET)
-    public Client getById(@PathVariable(name = "id") int ID) {
+    public Client getById(@PathVariable(name = "id") Integer ID) {
         return controller.getByID(ID);
     }
 }

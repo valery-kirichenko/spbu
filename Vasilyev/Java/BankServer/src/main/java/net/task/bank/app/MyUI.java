@@ -9,6 +9,7 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 
+import net.task.bank.converter.Currency;
 import net.task.bank.dao.DBClientsController;
 import net.task.bank.dao.DBCreditsController;
 import net.task.bank.models.Client;
@@ -16,6 +17,8 @@ import net.task.bank.models.Credit;
 import net.task.bank.sdata.Storage;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -46,7 +49,7 @@ public class MyUI extends UI {
         dataStore.setCreditList(creditsController.getAllCredits());
 
         final VerticalLayout layout = new VerticalLayout();
-        final HorizontalLayout horizontal = new HorizontalLayout();
+        final HorizontalLayout horizontalClient = new HorizontalLayout();
         final HorizontalLayout horizontalCredit = new HorizontalLayout();
 
         final TextField name = new TextField("Name:");
@@ -176,7 +179,7 @@ public class MyUI extends UI {
                 Credit credit = new Credit();
 
                 credit.setClientID(Integer.parseInt(tempId.getValue()));
-                credit.setAmount(Integer.parseInt(amount.getValue()));
+                credit.setAmount(Double.parseDouble(amount.getValue()));
                 credit.setPercent(Double.parseDouble(percent.getValue()));
                 credit.setPaidSum(Double.parseDouble(paidSum.getValue()));
                 credit.setNeedPaid(Double.parseDouble(needPaid.getValue()));
@@ -208,10 +211,27 @@ public class MyUI extends UI {
             }
         });
 
-        horizontal.addComponents(name, lastName, middleName, phone, passport, oldPassport, birthday);
+        List<Currency> namesCurrency = new ArrayList<>();
+        namesCurrency.add(Currency.RUB);
+        namesCurrency.add(Currency.USD);
+        namesCurrency.add(Currency.EUR);
+        ComboBox<Currency> boxCurrency = new ComboBox<>("Currency");
+        boxCurrency.setEmptySelectionAllowed(false);
+        boxCurrency.setItems(namesCurrency);
+        boxCurrency.setValue(Currency.RUB);
+
+        boxCurrency.setItemCaptionGenerator(Currency::toString);
+        boxCurrency.addValueChangeListener(valueChangeEvent -> {
+            if (!tempId.isEmpty()) {
+                Integer id = Integer.parseInt(tempId.getValue());
+                outTableCredits.setItems(dataStore.creditUpdate(boxCurrency.getValue(), id));
+            }
+        });
+
+        horizontalClient.addComponents(name, lastName, middleName, phone, passport, oldPassport, birthday);
         horizontalCredit.addComponents(amount, percent, paidSum, needPaid, closingDate);
-        layout.addComponents(horizontal, buttonClient, outTableClients, outTableCredits,
-                horizontalCredit, buttonCredit, copyright);
+        layout.addComponents(horizontalClient, buttonClient, outTableClients, outTableCredits,
+                horizontalCredit, buttonCredit, boxCurrency, copyright);
 
         setContent(layout);
     }
