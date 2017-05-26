@@ -177,8 +177,6 @@ public class DataStore implements Storage {
     public List<Credit> creditUpdate(Currency newCurrency, Integer ID) {
         List<Credit> creditUpdatedList = template.query("SELECT * FROM credits WHERE clientID = " + ID,
                 new CreditRowMapper());
-        System.out.println(newCurrency);
-        System.out.println(Currency.RUB);
         if (!newCurrency.equals(Currency.RUB)) {
             Double multiplication = currencyService.getRate(Currency.RUB, newCurrency);
             for (Credit credit : creditUpdatedList) {
