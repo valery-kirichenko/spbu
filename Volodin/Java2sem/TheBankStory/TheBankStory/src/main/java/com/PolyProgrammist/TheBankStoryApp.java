@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class TheBankStoryApp{
@@ -53,6 +54,8 @@ public class TheBankStoryApp{
 			fillClientStorage();
 
 			layout.setSizeFull();
+			
+			layout.addComponent(new Label(Double.toString(getFromAPI(1000.12))));
 			System.out.println("lol");
 
 			Grid<ClientInf> grClients = new Grid<>();
@@ -92,15 +95,18 @@ public class TheBankStoryApp{
 			//ts.addTab(grNowUser, "NowClient");
 			grClients.setSizeFull();
 			grCredits.setSizeFull();
-			grClients.addItemClickListener(new ItemClickListener<ClientInf>() {
-				@Override
-				public void itemClick(Grid.ItemClick<ClientInf> itemClick) {
-					grCredits.setItems(itemClick.getItem().getCredits());
-					ts.setSelectedTab(grCredits);
-				}
-			});
+			grClients.addItemClickListener((ItemClickListener<ClientInf>) itemClick -> {
+                grCredits.setItems(itemClick.getItem().getCredits());
+                ts.setSelectedTab(grCredits);
+            });
 
 			setContent(layout);
+		}
+
+		private double getFromAPI(double v) {
+			RestTemplate restTemplate = new RestTemplate();
+
+			return v * restTemplate.getForObject("http://api.fixer.io/latest?base=RUB&symbols=USD", ServiceAnswerDTO.class).getRates().get("USD");
 		}
 
 		@Autowired
