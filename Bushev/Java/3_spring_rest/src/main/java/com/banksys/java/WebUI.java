@@ -20,7 +20,6 @@ import java.util.*;
 @SpringUI
 @Theme("mytheme")
 public class WebUI extends UI {
-    //private static Storage storage;
     private static int maxId;
 
     // working with vis objects
@@ -204,8 +203,8 @@ public class WebUI extends UI {
         }
     }
 
-    private Set<Credit> setCredits(){
-        Set<Credit> credits = new HashSet<>();
+    private List<Credit> setCredits(){
+        List<Credit> credits = new ArrayList<>();
         for (Client current : selectedUsers) {
             for(Credit credit : current.getCredits()){
                 credits.add(new Credit(credit));
@@ -225,9 +224,9 @@ public class WebUI extends UI {
         value[1] = (Double) jsonCurrency.get("EUR");;
 
         for(Credit credit : credits) {
-            credit.amount = String.format("%.3f", Double.parseDouble(credit.amount) * value[currency-1]).replace(",", ".");
-            credit.payed = String.format("%.3f", Double.parseDouble(credit.payed) * value[currency-1]).replace(",", ".");
-            credit.needed = String.format("%.3f", Double.parseDouble(credit.needed) * value[currency-1]).replace(",", ".");
+            credit.amount = String.format("%.2f", Double.parseDouble(credit.amount) * value[currency-1]).replace(",", ".");
+            credit.payed = String.format("%.2f", Double.parseDouble(credit.payed) * value[currency-1]).replace(",", ".");
+            credit.needed = String.format("%.2f", Double.parseDouble(credit.needed) * value[currency-1]).replace(",", ".");
         }
 
         return credits;
