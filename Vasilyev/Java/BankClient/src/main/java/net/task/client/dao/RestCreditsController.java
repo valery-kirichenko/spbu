@@ -1,6 +1,5 @@
 package net.task.client.dao;
 
-
 import net.task.client.models.Credit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +19,7 @@ public class RestCreditsController implements CreditsController {
     }
 
     @Override
-    public void deleteCredit(int id) {
-        restTemplate.delete(urlCredits + "/" + id);
+    public void deleteCredit(Integer ID) {
+        restTemplate.delete(urlCredits + "/" + ID);
     }
 }

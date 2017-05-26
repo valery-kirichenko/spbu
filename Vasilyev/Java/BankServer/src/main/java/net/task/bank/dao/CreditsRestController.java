@@ -24,12 +24,12 @@ public class CreditsRestController {
     }
 
     @RequestMapping(value = "/credit/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable(name = "id") int creditID) {
+    public void delete(@PathVariable(name = "id") Integer creditID) {
         controller.deleteCredit(creditID);
     }
 
     @RequestMapping(value = "/credit/{id}", method = RequestMethod.GET)
-    public Credit getById(@PathVariable(name = "id") int ID) {
+    public Credit getById(@PathVariable(name = "id") Integer ID) {
         return controller.getByID(ID);
     }
 }

@@ -42,20 +42,20 @@ public class CreditsController implements DBCreditsController {
     }
 
     @Override
-    public void deleteCredit(int creditID) {
+    public void deleteCredit(Integer creditID) {
         if (isContained(getByID(creditID)))
-            template.execute("DELETE FROM " + CREDITS_TABLE_NAME + " WHERE ID =" + creditID);
+            template.execute("DELETE FROM " + CREDITS_TABLE_NAME + " WHERE ID = " + creditID);
     }
 
     @Override
-    public List<Credit> getByClientID(int clientID) {
-        return template.query("SELECT * FROM " + CREDITS_TABLE_NAME + " WHERE clientID =" + clientID,
+    public List<Credit> getByClientID(Integer clientID) {
+        return template.query("SELECT * FROM " + CREDITS_TABLE_NAME + " WHERE clientID = " + clientID,
                 new CreditRowMapper());
     }
 
     @Override
-    public Credit getByID(int creditID) {
-        return template.query("SELECT * FROM " + CREDITS_TABLE_NAME + " WHERE ID =" + creditID,
+    public Credit getByID(Integer creditID) {
+        return template.query("SELECT * FROM " + CREDITS_TABLE_NAME + " WHERE ID = " + creditID,
                 new CreditRowMapper()).stream().findFirst().orElse(null);
     }
 

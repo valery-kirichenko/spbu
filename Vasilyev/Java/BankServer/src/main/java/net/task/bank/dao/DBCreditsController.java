@@ -9,11 +9,11 @@ public interface DBCreditsController {
 
     List<Credit> getAllCredits();
 
-    void deleteCredit(int creditID);
+    void deleteCredit(Integer creditID);
 
-    Credit getByID(int creditID);
+    Credit getByID(Integer creditID);
 
-    List<Credit> getByClientID(int clientID);
+    List<Credit> getByClientID(Integer clientID);
 
     void updateCredit(Credit toUpdate);
 

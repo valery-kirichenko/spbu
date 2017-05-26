@@ -15,9 +15,9 @@ public interface Storage {
 
     void changeClientInfo();
 
-    String getNameFromId(int id);
+    String getNameFromId(Integer ID);
 
-    Client getClient(int id);
+    Client getClient(Integer ID);
 
     void setClientList(List<Client> clientList);
 

@@ -12,16 +12,21 @@ import java.util.List;
 
 public class Client {
     //ID в старой системе, Имя, Отчество, Фамилия, телефон, номер паспорта, номер старого паспорта(если есть), дата рождения в формате ISO
-    private int ID;
-    private String firstName, lastName, middleName, phone, passport, oldPassport;
+    private Integer ID;
+    private String firstName;
+    private String lastName;
+    private String middleName;
+    private String phone;
+    private String passport;
+    private String oldPassport;
     private LocalDate birthday;
-    public boolean isDeleted = false;
+    public Boolean isDeleted = Boolean.FALSE;
     private List<Credit> credits = new ArrayList<>();
 
     public Client() {
     }
 
-    public void setID(int ID) {
+    public void setID(Integer ID) {
         this.ID = ID;
     }
 
@@ -62,14 +67,14 @@ public class Client {
         this.credits = credits;
     }
 
-    public boolean isDebtor() {
+    public Boolean isDebtor() {
         for (Credit credit : this.credits)
             if (credit.isOverdue())
                 return true;
         return false;
     }
 
-    public boolean isMayBeDebtor() {
+    public Boolean isMayBeDebtor() {
         for (Credit credit : this.credits)
             if (credit.isMayBeOverdue())
                 return true;
@@ -77,7 +82,7 @@ public class Client {
     }
 
 
-    public int getID() {
+    public Integer getID() {
         return this.ID;
     }
 
