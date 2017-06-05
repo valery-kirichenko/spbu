@@ -1,0 +1,73 @@
+%%%1
+if (true && j || i){
+}
+%%%2
+if(5 &&6){
+	aa;
+
+}
+%%%3
+if(true){}
+%%%6
+if (5 + 7){
+}
+%%%8
+if (5 == 5){}
+%%%9
+if (b == 5){
+	cout << "that's good";
+}
+%%%10
+fi (a == 5){
+	cout << "that's ok";
+}
+%%%11
+if ({)}
+%%%12
+if ((((tt))))
+%%%13
+if (kekek&){
+}
+%%%14
+if (t and ol){
+}
+%%%15
+if (t &(5))
+{   }
+%%%16
+if {}
+%%%17
+if ((){
+}
+%%%18
+if(&&){
+}
+%%%19
+if (alibaba) then {
+}
+%%%20
+if (kek (&&5)) {
+}
+%%%21
+if kek (){
+}
+%%%22
+if (){}
+%%%23
+if (0){
+	if (s.find('{') == string::npos)
+		return "You have no '{' symbol";
+}
+%%%24
+if (a == b && x  < 5 || c > 0 && !k) {
+	if (s.substr(0, 3) == "%%%") {
+		if (t != "") {
+			cout << pred << '\n';
+			cout << compile(t) << endl;
+			t = "";
+		}
+		pred = s.substr(3);
+	}
+	else
+		t += s;	
+}

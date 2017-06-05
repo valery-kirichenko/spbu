@@ -7,7 +7,7 @@
 #include <vector>
 using namespace std;
 
-vector <string> boper = {"=", "!=", "==", "<=", ">=", ">", "<", "+", "-", "*", "/", "&&", "||", "&", "|"};
+vector <string> boper = {"!=", "==", "<=", ">=", ">", "<", "+", "-", "*", "/", "&&", "||", "&", "|", "="};
 vector <string> uoper = { "!", "-", "~" };
 
 int isoper(const string& s, const vector <string>& oper) {
@@ -38,8 +38,12 @@ int getVariable(string s) {
 }
 
 string compile(string s) {
+	if (s.find('{') == string::npos)
+		return "You have no '{' symbol"; 
+	if (s.find_first_not_of(" \t\n") == string::npos)
+		return "The code is empty";
 	const string tmps = s.substr(0);
-	s = s.substr(s.find_first_not_of(" \t"));
+	s = s.substr(s.find_first_not_of(" \t\n"));
 	if (s.substr(0, 2) != "if")
 		return "Keyword \"if\" is not first";
 	s = s.substr(2);
@@ -47,7 +51,7 @@ string compile(string s) {
 	bool state; // 0 - after bop, uop, (; 1 - after ), var
 	bool firstBracketWas = false;
 	while (!s.empty()) {
-		s = s.substr(s.find_first_not_of(" \t"));
+		s = s.substr(s.find_first_not_of(" \t\n"));
 		if (s[0] == '(') {
 			if (!firstBracketWas || !state) {
 				s = s.substr(1);
@@ -61,6 +65,8 @@ string compile(string s) {
 		else {
 			if (!firstBracketWas)
 				return "There are no main brackets";
+			if (s[0] == '{')
+				break;
 			if (s[0] == ')') {
 				if (state) {
 					if (!st.empty()) {
@@ -138,15 +144,47 @@ string compile(string s) {
 	}
 	if (!st.empty())
 		return "You have more open brackets than you need";
+	if (s[0] == '{') {
+		int bal = 0;
+		for (int i = 0; i < s.length(); i++) {
+			if (s[i] == '{')
+				bal++;
+			if (s[i] == '}')
+				bal--;
+			if (bal < 0)
+				return "You are no good with \"{}\" brackets";
+		}
+		if (bal != 0)
+			return "You are no good with \"{}\" brackets";
+		int t = s.find_last_of('}');
+		if (t + 1 == s.length())
+			s = "";
+		t = s.find_first_not_of(" \t\n");
+		if (t != string::npos)
+			return "You have something after \"{}\" brackets";
+	}
 	return "Your code may be right";
 }
 
 int main() {
 	ifstream f;
-	f.open("input.txt");
+	f.open("inputcheckercompilingif.txt");
+	string pred = "start";
+	string t = "";
 	string s;
-	getline(f, s);
+	while (getline(f, s)) {
+		if (s.substr(0, 3) == "%%%") {
+			if (t != "") {
+				cout << pred << '\n';
+				cout << compile(t) << endl;
+				t = "";
+			}
+			pred = s.substr(3);
+		}
+		else
+			t += s;	
+	}
+	cout << pred << '\n';
+	cout << compile(t) << endl;
 	f.close();
-	cout << compile(s) << endl;
-	int a = 3, b = 4;
 }

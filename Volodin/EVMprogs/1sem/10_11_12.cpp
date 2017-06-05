@@ -19,9 +19,9 @@ namespace nd {
 		node *next, *pred;
 		T d;
 		node() { next = NULL; pred = NULL; }
-		node(T val, node* next, node* pred):next(next), pred(pred), d(val){}
+		node(T val, node* next, node* pred) :next(next), pred(pred), d(val) {}
 	};
-	
+
 	template <class T>
 	class nodeWorker {
 		node<T>* pop_last() {
@@ -142,6 +142,15 @@ namespace nd {
 			return  t ? pos : -1;
 		}
 
+		pair <bool, int> find_together(T val) {
+			int ts = find(getFirst(), val, true);
+			int te = find(getLast(), val, false);
+			if (ts <= te)
+				return make_pair(true, ts);
+			else
+				return make_pair(false, te);
+		}
+
 		void clear() {
 			while (first != NULL)
 				erase(first, 0);
@@ -173,10 +182,13 @@ namespace nd {
 	};
 
 	template <class T>
-	class lst: nodeWorker<T>{
+	class lst : nodeWorker<T> {
 	public:
 		void insert(int pos, T val) {
 			nodeWorker::insert(getFirst(), pos, val);
+		}
+		void insertAfter(node<T>* p, T val) {
+			nodeWorker::insert(p, 0, val);
 		}
 		void erase(int pos) {
 			nodeWorker::erase(getFirst(), pos);
@@ -184,27 +196,55 @@ namespace nd {
 		void clear() {
 			nodeWorker::clear();
 		}
+		int find(T val) {
+			return nodeWorker::find(getFirst(), val);
+		}
 		void print() {
 			nodeWorker::print(getFirst());
 		}
-		int somesum(){
+		int find_forward(T val) {
+			return nodeWorker::find(getFirst(), val, true);
+		}
+		int find_backward(T val) {
+			return nodeWorker::find(getLast(), val, false);
+		}
+		pair<bool, int> find_together(T val) {
+			return nodeWorker::find_together(val);
+		}
+		int somesum() {
 			node<T> *a = getFirst(), *b = getLast();
-			int res = 0;
+			long long int res = 0;
+			int i = 0;
 			while (a) {
-				res += a->d * b->d;
+				long long int t = a->d * b->d;
+				cout << i++ << ": " << t << '\n';
+				res += t;
 				a = a->next;
 				b = b->pred;
 			}
+			cout << "sum : " << res << '\n' << '\n';
 			return res;
 		}
-		node<T>* someMethod(node<T>* t, T val){
-			nodeWorker::insert(t, 0, val);
+		node<T>* someMethod(node<T>* t, T val) {
+			return nodeWorker::insert(t, 0, val);
 		}
 		int size() {
 			return nodeWorker::size();
 		}
 		bool empty() {
 			return nodeWorker::empty();
+		}
+		node<T>* getPointerByPos(int pos) {
+			node<T>* p = nodeWorker::getFirst();
+			while (pos--)
+				p = nodeWorker::getNext(p);
+			return p;
+		}
+		node<T>* getFirst() {
+			return nodeWorker::getFirst();
+		}
+		void push_back(T val) {
+			nodeWorker::push_back(val);
 		}
 	};
 
@@ -226,7 +266,7 @@ namespace nd {
 	};
 
 	template <class T>
-	class que:nodeWorker<T> {
+	class que :nodeWorker<T> {
 	public:
 		void push(T val) {
 			nodeWorker::push_back(val);
@@ -246,13 +286,13 @@ namespace nd {
 	};
 
 	typedef node<char*>* ps;
-	class task11:nodeWorker<char*> {
+	class task11 :nodeWorker<char*> {
 	public:
 		int getIndex(ps t) {
 			int pos = 0;
 			while (t != NULL)
 				t = t->pred, pos++;
-			return pos;
+			return pos - 1;
 		}
 		void eraseByPointer(ps t) {
 			nodeWorker::erase(t, 0);
@@ -272,6 +312,12 @@ namespace nd {
 		ps erase(int pos) {
 			return nodeWorker::erase(getFirst(), pos);
 		}
+		ps delthis(ps t) {
+			int pos = getIndex(t);
+			auto tmp = getNext(t);
+			erase(pos);
+			return tmp;
+		}
 		int size() {
 			return nodeWorker::size();
 		}
@@ -289,7 +335,7 @@ namespace nd {
 			} while (a++, b++);
 			return false;
 		}
-		void sort(bool (*less)(char* a, char* b)) {
+		void sort(bool(*less)(char* a, char* b)) {
 			ps start = getFirst();
 			ps finish = getLast();
 			while (finish != start) {
@@ -317,8 +363,16 @@ namespace nd {
 
 using namespace nd;
 
+void enterlist(lst<int> & ls) {
+	int n; cin >> n;
+	for (int i = 0; i < n; i++) {
+		int a; cin >> a;
+		ls.push_back(a);
+	}
+}
+
 void listFeatures() {
-	cout << "Commands:\ninsert <pos> <val>\nerase <pos>\nsomesum\nsize\nprint\n\n";
+	//cout << "Commands:\ninsert <pos> <val>\nerase <pos>\nsomesum\nsize\nprint\n\n";
 	lst<int> ls;
 	while (true) {
 		string s; cin >> s;
@@ -332,17 +386,39 @@ void listFeatures() {
 			ls.erase(a);
 		}
 		if (s == "somesum") {
-			cout << ls.somesum() << endl;
+			ls.somesum();
 		}
 		if (s == "size") {
 			cout << ls.size() << endl;
 		}
+		if (s == "find") {
+			cin >> a;
+			cout << ls.find(a) << endl;
+		}
+		if (s == "find_forward") {
+			cin >> a;
+			cout << ls.find_forward(a) << endl;
+		}
+		if (s == "find_backward") {
+			cin >> a;
+			cout << ls.find_backward(a) << endl;
+		}
+		if (s == "find_together") {
+			cin >> a;
+			auto pr = ls.find_together(a);
+			cout << (pr.first ? "From first" : "From last") << ' ' << pr.second << endl;
+		}
+		s = "print";
 		if (s == "print") {
 			cout << "List: ";
 			ls.print();
 			cout << endl;
 		}
+		cout << endl;
+		if (s == "exit")
+			break;
 	}
+	ls.clear();
 }
 
 #define mp make_pair
@@ -350,8 +426,8 @@ int& getd(pii a, vector <vector <int> > & d) {
 	return d[a.first][a.second];
 }
 void chess() {
-	int dx[] = {1,2,2,1,-1,-2,-2,-1};
-	int dy[] = {2,1,-1,-2,-2,-1,1,2};
+	int dx[] = { 1,2,2,1,-1,-2,-2,-1 };
+	int dy[] = { 2,1,-1,-2,-2,-1,1,2 };
 	string a, b; cin >> a >> b;
 	vector < vector <int> > d(8, vector <int>(8, -1));
 	pii start = mp(a[0] - 'A', a[1] - '1'), finish = mp(b[0] - 'A', b[1] - '1');
@@ -364,7 +440,7 @@ void chess() {
 		q.pop();
 		for (int i = 0; i < 8; i++) {
 			pii to = mp(now.first + dx[i], now.second + dy[i]);
-			if (to.first >= 0 && to.second >= 0 && to.first < 8 && to.second < 8) 
+			if (to.first >= 0 && to.second >= 0 && to.first < 8 && to.second < 8)
 				if (getd(to, d) == -1) {
 					getd(to, d) = getd(now, d) + 1;
 					q.push(to);
@@ -387,7 +463,7 @@ void task11f() {
 	const int dirty_hack = 256;
 	task11 ls;
 	ps t = NULL;
-	cout << "Commands:\npush_back <char*>\ninsert <pos> <char*>\ndelete <pos>\nsize\nclear\nsort\nprint\npoint_first\ngo_next\ngo_pred\nget_pos\ndel_this\nget_pointer_data\n\n";
+	cout << "Commands:\npush_back <char*>\ninsert <pos> <char*>\ndelete <pos>\nsize\nclear\nsort\nprint\npoint_first\ngo_next\ngo_pred\nget_pos\ndel_this\nget_pointer_data\nsize\n\n";
 	while (true) {
 		cout << "Command: ";
 		string s; cin >> s;
@@ -409,6 +485,9 @@ void task11f() {
 				t = NULL;
 				cout << "Pointer freed\n";
 			}
+		}
+		else if (s == "del_this") {
+			t = ls.delthis(t);
 		}
 		else if (s == "size")
 			cout << ls.size() << endl;
@@ -445,11 +524,158 @@ void task11f() {
 			ls.print();
 			cout << endl;
 		}
+		else if (s == "exit")
+			break;
 		else
 			cout << "!!!Warning, no such command!!!\n";
 	}
+	ls.clear();
+}
+
+
+void the10sub1() {
+	cout << "This is one-directed list\n";
+	cout << "Commands:\ninsert <pos> <val>\nerase <pos>\nfind <val>\n\n";
+	listFeatures();
+}
+
+void the10sub2() {
+	cout << "This is two-directed list\n";
+	cout << "Commands:\ninsert <pos> <val>\nerase <pos>\nfind_forward <val>\nfind_backward <val>\nfind_together <val>\n\n";
+	listFeatures();
+}
+
+void the10sub3outvar() {
+	cout << "This is the some sum function\nEnter the number of elements and after that enter them\n\n";
+	lst<int> ls;
+	enterlist(ls);
+	ls.somesum();
+	ls.clear();
+}
+
+void the10sub3withvar() {
+	cout << "This is the some pointer function\nEnter the number of elements and after that enter them\n\n";
+	lst<int> ls;
+	enterlist(ls);
+	cout << "\nOK, enter the number of queries\n";
+	int queries; cin >> queries;
+	cout << "\nOK, enter D and P0, you may do it several times\n\n";
+	cout << "List: ";
+	ls.print();
+	cout << endl;
+	cout << endl;
+	while (queries--) {
+		int d, p0; cin >> d >> p0;
+		node<int> * p = ls.getPointerByPos(p0);
+		cout << "Before: " << "Pointer: " << p << " Data: " << (p ? p->d : 0) << '\n';
+		p = ls.someMethod(p, d);
+		cout << "After : " << "Pointer: " << p << " Data: " << (p ? p->d : 0) << '\n';
+		cout << "List: ";
+		ls.print();
+		cout << endl << endl;
+	}
+	ls.clear();
+}
+
+void the11() {
+	task11f();
+}
+
+void the12() {
+	chess();
 }
 
 int main() {
-	task11f();
+	//the10sub1();
+	//the10sub2();
+	//the10sub3outvar();
+	//the10sub3withvar();
+	//the11();
+	//the12();
 }
+
+//the10sub1
+/*
+insert 0 1
+insert 1 5
+insert 1 6
+insert 0 8
+find 5
+find 8
+erase 1
+find 5
+exit
+*/
+
+//the10sub2
+/*
+insert 0 1
+insert 1 5
+insert 1 6
+insert 0 8
+find_forward 5
+find_backward 5
+find_together 5
+find_forward 8
+find_backward 8
+find_together 8
+erase 1
+find_forward 5
+find_backward 5
+find_together 5
+exit
+*/
+
+//the10sub3outvar
+/*
+7
+1 5 0 17 3 6 8
+*/
+
+//the10sub3withvar
+/*
+5
+1 2 3 4 5
+4
+7 1
+8 2
+10 6
+-1 4
+*/
+
+//the11
+/*
+push_back Hello
+push_back World
+print
+insert 1 Magic
+print
+delete 2
+print
+push_back one
+push_back two
+push_back three
+print
+point_first
+get_pointer_data
+go_next
+go_next
+get_pointer_data
+go_next
+go_next
+go_pred
+get_pointer_data
+get_pos
+del_this
+get_pointer_data
+push_back atata
+push_back bbbb
+push_back ataka
+print
+sort
+print
+size
+clear
+print
+exit
+*/
