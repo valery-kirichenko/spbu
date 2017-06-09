@@ -2,11 +2,9 @@ package com.Client.Client;
 
 import java.util.List;
 
-/**
- * Created by Я on 16.04.2017.
- */
+
 public interface MergeClientAndCredit {
      void getMerge(List<Clients> listClient, List<Credits> listCredit);
-
+     String getNameFromID(Integer ID, List<Clients> clients);
      void getReplace(List<Clients> listClient);
 }

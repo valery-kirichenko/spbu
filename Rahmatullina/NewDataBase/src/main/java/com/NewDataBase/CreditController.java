@@ -8,8 +8,8 @@ import java.util.List;
 public  interface  CreditController {
     void saveNewCredit(Credits toCreate);
     List<Credits> getAllCredits();
-    void deleteCredit(String creditID);
-    Credits getFirstByID(String creditID);
-    List<Credits> getByClientID(String clientID);
+    void deleteCredit(Integer creditID);
+    Credits getFirstByID(Integer creditID);
+    List<Credits> getByClientID(Integer clientID);
     void updateCredit(Credits toUpdate);
 }

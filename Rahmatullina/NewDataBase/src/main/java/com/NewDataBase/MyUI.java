@@ -7,11 +7,8 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Service;
 
 import javax.servlet.annotation.WebServlet;
-import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,16 +16,17 @@ import java.util.stream.Collectors;
 @Theme("mytheme")
 @SpringUI
 public class MyUI extends UI {
+    @Autowired
+    private ShowClientWithExpiryCredit expiryClients;
 
+    @Autowired
+    private ShowExpiryCredit showExpiry;
 
     @Autowired
-    ShowClientWithExpiryCredit expiryClients;
+    private ClientControllerImpl clientController;
+
     @Autowired
-    ShowExpiryCredit showExpiry;
-    @Autowired
-    ClientControllerImpl clientController;
-    @Autowired
-    CreditControllerImpl creditController;
+    private CreditControllerImpl creditController;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -76,7 +74,7 @@ public class MyUI extends UI {
 
         Grid<Clients> clientGrid = new Grid<>();
         clientGrid.setSizeFull();
-        clientGrid.addColumn(Clients::getClientId).setCaption("ID").setWidth(100);
+        clientGrid.addColumn(Clients::getId).setCaption("ID").setWidth(100);
         clientGrid.addColumn(Clients::getName).setCaption("Name");
         clientGrid.addColumn(Clients::getSurName).setCaption("SurName");
         clientGrid.addColumn(Clients::getMidName).setCaption("MiddleName");
@@ -91,7 +89,7 @@ public class MyUI extends UI {
         creditGrid.addColumn(Credits::getWholeLoan).setCaption("WholeLoan");
         creditGrid.addColumn(Credits::getPaidSum).setCaption("PaidSum");
         creditGrid.addColumn(Credits::getPercent).setCaption("Percent");
-        creditGrid.addColumn(Credits::getCreditData).setCaption("Data").setWidth(400);
+        creditGrid.addColumn(Credits::getDataString).setCaption("Data").setWidth(400);
 
 
         clientGrid.setStyleGenerator(client -> expiryClients.checkClient(client) ? "dead" : null);
@@ -111,32 +109,28 @@ public class MyUI extends UI {
         });
 
         clientGrid.addSelectionListener(event -> {
-
-            creditGrid.setItems(creditController.getByClientID(event.getFirstSelectedItem().get().getClientId()));
-            IdClientSelected.setValue(event.getFirstSelectedItem().get().getClientId());
-
+            creditGrid.setItems(creditController.getByClientID(event.getFirstSelectedItem().get().getId()));
+            IdClientSelected.setValue(event.getFirstSelectedItem().get().getId().toString());
         });
         buttonAddCredit.addClickListener(clickEvent -> {
-            try {
-                if(IdClientSelected.getValue()!=null) {
-                    Credits credit = new Credits(IdClientSelected.getValue(), сreditLoan.getValue(),
-                            creditPercent.getValue(), creditPaidSum.getValue(), creditWholeLoan.getValue(), creditDate.getValue());
-                    if (credit.getLoan() == null || credit.getPercent() == null ||
-                            credit.getPaidSum() == null || credit.getWholeLoan() == null || credit.getCrediitData2() == null)
-                        Notification.show("Incorrect data for new credit!");
+            if (IdClientSelected.getValue() != null) {
+                Credits credit = new Credits();
+                credit.setId(Integer.parseInt(IdClientSelected.getValue()));
+                credit.setLoan(сreditLoan.getValue());
+                credit.setPercent(creditPercent.getValue());
+                credit.setPaidSum(creditPaidSum.getValue());
+                credit.setWholeLoan(creditWholeLoan.getValue());
+                credit.setDataString(creditDate.getValue());
+                if (credit.getLoan() == null || credit.getPercent() == null ||
+                        credit.getPaidSum() == null || credit.getWholeLoan() == null || credit.getDataString() == null)
+                    Notification.show("Incorrect data for new credit!");
 
-                    else {
-                        creditController.saveNewCredit(credit);
-                        Notification.show("We insert new credit to client id :" + IdClientSelected.getValue());
-                    }
+                else {
+                    creditController.saveNewCredit(credit);
+                    Notification.show("We insert new credit to client id :" + IdClientSelected.getValue());
                 }
-                else  Notification.show("You didn't chose client !");
-
-            } catch (ParseException e) {
-                e.printStackTrace();
-
-            }
-            creditGrid.setItems(creditController.getByClientID(IdClientSelected.getValue()));
+            } else Notification.show("You didn't chose client !");
+            creditGrid.setItems(creditController.getByClientID(Integer.parseInt(IdClientSelected.getValue())));
             сreditLoan.clear();
             creditPercent.clear();
             creditPaidSum.clear();
@@ -146,21 +140,22 @@ public class MyUI extends UI {
         });
 
         buttonAddClient.addClickListener(clickEvent -> {
+            Clients newClient = new Clients();
+            newClient.setId(Integer.parseInt(сlientId.getValue()));
+            newClient.setName(сlientName.getValue());
+            newClient.setSurName(clientSurName.getValue());
+            newClient.setMidName(clientMidName.getValue());
+            newClient.setPhone(clientPhone.getValue());
+            newClient.setNewPassport(clientPassport.getValue());
+            newClient.setData(clientDate.getValue());
+            newClient.setOldPassport(clientOldPassport.getValue());
 
-            try {
-                Clients newClient = new Clients(сlientId.getValue(), сlientName.getValue(), clientSurName.getValue(), clientMidName.getValue(),
-                            clientPhone.getValue(), clientPassport.getValue(), clientDate.getValue(), clientOldPassport.getValue());
-
-                if(newClient.getClientId()==null || newClient.getName()==null|| newClient.getSurName() == null || newClient.getOldPassport()==null ||
-                        newClient.getMidName()== null || newClient.getPhone() == null || newClient.getNewPassport() == null)
-                    Notification.show("Incorrect data for new client!");
-                else{
-                    clientController.saveNewClient(newClient);
-                    clientGrid.setItems(clientController.getAllClients());
-                }
-            } catch (ParseException ex) {
-                ex.printStackTrace();
-
+            if (newClient.getId() == null || newClient.getName() == null || newClient.getSurName() == null || newClient.getOldPassport() == null ||
+                    newClient.getMidName() == null || newClient.getPhone() == null || newClient.getNewPassport() == null)
+                Notification.show("Incorrect data for new client!");
+            else {
+                clientController.saveNewClient(newClient);
+                clientGrid.setItems(clientController.getAllClients());
             }
 
             сlientId.clear();
@@ -179,7 +174,7 @@ public class MyUI extends UI {
         layoutClient.addComponents(сlientId, сlientName, clientSurName, clientMidName, clientPhone, clientPassport, clientDate, clientOldPassport);
         layoutCredit.addComponents(сreditLoan, creditPercent, creditPaidSum, creditWholeLoan, creditDate);
         horlayout2.addComponents(layoutClient, layoutCredit);
-        horlayout.addComponents(buttonAddClient, buttonAddCredit, buttonDodjers, buttonNotDodjers, buttonAllClients,IdClientSelected);
+        horlayout.addComponents(buttonAddClient, buttonAddCredit, buttonDodjers, buttonNotDodjers, buttonAllClients, IdClientSelected);
         layout.addComponents(horlayout, clientGrid, creditGrid, horlayout2);
 
         setContent(layout);

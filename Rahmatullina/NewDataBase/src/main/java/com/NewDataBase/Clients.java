@@ -1,72 +1,60 @@
 package com.NewDataBase;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Я on 17.03.2017.
- */
+
 public class Clients {
-    private String id;
+    private Integer id;
     private String name;
     private String surName;
     private String midName;
     private String phone;
     private String newPassport;
     private String oldPassport;
-    private DateFormat format;
-    private List<Credits> credit;
-    private Date data;
-    private String data2;
+    private List<Credits> credits = new ArrayList<>();
+    private String data;
+    public Boolean isDeleted = Boolean.FALSE;
 
-    public Clients(String id, String name, String surName, String midName, String phone, String newPassport, String date, String oldPassport) throws ParseException {
-
-        this.id = id;
-        this.name = name;
-        this.surName = surName;
-        this.midName = midName;
-        this.phone = phone;
-        this.credit= new ArrayList();
-        this.oldPassport = oldPassport;
-        this.newPassport = newPassport;
-        this.format = new SimpleDateFormat("yyyy-MM-dd");
-        this.data = format.parse(date);
-        this.data2 = date;
+    public Clients() {
     }
 
-    public String getClientId() {
-        return id;
+    public Integer getId() {
+        return this.id;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public String getSurName() {
-        return surName;
+        return this.surName;
     }
 
     public String getMidName() {
-        return midName;
+        return this.midName;
     }
 
     public String getPhone() {
-        return phone;
+        return this.phone;
     }
 
     public String getNewPassport() {
-        return newPassport;
+        return this.newPassport;
+    }
+
+    public String getData() {
+        return this.data;
     }
 
     public String getOldPassport() {
-        return oldPassport;
+        return this.oldPassport;
     }
 
-    public String getData2(){ return data2; }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -75,8 +63,6 @@ public class Clients {
     public void setSurName(String surName) {
         this.surName = surName;
     }
-
-    public void setId(String id){ this.id = id;}
 
     public void setMidName(String midName) {
         this.midName = midName;
@@ -90,26 +76,31 @@ public class Clients {
         this.newPassport = newPassport;
     }
 
-    public void setData(String data) throws ParseException {
-        format = new SimpleDateFormat("yyyy-MM-dd");
-        this.data = format.parse(data);
+    public void setData(String data) {
+        this.data = data;
     }
 
     public void setOldPassport(String oldPassport) {
         this.oldPassport = oldPassport;
     }
+
+    @Override
     public String toString() {
-        return "Clients{" +
-                "Name = " + name +
-                " , id=" + id +" , SurName = " + surName + '\'' +" , MidName = " + midName +
-                '}';
+        return (this.getId() + " " + this.getName() + " " + this.getSurName() + " " +
+                this.getMidName() + " " + this.getPhone() + " " + this.getNewPassport() + " " +
+                this.getData() + " " + this.getOldPassport());
+
     }
 
-    public List<Credits> getCredit() {
-        return credit;
+    public List<Credits> getCredits() {
+        return this.credits;
     }
 
-    public void setCredit(List<Credits> credit) {
-        this.credit = credit;
+    public void setCredits(List<Credits> credits) {
+        this.credits = credits;
+    }
+
+    public void addCredit(Credits credit) {
+        this.credits.add(credit);
     }
 }

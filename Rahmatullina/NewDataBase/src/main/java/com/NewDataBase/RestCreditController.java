@@ -5,9 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Created by Я on 27.05.2017.
- */
+
 @RestController("/credit/")
 public class RestCreditController {
     @Autowired
@@ -24,13 +22,13 @@ public class RestCreditController {
     }
 
     @RequestMapping(value = "/credit/{id}", method = RequestMethod.DELETE)
-    void delete(@PathVariable(name = "id") String creditID) {
+    void delete(@PathVariable(name = "id") Integer creditID) {
         creditController.deleteCredit(creditID);
     }
 
 
     @RequestMapping(value = "/credit/{id}", method = RequestMethod.GET)
-    List<Credits> getByClientId(@PathVariable(name = "id") String ID) {
+    List<Credits> getByClientId(@PathVariable(name = "id") Integer ID) {
         return creditController.getByClientID(ID);
     }
 }

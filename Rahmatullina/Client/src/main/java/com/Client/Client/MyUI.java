@@ -4,7 +4,6 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.shared.Registration;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.UI;
@@ -13,30 +12,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.annotation.WebServlet;
 import java.io.FileNotFoundException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Я on 27.05.2017.
- */
+
 @SpringUI
 @Theme("mytheme")
 public class MyUI extends UI {
 
     @Autowired
-    CreditRestController creditRestController;
+    private CreditRestController creditRestController;
 
     @Autowired
-    ClientRestController clientRestController;
+    private ClientRestController clientRestController;
 
     @Autowired
-    GettingClientFromFile gettingClientFromFile;
+    private GettingClientFromFile gettingClientFromFile;
 
     @Override
     protected void init(VaadinRequest request) {
-
-
         VerticalLayout layout = new VerticalLayout();
         Button send = new Button("SEND");
 
@@ -44,19 +38,18 @@ public class MyUI extends UI {
             send.setCaption("We sent");
             try {
                 List<Credits> creditList = new ArrayList<>();
-                List<Clients> clientList =  new ArrayList<>();
-                clientList = gettingClientFromFile.getClient();
-                for(Clients client : clientList)
-                    for(Credits credit : client.getCredit())
-                    creditList.add(credit);
+                List<Clients> clientList = gettingClientFromFile.getClient();
+                for (Clients client : clientList)
+                    creditList.addAll(client.getCredits());
 
-                for(Clients client : clientList )
-                 clientRestController.saveNewClient(client);
-                for(Credits credit : creditList)
+                for (Clients client : clientList) {
+                    clientRestController.saveNewClient(client);
+                }
+
+                for (Credits credit : creditList) {
                     creditRestController.saveNewCredit(credit);
+                }
                 send.setEnabled(false);
-            } catch (ParseException e) {
-                e.printStackTrace();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -66,6 +59,7 @@ public class MyUI extends UI {
         setContent(layout);
 
     }
+
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
     @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
     public static class MyUIServlet extends VaadinServlet {

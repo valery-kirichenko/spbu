@@ -2,9 +2,7 @@ package com.NewDataBase;
 
 import java.util.List;
 
-/**
- * Created by Я on 05.05.2017.
- */
+
 public interface  ClientController {
     void saveNewClient(Clients newClient);
     List<Clients> getAllClients();
