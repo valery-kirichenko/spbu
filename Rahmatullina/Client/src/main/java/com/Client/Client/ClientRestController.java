@@ -7,5 +7,5 @@ import java.util.List;
  */
 public interface ClientRestController {
     void saveNewClient(Clients newClient);
-    void deleteClient(Integer client_id);
+    void deleteClient(int client_id);
 }

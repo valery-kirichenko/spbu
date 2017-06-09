@@ -7,8 +7,11 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.annotation.WebServlet;
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -108,28 +111,32 @@ public class MyUI extends UI {
         });
 
         clientGrid.addSelectionListener(event -> {
+
             creditGrid.setItems(creditController.getByClientID(event.getFirstSelectedItem().get().getClientId()));
-            IdClientSelected.setValue(event.getFirstSelectedItem().get().getClientId().toString());
+            IdClientSelected.setValue(event.getFirstSelectedItem().get().getClientId());
+
         });
         buttonAddCredit.addClickListener(clickEvent -> {
-            if (IdClientSelected.getValue() != null) {
-                Credits credit = new Credits();
-                credit.setId(Integer.parseInt(IdClientSelected.getValue()));
-                credit.setLoan(сreditLoan.getValue());
-                credit.setPercent(creditPercent.getValue());
-                credit.setPaidSum(creditPaidSum.getValue());
-                credit.setWholeLoan(creditWholeLoan.getValue());
-                credit.setDataString(creditDate.getValue());
-                if (credit.getLoan() == null || credit.getPercent() == null ||
-                        credit.getPaidSum() == null || credit.getWholeLoan() == null || credit.getCreditData() == null)
-                    Notification.show("Incorrect data for new credit!");
+            try {
+                if(IdClientSelected.getValue()!=null) {
+                    Credits credit = new Credits(IdClientSelected.getValue(), сreditLoan.getValue(),
+                            creditPercent.getValue(), creditPaidSum.getValue(), creditWholeLoan.getValue(), creditDate.getValue());
+                    if (credit.getLoan() == null || credit.getPercent() == null ||
+                            credit.getPaidSum() == null || credit.getWholeLoan() == null || credit.getCrediitData2() == null)
+                        Notification.show("Incorrect data for new credit!");
 
-                else {
-                    creditController.saveNewCredit(credit);
-                    Notification.show("We insert new credit to client id :" + IdClientSelected.getValue());
+                    else {
+                        creditController.saveNewCredit(credit);
+                        Notification.show("We insert new credit to client id :" + IdClientSelected.getValue());
+                    }
                 }
-            } else Notification.show("You didn't chose client !");
-            creditGrid.setItems(creditController.getByClientID(Integer.parseInt(IdClientSelected.getValue())));
+                else  Notification.show("You didn't chose client !");
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+
+            }
+            creditGrid.setItems(creditController.getByClientID(IdClientSelected.getValue()));
             сreditLoan.clear();
             creditPercent.clear();
             creditPaidSum.clear();
@@ -139,22 +146,21 @@ public class MyUI extends UI {
         });
 
         buttonAddClient.addClickListener(clickEvent -> {
-            Clients newClient = new Clients();
-            newClient.setId(Integer.parseInt(сlientId.getValue()));
-            newClient.setName(сlientName.getValue());
-            newClient.setSurName(clientSurName.getValue());
-            newClient.setMidName(clientMidName.getValue());
-            newClient.setPhone(clientPhone.getValue());
-            newClient.setNewPassport(clientPassport.getValue());
-            newClient.setData(clientDate.getValue());
-            newClient.setOldPassport(clientOldPassport.getValue());
 
-            if (newClient.getClientId() == null || newClient.getName() == null || newClient.getSurName() == null || newClient.getOldPassport() == null ||
-                    newClient.getMidName() == null || newClient.getPhone() == null || newClient.getNewPassport() == null)
-                Notification.show("Incorrect data for new client!");
-            else {
-                clientController.saveNewClient(newClient);
-                clientGrid.setItems(clientController.getAllClients());
+            try {
+                Clients newClient = new Clients(сlientId.getValue(), сlientName.getValue(), clientSurName.getValue(), clientMidName.getValue(),
+                            clientPhone.getValue(), clientPassport.getValue(), clientDate.getValue(), clientOldPassport.getValue());
+
+                if(newClient.getClientId()==null || newClient.getName()==null|| newClient.getSurName() == null || newClient.getOldPassport()==null ||
+                        newClient.getMidName()== null || newClient.getPhone() == null || newClient.getNewPassport() == null)
+                    Notification.show("Incorrect data for new client!");
+                else{
+                    clientController.saveNewClient(newClient);
+                    clientGrid.setItems(clientController.getAllClients());
+                }
+            } catch (ParseException ex) {
+                ex.printStackTrace();
+
             }
 
             сlientId.clear();
@@ -173,7 +179,7 @@ public class MyUI extends UI {
         layoutClient.addComponents(сlientId, сlientName, clientSurName, clientMidName, clientPhone, clientPassport, clientDate, clientOldPassport);
         layoutCredit.addComponents(сreditLoan, creditPercent, creditPaidSum, creditWholeLoan, creditDate);
         horlayout2.addComponents(layoutClient, layoutCredit);
-        horlayout.addComponents(buttonAddClient, buttonAddCredit, buttonDodjers, buttonNotDodjers, buttonAllClients, IdClientSelected);
+        horlayout.addComponents(buttonAddClient, buttonAddCredit, buttonDodjers, buttonNotDodjers, buttonAllClients,IdClientSelected);
         layout.addComponents(horlayout, clientGrid, creditGrid, horlayout2);
 
         setContent(layout);

@@ -24,13 +24,13 @@ public class RestCreditController {
     }
 
     @RequestMapping(value = "/credit/{id}", method = RequestMethod.DELETE)
-    void delete(@PathVariable(name = "id") Integer creditID) {
+    void delete(@PathVariable(name = "id") String creditID) {
         creditController.deleteCredit(creditID);
     }
 
 
     @RequestMapping(value = "/credit/{id}", method = RequestMethod.GET)
-    List<Credits> getByClientId(@PathVariable(name = "id") Integer ID) {
+    List<Credits> getByClientId(@PathVariable(name = "id") String ID) {
         return creditController.getByClientID(ID);
     }
 }

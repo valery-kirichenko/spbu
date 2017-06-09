@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.client.RestTemplate;
 
-
+/**
+ * Created by Я on 05.05.2017.
+ */
 @Controller
 public class ClientRestControllerImpl implements ClientRestController {
     private String urlClients = "http://localhost:8080/client/";
@@ -14,13 +16,14 @@ public class ClientRestControllerImpl implements ClientRestController {
 
     @Override
     public void saveNewClient(Clients newClient) {
-        System.out.println(newClient.getClientId());
         restTemplate.postForEntity(urlClients, newClient, Clients.class);
+
     }
 
     @Override
-    public void deleteClient(Integer client_id) {
+    public void deleteClient(int client_id) {
         restTemplate.delete(urlClients + client_id);
+
     }
 
 }

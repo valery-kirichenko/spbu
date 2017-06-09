@@ -25,13 +25,19 @@ public class DataBase implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        template.execute("CREATE TABLE IF NOT EXISTS  clients(" +
-                "id INTEGER, first_name VARCHAR(255), last_name VARCHAR(255)," +
+
+        template.execute("DROP TABLE IF EXISTS clients");
+        template.execute("CREATE TABLE   clients(" +
+                "id VARCHAR(255), first_name VARCHAR(255), last_name VARCHAR(255)," +
                 " mid_name VARCHAR(255),phone VARCHAR(255), new_passport VARCHAR(255)," +
                 "dat VARCHAR(255) , old_passport VARCHAR(255))");
-        template.execute("CREATE TABLE IF NOT EXISTS credits(" +
-                "client_id INTEGER,loan VARCHAR(255), whole_loan VARCHAR(255), paid_sum VARCHAR(255)," +
+        template.execute("DROP TABLE IF EXISTS credits");
+        template.execute("CREATE TABLE credits(" +
+                "client_id VARCHAR(255),loan VARCHAR(255), whole_loan VARCHAR(255), paid_sum VARCHAR(255)," +
                 "percent VARCHAR(255), dat VARCHAR(255))");
         template.execute("ALTER TABLE credits ADD FOREIGN KEY ( client_id ) REFERENCES clients( id ) ;");
+
+
+
     }
 }

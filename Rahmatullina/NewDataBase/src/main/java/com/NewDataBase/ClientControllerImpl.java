@@ -10,7 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-
+/**
+ * Created by Я on 05.05.2017.
+ */
 @Controller
 public class ClientControllerImpl implements ClientController {
 
@@ -21,18 +23,22 @@ public class ClientControllerImpl implements ClientController {
 
     @Override
     public void saveNewClient(Clients newClient) {
+        template.execute(query, new PreparedStatementCallback<Object>() {
+            @Override
+            public Object doInPreparedStatement(PreparedStatement
+                                                        preparedStatement) throws SQLException, DataAccessException {
+                preparedStatement.setString(1, newClient.getClientId());
+                preparedStatement.setString(2, newClient.getName());
+                preparedStatement.setString(3, newClient.getSurName());
+                preparedStatement.setString(4, newClient.getMidName());
+                preparedStatement.setString(5, newClient.getPhone());
+                preparedStatement.setString(6, newClient.getNewPassport());
+                preparedStatement.setString(7, newClient.getData2());
+                preparedStatement.setString(8, newClient.getOldPassport());
 
-        template.execute(query, (PreparedStatementCallback<Object>) preparedStatement -> {
-            preparedStatement.setInt(1, newClient.getClientId());
-            preparedStatement.setString(2, newClient.getName());
-            preparedStatement.setString(3, newClient.getSurName());
-            preparedStatement.setString(4, newClient.getMidName());
-            preparedStatement.setString(5, newClient.getPhone());
-            preparedStatement.setString(6, newClient.getNewPassport());
-            preparedStatement.setString(7, newClient.getData());
-            preparedStatement.setString(8, newClient.getOldPassport());
 
-            return preparedStatement.execute();
+                return preparedStatement.execute();
+            }
         });
     }
 

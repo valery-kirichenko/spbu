@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Я on 06.05.2017.
@@ -20,12 +21,13 @@ import java.util.List;
     public void saveNewCredit(Credits toCreate) {
 
         template.execute(query, (PreparedStatementCallback<Object>) preparedStatement -> {
-            preparedStatement.setInt(1, toCreate.getId());
+
+            preparedStatement.setString(1, toCreate.getId());
             preparedStatement.setString(2, toCreate.getLoan());
             preparedStatement.setString(3, toCreate.getWholeLoan());
             preparedStatement.setString(4, toCreate.getPaidSum());
             preparedStatement.setString(5, toCreate.getPercent());
-            preparedStatement.setString(6, toCreate.getCreditData());
+            preparedStatement.setString(6, toCreate.getCrediitData2());
             return preparedStatement.execute();
         });
 
@@ -39,12 +41,12 @@ import java.util.List;
     }
 
     @Override
-    public void deleteCredit(Integer client_id) {
+    public void deleteCredit(String client_id) {
         template.execute("DELETE FROM credits WHERE client_id =" + client_id);
     }
 
     @Override
-    public Credits getFirstByID(Integer clientID) {
+    public Credits getFirstByID(String clientID) {
 
         return template.query("SELECT * FROM credits WHERE client_id =" + clientID,
                 new CreditRowMapper()).stream().findFirst().orElse(null);
@@ -52,7 +54,7 @@ import java.util.List;
     }
 
     @Override
-    public List<Credits> getByClientID(Integer clientID) {
+    public List<Credits> getByClientID(String clientID) {
         return template.query("SELECT * FROM credits WHERE client_id =" + clientID,
                 new CreditRowMapper());
     }

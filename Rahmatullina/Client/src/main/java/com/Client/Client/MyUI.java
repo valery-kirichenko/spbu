@@ -44,19 +44,19 @@ public class MyUI extends UI {
             send.setCaption("We sent");
             try {
                 List<Credits> creditList = new ArrayList<>();
-                List<Clients> clientList = gettingClientFromFile.getClient();
-                for (Clients client : clientList)
-                    creditList.addAll(client.getCredit());
+                List<Clients> clientList =  new ArrayList<>();
+                clientList = gettingClientFromFile.getClient();
+                for(Clients client : clientList)
+                    for(Credits credit : client.getCredit())
+                    creditList.add(credit);
 
-                for (Clients client : clientList) {
-                    clientRestController.saveNewClient(client);
-                }
-
-                for (Credits credit : creditList) {
+                for(Clients client : clientList )
+                 clientRestController.saveNewClient(client);
+                for(Credits credit : creditList)
                     creditRestController.saveNewCredit(credit);
-                    System.out.println(58);
-                }
                 send.setEnabled(false);
+            } catch (ParseException e) {
+                e.printStackTrace();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -66,7 +66,6 @@ public class MyUI extends UI {
         setContent(layout);
 
     }
-
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
     @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
     public static class MyUIServlet extends VaadinServlet {

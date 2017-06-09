@@ -3,30 +3,33 @@ package com.NewDataBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
-
+/**
+ * Created by Я on 17.03.2017.
+ */
 @Service
-public class ShowClientWithExpiryCreditImpl implements ShowClientWithExpiryCredit {
+public class ShowClientWithExpiryCreditImpl implements ShowClientWithExpiryCredit{
+
+
     @Autowired
     CreditController creditController;
 
     @Override
     public boolean checkClient(Clients client) {
-        List<Credits> listCredit = creditController.getByClientID(client.getClientId());
 
-        boolean haveExpiryCredit = false;
-        LocalDate now = LocalDate.now();
+    List<Credits> listCredit = creditController.getByClientID(client.getClientId());
 
-        for (Credits credit : listCredit) {
-            LocalDate date = LocalDate.parse(credit.getCreditData());
-            float wholeLoan = Float.parseFloat(credit.getWholeLoan());
-            float paidSum = Float.parseFloat(credit.getPaidSum());
-            if (now.isAfter(date) && paidSum < wholeLoan) {
-                haveExpiryCredit = true;
+            boolean haveExpiryCredit = false;
+            Date now = new Date();
+            for(Credits credit : listCredit){
+                float wholeLoan = Float.parseFloat(credit.getWholeLoan());
+                float paidSum = Float.parseFloat(credit.getPaidSum());
+                if (now.after(credit.getCreditData()) && paidSum < wholeLoan) {
+                    haveExpiryCredit =  true;
+                }
             }
-        }
-        return haveExpiryCredit;
+            return haveExpiryCredit;
     }
 }

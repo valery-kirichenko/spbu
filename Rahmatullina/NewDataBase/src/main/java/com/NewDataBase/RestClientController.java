@@ -15,15 +15,12 @@ public class RestClientController {
 
     @RequestMapping(value = "/client/", method = RequestMethod.POST)
     public void createClient(@RequestBody Clients client) {
-        System.out.println(client.getClientId());
         clientController.saveNewClient(client);
     }
-
     @RequestMapping(value = "/client/", method = RequestMethod.GET)
     public List<Clients> getAll() {
         return clientController.getAllClients();
     }
-
     @RequestMapping(value = "/client/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable(name = "id") Integer clientID) {
         clientController.deleteClient(clientID);
