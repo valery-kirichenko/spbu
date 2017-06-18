@@ -59,6 +59,8 @@ public class Credit {
     }
 
     private double toDouble(String stringToParse){
+        if(!stringToParse.contains("."))
+            stringToParse += ".0";
         Scanner sc = new Scanner(stringToParse.replace("."," "));
         double a = sc.nextDouble(),b = sc.nextDouble();
         while(b>1)

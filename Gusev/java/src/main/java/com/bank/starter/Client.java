@@ -124,6 +124,14 @@ public class Client {
         return pass;
     }
 
+    public String getPasstoString(){
+        String ans = "";
+        ans += pass;
+        while(ans.length() < 6)
+            ans = "0"+ans;
+        return ans;
+    }
+
     public void setPass(int pass) {
         this.pass = pass;
     }

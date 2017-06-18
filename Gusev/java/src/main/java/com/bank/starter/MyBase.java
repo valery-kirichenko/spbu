@@ -54,8 +54,8 @@ public class MyBase {
 
     void tryMerge(Client locClient){
         for (Client subClient: listOfClients
-             ) {
-            if(subClient.isEqualAndGreater(locClient)){
+                ) {
+            if(locClient.isEqualAndGreater(subClient)){
                 listOfClients.remove(subClient);
                 subClient.merge(locClient);
                 locClient = subClient;
@@ -63,14 +63,21 @@ public class MyBase {
             }
         }
         for (Client subClient: listOfClients
-                ) {
-            if(locClient.isEqualAndGreater(subClient)){
+             ) {
+            if(subClient.isEqualAndGreater(locClient)){
                 listOfClients.remove(subClient);
                 locClient.merge(subClient);
                 break;
             }
         }
         listOfClients.add(locClient);
+        if(!mapOfCredits.containsKey(locClient.getNowId()))
+            mapOfCredits.put(locClient.getNowId(),new ArrayList<>());
+        for (Integer id: locClient.getOldId()
+             ){
+            if (!mapOfCredits.containsKey(id))
+                mapOfCredits.put(id, new ArrayList<>());
+        }
     }
 
     public int numberOfCredits(){
@@ -98,6 +105,16 @@ public class MyBase {
             tryMerge(locClient);
         }
         in.close();
+    }
+
+    public ArrayList<Credit> getListOfCredits(Client locClient){
+        ArrayList<Credit> ans = new ArrayList<>();
+        ans.addAll(mapOfCredits.get(locClient.getNowId()));
+        for (int id: locClient.getOldId()
+                ) {
+            ans.addAll(mapOfCredits.get(id));
+        }
+        return ans;
     }
 
     public HashMap<Integer, ArrayList<Credit>> getMapOfCredits() {
