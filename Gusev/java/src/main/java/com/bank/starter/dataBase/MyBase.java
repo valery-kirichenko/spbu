@@ -1,7 +1,9 @@
-package com.bank.starter;
+package com.bank.starter.dataBase;
+
+import com.bank.starter.models.Client;
+import com.bank.starter.models.Credit;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +54,7 @@ public class MyBase {
         }
     }
 
-    void tryMerge(Client locClient){
+    public void tryMerge(Client locClient){
         for (Client subClient: listOfClients
                 ) {
             if(locClient.isEqualAndGreater(subClient)){

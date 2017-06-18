@@ -1,4 +1,8 @@
-package com.bank.starter;
+package com.bank.starter.workStorrage;
+
+import com.bank.starter.dataBase.MyBase;
+import com.bank.starter.models.Client;
+import com.bank.starter.models.Credit;
 
 import java.util.ArrayList;
 

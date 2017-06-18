@@ -1,25 +1,21 @@
-package com.bank.starter;
+package com.bank.starter.app;
 
+import com.bank.starter.models.Client;
+import com.bank.starter.workStorrage.ClientWorkPlace;
+import com.bank.starter.models.Credit;
 import com.vaadin.annotations.Theme;
 
 import javax.servlet.annotation.WebServlet;
 
-import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.data.provider.DataProvider;
-import com.vaadin.data.provider.DataProviderListener;
-import com.vaadin.data.provider.ListDataProvider;
-import com.vaadin.data.provider.Query;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.shared.Registration;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import com.bank.starter.dataBase.MyBase;
+
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * Created by gusef on 17.06.2017.

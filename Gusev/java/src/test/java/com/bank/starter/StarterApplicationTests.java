@@ -1,5 +1,7 @@
 package com.bank.starter;
 
+import com.bank.starter.models.Client;
+import com.bank.starter.models.Credit;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

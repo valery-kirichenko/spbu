@@ -1,6 +1,5 @@
-package com.bank.starter;
+package com.bank.starter.models;
 
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -27,7 +26,7 @@ public class Credit {
     }
 
     //constructor from String
-    static Credit parse(String stringToParse) {
+    public static Credit parse(String stringToParse) {
         if(stringToParse.toCharArray()[0] != 'C')
             return null;
         Credit tmpCredit = new Credit();

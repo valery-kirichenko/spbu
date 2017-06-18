@@ -1,4 +1,4 @@
-package com.bank.starter;
+package com.bank.starter.models;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class Client {
     // list of the credits
     private List<Credit> credits = new ArrayList<>();
 
-    static Client Parse(String stringToParse){
+    public static Client Parse(String stringToParse){
         if(stringToParse.toCharArray()[0] < '0' || stringToParse.toCharArray()[0] > '9')
             stringToParse = stringToParse.substring(1);
         Scanner sc2 = new Scanner(stringToParse.substring(0,stringToParse.indexOf("->>>>")));
@@ -50,7 +50,7 @@ public class Client {
         return tmpClient;
     }
 
-    boolean isEqualAndGreater(Client locClient){
+    public boolean isEqualAndGreater(Client locClient){
         if(pass == locClient.getPass())
             return true;
         for (int subPass:
@@ -61,7 +61,7 @@ public class Client {
         return false;
     }
 
-    boolean merge(Client cl){
+    public boolean merge(Client cl){
         if(isEqualAndGreater(cl)){
             oldId.add(cl.getNowId());
             oldPass.add(cl.getPass());

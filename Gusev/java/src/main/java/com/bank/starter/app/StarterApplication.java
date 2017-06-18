@@ -1,5 +1,7 @@
-package com.bank.starter;
+package com.bank.starter.app;
 
+import com.bank.starter.workStorrage.ClientWorkPlace;
+import com.bank.starter.dataBase.MyBase;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

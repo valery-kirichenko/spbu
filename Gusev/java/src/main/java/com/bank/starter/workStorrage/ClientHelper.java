@@ -1,9 +1,9 @@
-package com.bank.starter;
+package com.bank.starter.workStorrage;
 
-import java.io.File;
-import java.io.IOException;
+import com.bank.starter.models.Client;
+import com.bank.starter.models.Credit;
+
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * Created by gusef on 27.05.2017.
