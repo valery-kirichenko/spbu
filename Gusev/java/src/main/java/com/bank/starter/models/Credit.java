@@ -19,52 +19,14 @@ public class Credit {
     paidSum - sum of money which was paid
     allSum - sum of money which should be paid
      */
-    private String percent = "", startSum = "", paidSum = "", allSum = "";
-
+    private Double percent = new Double(-1), startSum = new Double(-1), paidSum = new Double(-1), allSum = new Double(-1);
 
     public Credit() {
     }
 
-    //constructor from String
-    public static Credit parse(String stringToParse) {
-        if(stringToParse.toCharArray()[0] != 'C')
-            return null;
-        Credit tmpCredit = new Credit();
-
-        stringToParse = stringToParse.substring(stringToParse.indexOf("Credit{") + 7);
-        tmpCredit.setId(new Scanner(stringToParse.substring(0, stringToParse.indexOf("|"))).nextInt());
-
-        stringToParse = stringToParse.substring(stringToParse.indexOf("|") + 1);
-        tmpCredit.setStartSum(stringToParse.substring(0, stringToParse.indexOf(",")));
-
-        stringToParse = stringToParse.substring(stringToParse.indexOf(",") + 1);
-        tmpCredit.setPercent(stringToParse.substring(0, stringToParse.indexOf("%,")));
-
-        stringToParse = stringToParse.substring(stringToParse.indexOf("%,") + 2);
-        tmpCredit.setPaidSum(stringToParse.substring(0, stringToParse.indexOf("^")));
-
-        stringToParse = stringToParse.substring(stringToParse.indexOf("^") + 1);
-        tmpCredit.setAllSum(stringToParse.substring(0, stringToParse.indexOf("___")));
-
-        stringToParse = stringToParse.substring(stringToParse.indexOf("___") + 3, stringToParse.indexOf("&"));
-        tmpCredit.setFinishDate(LocalDate.parse(stringToParse));
-        return tmpCredit;
-    }
-
     //checker if this com.starter.bank.Credit paid or not
     public boolean isNotPaid() {
-       double as = toDouble(allSum), ps = toDouble(paidSum);
-        return finishDate.isBefore(LocalDate.now()) && (ps < as);
-    }
-
-    private double toDouble(String stringToParse){
-        if(!stringToParse.contains("."))
-            stringToParse += ".0";
-        Scanner sc = new Scanner(stringToParse.replace("."," "));
-        double a = sc.nextDouble(),b = sc.nextDouble();
-        while(b>1)
-            b /= 10;
-        return a+b;
+        return finishDate.isBefore(LocalDate.now()) && (paidSum < allSum);
     }
 
     public void setFinishDate(LocalDate finishDate) {
@@ -83,27 +45,27 @@ public class Credit {
         return id;
     }
 
-    public void setPercent(String percent) {
+    public void setPercent(Double percent) {
         this.percent = percent;
     }
 
-    public void setStartSum(String startSum) {
+    public void setStartSum(Double startSum) {
         this.startSum = startSum;
     }
 
-    public void setPaidSum(String paidSum) {
+    public void setPaidSum(Double paidSum) {
         this.paidSum = paidSum;
     }
 
-    public void setAllSum(String allSum) {
+    public void setAllSum(Double allSum) {
         this.allSum = allSum;
     }
 
-    public double getPercent() { return toDouble(percent);}
+    public double getPercent() { return percent;}
 
-    public double getStartSum() { return toDouble(startSum);}
+    public double getStartSum() { return startSum;}
 
-    public double getPaidSum() { return toDouble(paidSum);}
+    public double getPaidSum() { return paidSum;}
 
-    public double getAllSum() { return toDouble(allSum);}
+    public double getAllSum() { return allSum;}
 }

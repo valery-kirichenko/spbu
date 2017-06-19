@@ -15,10 +15,10 @@ public class CreditRowMapper implements RowMapper<Credit> {
     public Credit mapRow(ResultSet resultSet, int i) throws SQLException{
         Credit locCredit = new Credit();
         locCredit.setId(resultSet.getInt("id"));
-        locCredit.setStartSum(Double.toString(resultSet.getDouble("startSum")));
-        locCredit.setPaidSum(Double.toString(resultSet.getDouble("paidSum")));
-        locCredit.setAllSum(Double.toString(resultSet.getDouble("allSum")));
-        locCredit.setPercent(Double.toString(resultSet.getDouble("percent")));
+        locCredit.setStartSum((resultSet.getDouble("startSum")));
+        locCredit.setPaidSum((resultSet.getDouble("paidSum")));
+        locCredit.setAllSum((resultSet.getDouble("allSum")));
+        locCredit.setPercent((resultSet.getDouble("percent")));
         locCredit.setFinishDate(resultSet.getDate("finishDate").toLocalDate());
         return locCredit;
     }

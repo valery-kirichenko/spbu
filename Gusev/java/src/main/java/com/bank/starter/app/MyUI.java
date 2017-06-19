@@ -2,8 +2,8 @@ package com.bank.starter.app;
 
 import com.bank.starter.DataBaseSystem.ClientControllers.DBClientControler;
 import com.bank.starter.DataBaseSystem.CreditControllers.DBCreditControler;
+import com.bank.starter.MyDataBase.MyDataBase;
 import com.bank.starter.models.Client;
-import com.bank.starter.workStorrage.ClientWorkPlace;
 import com.bank.starter.models.Credit;
 import com.bank.starter.Curency.Currency;
 import com.vaadin.annotations.Theme;
@@ -16,12 +16,8 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 
-import com.bank.starter.MyDataBase.MyBase;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.net.URL;
 import java.util.*;
 
 /**
@@ -42,11 +38,14 @@ public class MyUI extends UI {
     @Autowired
     private DBCreditControler creditsController;
 
-    protected void init(VaadinRequest vaadinRequest){
-        MyBase.getInstance().insertFromFile();
+    @Autowired
+    private MyDataBase myDataBase;
 
-        //MyBase.getInstance().setCredits(new ArrayList<>(creditsController.getAllCredits()));
-        //MyBase.getInstance().setListOfClients(new ArrayList<>(clientsController.getAllClients()));
+    protected void init(VaadinRequest vaadinRequest){
+        //myDataBase.insertFromFile();
+
+        myDataBase.setCredits(new ArrayList<>(creditsController.getAllCredits()));
+        myDataBase.setListOfClients(new ArrayList<>(clientsController.getAllClients()));
 
 
         getPage().setTitle("Bank information storage server");
@@ -65,10 +64,9 @@ public class MyUI extends UI {
         clientGrid.addColumn(Client::getPasstoString).setCaption("passport");
         clientGrid.addColumn(Client::getBirthDate).setCaption("birthday");
         clientGrid.getEditor().setEnabled(true);
-        clientGrid.setItems(MyBase.getInstance().getListOfClients());
+        clientGrid.setItems(myDataBase.getListOfClients());
         clientGrid.setStyleGenerator(client ->{
-            ClientWorkPlace work = new ClientWorkPlace();
-            return work.debtCredits(client).size()>0 ? "overdue" : null;
+            return myDataBase.debtCredits(client).size()>0 ? "overdue" : null;
         });
 
         final TextField fieldName = new TextField("Name:");
@@ -94,13 +92,13 @@ public class MyUI extends UI {
                 newClient.setPhone(fieldPhone.getValue());
                 newClient.setPass(Integer.parseInt(filedPass.getValue()));
                 newClient.setBirthDate(fieldBirthday.getValue());
-                newClient.setNowId(MyBase.getInstance().getFreeId());
+                newClient.setNowId(myDataBase.getFreeId());
                 if(!fieldOldPass.getValue().isEmpty())
                     newClient.setOldPass(Integer.parseInt(fieldOldPass.getValue()));
-                MyBase.getInstance().tryMerge(newClient);
+                myDataBase.tryMerge(newClient);
 
                 Notification.show("Client " + newClient.getName() + "was added");
-                clientGrid.setItems(MyBase.getInstance().getListOfClients());
+                clientGrid.setItems(myDataBase.getListOfClients());
 
                 fieldName.clear();
                 fieldSurName.clear();
@@ -127,7 +125,7 @@ public class MyUI extends UI {
         clientGrid.addSelectionListener(event->{
             Optional<Client> client = event.getFirstSelectedItem();
             client.ifPresent(client1 -> {
-                creditGrid.setItems(MyBase.getInstance().getListOfCredits(client1));
+                creditGrid.setItems(myDataBase.getListOfCredits(client1));
                 curId = client1.getNowId();
                 curClient = client1;
             });
@@ -152,14 +150,14 @@ public class MyUI extends UI {
             else{
                 Credit newCredit = new Credit();
                 newCredit.setId(curId);
-                newCredit.setAllSum(fieldAllSum.getValue());
-                newCredit.setStartSum(fieldStartSum.getValue());
+                newCredit.setAllSum(Double.parseDouble(fieldAllSum.getValue()));
+                newCredit.setStartSum(Double.parseDouble(fieldStartSum.getValue()));
                 newCredit.setFinishDate(fieldFinishDate.getValue());
-                newCredit.setPaidSum(fieldPaidSum.getValue());
-                newCredit.setPercent(fieldPersent.getValue());
+                newCredit.setPaidSum(Double.parseDouble(fieldPaidSum.getValue()));
+                newCredit.setPercent(Double.parseDouble(fieldPersent.getValue()));
 
-                MyBase.getInstance().getMapOfCredits().get(curId).add(newCredit);
-                creditGrid.setItems(MyBase.getInstance().getListOfCredits(curClient));
+                myDataBase.getMapOfCredits().get(curId).add(newCredit);
+                creditGrid.setItems(myDataBase.getListOfCredits(curClient));
                 Notification.show("Credit was added!");
 
                 fieldAllSum.clear();
@@ -182,7 +180,7 @@ public class MyUI extends UI {
         boxCurrency.setItemCaptionGenerator(Currency::toString);
         boxCurrency.addValueChangeListener(valueChangeEvent -> {
             if (curId != -1) {
-                ArrayList<Credit> al = MyBase.getInstance().getListOfCreditsWithChangedValues(boxCurrency.getValue(), curId);
+                ArrayList<Credit> al = myDataBase.getListOfCreditsWithChangedValues(boxCurrency.getValue(), curId);
                 if(al != null)
                     creditGrid.setItems(al);
             }

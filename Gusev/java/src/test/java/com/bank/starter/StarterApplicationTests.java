@@ -17,7 +17,7 @@ import static junit.framework.TestCase.assertEquals;
 @SpringBootTest
 public class StarterApplicationTests {
 
-	@Test
+	/*@Test
 	public void contextLoads() {
 		Credit cr = Credit.parse("Credit{727|515584.72710622626,5.0%,269089.711338759^541363.9634615376___2012-12-31&");
         assertEquals(727,cr.getId());
@@ -36,7 +36,7 @@ public class StarterApplicationTests {
         assertEquals("898340100",cl.getPass());
         assertEquals(LocalDate.parse("1949-03-23"),cl.getBirthDate());
         assertEquals("89",cl.getOldPass());
-	}
+	}//*/
 
 	@Test
     public void chaeck(){

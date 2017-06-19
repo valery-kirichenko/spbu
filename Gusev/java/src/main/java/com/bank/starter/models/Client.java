@@ -27,27 +27,6 @@ public class Client {
 
     private LocalDate birthDate = LocalDate.now();
 
-    public static Client Parse(String stringToParse){
-        if(stringToParse.toCharArray()[0] < '0' || stringToParse.toCharArray()[0] > '9')
-            stringToParse = stringToParse.substring(1);
-        Scanner sc2 = new Scanner(stringToParse.substring(0,stringToParse.indexOf("->>>>")));
-        Client tmpClient = new Client();
-        tmpClient.setNowId(sc2.nextInt());
-        tmpClient.setName(stringToParse.substring(stringToParse.lastIndexOf("->>>>")+5,stringToParse.indexOf("---")));
-        tmpClient.setSurName(stringToParse.substring(stringToParse.lastIndexOf("---")+3,stringToParse.indexOf("\\\\")));
-        tmpClient.setLastName(stringToParse.substring(stringToParse.lastIndexOf("\\\\")+2,stringToParse.indexOf("~~~~")));
-        tmpClient.setPhone(stringToParse.substring(stringToParse.lastIndexOf("~~~~")+4,stringToParse.indexOf("==")));
-        tmpClient.setPass(Integer.parseInt(stringToParse.substring(stringToParse.indexOf("==")+2,stringToParse.indexOf("___"))));
-        stringToParse = stringToParse.substring(stringToParse.lastIndexOf("___")+3);
-        if(stringToParse.contains("==")) {
-            tmpClient.setBirthDate(LocalDate.parse(stringToParse.substring(0,stringToParse.indexOf("=="))));
-            tmpClient.setOldPass(Integer.parseInt(stringToParse.substring(stringToParse.indexOf("==")+2)));
-        }
-        else
-            tmpClient.setBirthDate(LocalDate.parse(stringToParse));
-        return tmpClient;
-    }
-
     public boolean isEqualAndGreater(Client locClient){
         if(pass == locClient.getOldPass())
             return true;
@@ -55,19 +34,6 @@ public class Client {
     }
     public boolean isEqual(Client locClinet){
         return pass == locClinet.getPass();
-    }
-
-    public boolean merge(Client cl){
-        if(isEqualAndGreater(cl)){
-            if(!MyBase.getInstance().getMapOfCredits().containsKey(nowId))
-                MyBase.getInstance().getMapOfCredits().put(nowId,new ArrayList<>());
-            MyBase.getInstance().getMapOfCredits().get(nowId).addAll(MyBase.getInstance().getMapOfCredits().get(cl.getNowId()));
-            if(MyBase.getInstance().getMapOfCredits().containsKey(cl.getNowId()))
-                MyBase.getInstance().getMapOfCredits().remove(cl.getNowId());
-            oldPass = cl.getOldPass();
-            return true;
-        }
-        return false;
     }
 
     public Integer getOldPass() {
