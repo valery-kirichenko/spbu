@@ -1,5 +1,7 @@
 package com.bank.starter.models;
 
+import com.bank.starter.MyDataBase.MyBase;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,23 +13,19 @@ import java.util.Scanner;
 public class Client {
 
     // id in old system
-    private int nowId;
-    private List<Integer> oldId = new ArrayList<>();
+    private int nowId = -1;
 
     //name of client
     private String name, surName, lastName;
 
     // passport of the client
     int pass;
-    private List<Integer> oldPass = new ArrayList<>();
+    private int oldPass = -1;
 
     //current phone of the client
     private String phone = "";
 
     private LocalDate birthDate = LocalDate.now();
-
-    // list of the credits
-    private List<Credit> credits = new ArrayList<>();
 
     public static Client Parse(String stringToParse){
         if(stringToParse.toCharArray()[0] < '0' || stringToParse.toCharArray()[0] > '9')
@@ -43,7 +41,7 @@ public class Client {
         stringToParse = stringToParse.substring(stringToParse.lastIndexOf("___")+3);
         if(stringToParse.contains("==")) {
             tmpClient.setBirthDate(LocalDate.parse(stringToParse.substring(0,stringToParse.indexOf("=="))));
-            tmpClient.getOldPass().add(Integer.parseInt(stringToParse.substring(stringToParse.indexOf("==")+2)));
+            tmpClient.setOldPass(Integer.parseInt(stringToParse.substring(stringToParse.indexOf("==")+2)));
         }
         else
             tmpClient.setBirthDate(LocalDate.parse(stringToParse));
@@ -51,36 +49,28 @@ public class Client {
     }
 
     public boolean isEqualAndGreater(Client locClient){
-        if(pass == locClient.getPass())
+        if(pass == locClient.getOldPass())
             return true;
-        for (int subPass:
-             locClient.getOldPass()) {
-            if(pass == subPass)
-                return true;
-        }
         return false;
+    }
+    public boolean isEqual(Client locClinet){
+        return pass == locClinet.getPass();
     }
 
     public boolean merge(Client cl){
         if(isEqualAndGreater(cl)){
-            oldId.add(cl.getNowId());
-            oldPass.add(cl.getPass());
-            oldPass.addAll(cl.getOldPass());
-            oldId.addAll(cl.getOldId());
+            if(!MyBase.getInstance().getMapOfCredits().containsKey(nowId))
+                MyBase.getInstance().getMapOfCredits().put(nowId,new ArrayList<>());
+            MyBase.getInstance().getMapOfCredits().get(nowId).addAll(MyBase.getInstance().getMapOfCredits().get(cl.getNowId()));
+            if(MyBase.getInstance().getMapOfCredits().containsKey(cl.getNowId()))
+                MyBase.getInstance().getMapOfCredits().remove(cl.getNowId());
+            oldPass = cl.getOldPass();
             return true;
         }
         return false;
     }
 
-    public List<Credit> getCredits() {
-        return credits;
-    }
-
-    public List<Integer> getOldId() {
-        return oldId;
-    }
-
-    public List<Integer> getOldPass() {
+    public Integer getOldPass() {
         return oldPass;
     }
 
@@ -102,10 +92,6 @@ public class Client {
 
     public void setNowId(int nowId) {
         this.nowId = nowId;
-    }
-
-    public void setOldId(List<Integer> oldId) {
-        this.oldId = oldId;
     }
 
     public void setName(String name) {
@@ -136,7 +122,7 @@ public class Client {
         this.pass = pass;
     }
 
-    public void setOldPass(List<Integer> oldPass) {
+    public void setOldPass(Integer oldPass) {
         this.oldPass = oldPass;
     }
 
@@ -146,10 +132,6 @@ public class Client {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public void setCredits(List<Credit> credits) {
-        this.credits = credits;
     }
 
     public LocalDate getBirthDate() {

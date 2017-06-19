@@ -1,6 +1,6 @@
 package com.bank.starter.workStorrage;
 
-import com.bank.starter.dataBase.MyBase;
+import com.bank.starter.MyDataBase.MyBase;
 import com.bank.starter.models.Client;
 import com.bank.starter.models.Credit;
 
@@ -18,14 +18,6 @@ public class ClientWorkPlace implements ClientHelper {
             if(subCredit.getAllSum() < subCredit.getPaidSum())
                 ans += subCredit.getAllSum() - subCredit.getPaidSum();
         }
-        for (int id: cl.getOldId()
-             ) {
-            for (Credit subCredit: MyBase.getInstance().getMapOfCredits().get(id)
-                    ) {
-                if(subCredit.getAllSum() < subCredit.getPaidSum())
-                    ans += subCredit.getAllSum() - subCredit.getPaidSum();
-            }
-        }
         return ans;
     }
 
@@ -36,14 +28,6 @@ public class ClientWorkPlace implements ClientHelper {
                 ) {
             if(subCredit.isNotPaid())
                 ans.add(subCredit);
-        }
-        for (int id: cl.getOldId()
-                ) {
-            for (Credit subCredit: MyBase.getInstance().getMapOfCredits().get(id)
-                    ) {
-                if(subCredit.isNotPaid())
-                    ans.add(subCredit);
-            }
         }
         return ans;
     }

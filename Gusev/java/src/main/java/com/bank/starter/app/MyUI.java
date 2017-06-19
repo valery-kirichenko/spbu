@@ -1,8 +1,11 @@
 package com.bank.starter.app;
 
+import com.bank.starter.DataBaseSystem.ClientControllers.DBClientControler;
+import com.bank.starter.DataBaseSystem.CreditControllers.DBCreditControler;
 import com.bank.starter.models.Client;
 import com.bank.starter.workStorrage.ClientWorkPlace;
 import com.bank.starter.models.Credit;
+import com.bank.starter.Curency.Currency;
 import com.vaadin.annotations.Theme;
 
 import javax.servlet.annotation.WebServlet;
@@ -13,8 +16,12 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 
-import com.bank.starter.dataBase.MyBase;
+import com.bank.starter.MyDataBase.MyBase;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -28,8 +35,21 @@ public class MyUI extends UI {
     private int curId = -1;
     private Client curClient;
 
+
+    @Autowired
+    private DBClientControler clientsController;
+
+    @Autowired
+    private DBCreditControler creditsController;
+
     protected void init(VaadinRequest vaadinRequest){
-        getPage().setTitle("Bank information storage");
+        MyBase.getInstance().insertFromFile();
+
+        //MyBase.getInstance().setCredits(new ArrayList<>(creditsController.getAllCredits()));
+        //MyBase.getInstance().setListOfClients(new ArrayList<>(clientsController.getAllClients()));
+
+
+        getPage().setTitle("Bank information storage server");
 
         final VerticalLayout mainLayout = new VerticalLayout();
         final HorizontalLayout clientLayout = new HorizontalLayout();
@@ -74,11 +94,9 @@ public class MyUI extends UI {
                 newClient.setPhone(fieldPhone.getValue());
                 newClient.setPass(Integer.parseInt(filedPass.getValue()));
                 newClient.setBirthDate(fieldBirthday.getValue());
-                if(!fieldOldPass.getValue().isEmpty()){
-                    ArrayList<Integer> al = new ArrayList<>();
-                    al.add(Integer.parseInt(fieldOldPass.getValue()));
-                    newClient.setOldPass(al);
-                }
+                newClient.setNowId(MyBase.getInstance().getFreeId());
+                if(!fieldOldPass.getValue().isEmpty())
+                    newClient.setOldPass(Integer.parseInt(fieldOldPass.getValue()));
                 MyBase.getInstance().tryMerge(newClient);
 
                 Notification.show("Client " + newClient.getName() + "was added");
@@ -96,7 +114,7 @@ public class MyUI extends UI {
 
         Grid<Credit> creditGrid = new Grid<>();
         creditGrid.setWidth("1800px");
-        creditGrid.setHeight("300px");
+        creditGrid.setHeight("200px");
         creditGrid.addColumn(Credit::getId).setCaption("user id");
         creditGrid.addColumn(Credit::getStartSum).setCaption("start sum");
         creditGrid.addColumn(Credit::getPaidSum).setCaption("paid sum");
@@ -152,7 +170,25 @@ public class MyUI extends UI {
             }
         });
 
-        mainLayout.addComponents(clientGrid,clientLayout,buttonClient,creditGrid,creditLayout,buttonCredit);
+        List<Currency> namesCurrency = new ArrayList<>();
+        namesCurrency.add(Currency.RUB);
+        namesCurrency.add(Currency.USD);
+        namesCurrency.add(Currency.EUR);
+        ComboBox<Currency> boxCurrency = new ComboBox<>("Currency");
+        boxCurrency.setEmptySelectionAllowed(false);
+        boxCurrency.setItems(namesCurrency);
+        boxCurrency.setValue(Currency.RUB);
+
+        boxCurrency.setItemCaptionGenerator(Currency::toString);
+        boxCurrency.addValueChangeListener(valueChangeEvent -> {
+            if (curId != -1) {
+                ArrayList<Credit> al = MyBase.getInstance().getListOfCreditsWithChangedValues(boxCurrency.getValue(), curId);
+                if(al != null)
+                    creditGrid.setItems(al);
+            }
+        });
+
+        mainLayout.addComponents(clientGrid,clientLayout,buttonClient,creditGrid,creditLayout,buttonCredit,boxCurrency);
         setContent(mainLayout);
     }
 

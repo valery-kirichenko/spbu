@@ -5,7 +5,9 @@ import com.bank.starter.models.Credit;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import com.bank.starter.app.*;
 
 import java.time.LocalDate;
 
@@ -25,15 +27,15 @@ public class StarterApplicationTests {
         assertEquals("541363.9634615376",cr.getAllSum());
         assertEquals(LocalDate.parse("2012-12-31"),cr.getFinishDate());
 
-        Client cl = Client.Parse("934->>>>Елена---Водохлёбова\\\\Федоровна~~~~+79646546254==559253___1945-10-01==613027");
-        assertEquals(934,cl.getNowId());
-        assertEquals("Елена",cl.getName());
-        assertEquals("Водохлёбова",cl.getSurName());
-        assertEquals("Федоровна",cl.getLastName());
-        assertEquals("+79646546254",cl.getPhone());
-        assertEquals("559253",cl.getPass());
-        assertEquals(LocalDate.parse("1945-10-01"),cl.getBirthDate());
-        assertEquals(1,cl.getOldPass().size());
+        Client cl = Client.Parse("\n" + "3751->>>>Ольга---Евгеньева\\\\Прохоровна~~~~+79648590338==898340100___1949-03-23==89");
+        assertEquals(3751,cl.getNowId());
+        assertEquals("Ольга",cl.getName());
+        assertEquals("Евгеньева",cl.getSurName());
+        assertEquals("Прохоровна",cl.getLastName());
+        assertEquals("+79648590338",cl.getPhone());
+        assertEquals("898340100",cl.getPass());
+        assertEquals(LocalDate.parse("1949-03-23"),cl.getBirthDate());
+        assertEquals("89",cl.getOldPass());
 	}
 
 	@Test
