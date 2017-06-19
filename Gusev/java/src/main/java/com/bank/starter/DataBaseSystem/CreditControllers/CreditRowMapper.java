@@ -14,7 +14,7 @@ public class CreditRowMapper implements RowMapper<Credit> {
     @Override
     public Credit mapRow(ResultSet resultSet, int i) throws SQLException{
         Credit locCredit = new Credit();
-        locCredit.setId(resultSet.getInt("id"));
+        locCredit.setId(resultSet.getInt("clientId"));
         locCredit.setStartSum((resultSet.getDouble("startSum")));
         locCredit.setPaidSum((resultSet.getDouble("paidSum")));
         locCredit.setAllSum((resultSet.getDouble("allSum")));

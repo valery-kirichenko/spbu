@@ -11,7 +11,7 @@ public interface DBClientControler {
     void addNewClient(Client locCLient);
     void deleteClient(Integer id);
     List<Client> getAllClients();
-    Client egtClient(Integer id);
+    Client getClient(Integer id);
     void upadateClient(Client locClient);
     boolean Contains(Client locClinet);
 }

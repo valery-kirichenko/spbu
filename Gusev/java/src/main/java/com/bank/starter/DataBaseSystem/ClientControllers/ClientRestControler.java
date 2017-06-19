@@ -31,6 +31,6 @@ public class ClientRestControler {
 
     @RequestMapping(value = "/client/{id}", method = RequestMethod.GET)
     public Client getById(@PathVariable(name = "id") Integer ID) {
-        return controller.egtClient(ID);
+        return controller.getClient(ID);
     }
 }

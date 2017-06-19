@@ -2,10 +2,11 @@ package com.bank.starter.MyDataBase;
 
 import com.bank.starter.Curency.Currency;
 import com.bank.starter.Curency.CurrencyService;
+import com.bank.starter.DataBaseSystem.ClientControllers.DBClientControler;
+import com.bank.starter.DataBaseSystem.CreditControllers.DBCreditControler;
 import com.bank.starter.models.Client;
 import com.bank.starter.models.Credit;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -24,14 +25,18 @@ import java.util.Scanner;
 public class MyBase implements MyDataBase {
 
     @Autowired
-    private JdbcTemplate template;
+    private CurrencyService currencyService;
 
     @Autowired
-    private CurrencyService currencyService;
+    private DBClientControler clientsController;
+
+    @Autowired
+    private DBCreditControler creditsController;
 
     private int maxUserId = -1;
     private HashMap<Integer, ArrayList<Credit>> mapOfCredits = new HashMap<>();
     private ArrayList<Client> listOfClients = new ArrayList<>();
+    private ArrayList<Credit> creditsWithoutClients = new ArrayList<>();
 
     private boolean notReaded = true;
 
@@ -55,6 +60,10 @@ public class MyBase implements MyDataBase {
         if (cl1.isEqualAndGreater(cl2)) {
             if (!mapOfCredits.containsKey(cl1.getNowId()))
                 mapOfCredits.put(cl1.getNowId(), new ArrayList<>());
+            for (Credit subCredit: mapOfCredits.get(cl2.getNowId())
+                 ) {
+                subCredit.setId(cl1.getNowId());
+            }
             mapOfCredits.get(cl1.getNowId()).addAll(mapOfCredits.get(cl2.getNowId()));
             if (mapOfCredits.containsKey(cl2.getNowId()))
                 mapOfCredits.remove(cl2.getNowId());
@@ -196,7 +205,9 @@ public class MyBase implements MyDataBase {
 
     @Override
     public ArrayList<Credit> getListOfCredits(Client locClient) {
-        return mapOfCredits.get(locClient.getNowId());
+        if(mapOfCredits.containsKey(locClient.getNowId()))
+            return mapOfCredits.get(locClient.getNowId());
+        return new ArrayList<>();
     }
 
     @Override
@@ -213,6 +224,15 @@ public class MyBase implements MyDataBase {
     public int getFreeId() {
         maxUserId++;
         return maxUserId;
+    }
+
+    private boolean existClientWithId(Integer id){
+        for (Client cl:listOfClients
+             ) {
+            if(id == cl.getNowId())
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -236,6 +256,30 @@ public class MyBase implements MyDataBase {
             System.out.println(allNotPaidCredits().size());
             notReaded = false;
         }
+        ArrayList<Integer> al = new ArrayList<>();
+         for(Integer subKey: mapOfCredits.keySet()
+                ) {
+            if(!existClientWithId(subKey)){
+                creditsWithoutClients.addAll(mapOfCredits.get(subKey));
+                al.add(subKey);
+            }
+        }
+        System.out.println(creditsWithoutClients.size());
+        for (Integer subKey: al
+             ) {
+            mapOfCredits.remove(subKey);
+        }
+        for (Client subClient:listOfClients
+             ) {
+            clientsController.addNewClient(subClient);
+        }
+        for (ArrayList<Credit> subListOfCredits : mapOfCredits.values()
+                ) {
+            for (Credit subCredit : subListOfCredits
+                    ) {
+                creditsController.addNewCredit(subCredit);
+            }
+        }//*/
     }
 
     @Override
@@ -266,19 +310,16 @@ public class MyBase implements MyDataBase {
     }
 
     @Override
-    public ArrayList<Credit> getListOfCreditsWithChangedValues(Currency newCurrency, Integer Id) {
-        ArrayList<Credit> ans = new ArrayList<>();
-        ans = copyAll(ans);
+    public ArrayList<Credit> getListOfCreditsWithChangedValues(Currency newCurrency, Integer id) {
+        ArrayList<Credit> ans = new ArrayList<>(creditsController.getListOfCredits(id));
         if (!newCurrency.equals(Currency.RUB)) {
             Double multiplication = currencyService.getRate(Currency.RUB, newCurrency);
-            for (Credit credit : mapOfCredits.get(Id)) {
+            for (Credit credit : ans) {
                 credit.setStartSum(credit.getStartSum() * multiplication);
                 credit.setAllSum(credit.getAllSum() * multiplication);
                 credit.setPaidSum(credit.getPaidSum() * multiplication);
-                ans.add(credit);
             }
-        } else
-            ans = mapOfCredits.get(Id);
+        }
 
         return ans;
     }
@@ -297,10 +338,12 @@ public class MyBase implements MyDataBase {
     @Override
     public ArrayList<Credit> debtCredits(Client cl) {
         ArrayList<Credit> ans = new ArrayList<>();
-        for (Credit subCredit : mapOfCredits.get(cl.getNowId())
-                ) {
-            if (subCredit.isNotPaid())
-                ans.add(subCredit);
+        if(mapOfCredits.containsKey(cl.getNowId())) {
+            for (Credit subCredit : mapOfCredits.get(cl.getNowId())
+                    ) {
+                if (subCredit.isNotPaid())
+                    ans.add(subCredit);
+            }
         }
         return ans;
     }

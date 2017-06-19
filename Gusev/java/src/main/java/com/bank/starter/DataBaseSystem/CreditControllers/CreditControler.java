@@ -20,7 +20,7 @@ public class CreditControler implements DBCreditControler {
 
     private final String CREDITS_TABLE_NAME = "credits";
     private final String INSERT_QUERY = "INSERT INTO " + CREDITS_TABLE_NAME +
-            " (id, startSum,  paidSum, allSum, percent, finishDate)" +
+            " (clientId, startSum,  paidSum, allSum, percent, finishDate)" +
             "VALUES (?,?,?,?,?,?);";
 
     @Override
@@ -47,7 +47,7 @@ public class CreditControler implements DBCreditControler {
 
     @Override
     public List<Credit> getListOfCredits(Integer id) {
-        return template.query("SELECT * FROM " + CREDITS_TABLE_NAME + " WHERE clientID = " + id,
+        return template.query("SELECT * FROM " + CREDITS_TABLE_NAME + " WHERE clientId = " + id,
                 new CreditRowMapper());
     }
 
@@ -63,7 +63,7 @@ public class CreditControler implements DBCreditControler {
 
     @Override
     public Credit getCredit(Integer id) {
-        return template.query("SELECT * FROM " + CREDITS_TABLE_NAME + " WHERE ID = " + id,
+        return template.query("SELECT * FROM " + CREDITS_TABLE_NAME + " WHERE NewID = " + id,
                 new CreditRowMapper()).stream().findFirst().orElse(null);
     }
 
@@ -75,6 +75,6 @@ public class CreditControler implements DBCreditControler {
     @Override
     public void deletCredit(Integer id) {
         if (isContained(getCredit(id)))
-            template.execute("DELETE FROM " + CREDITS_TABLE_NAME + " WHERE ID = " + id);
+            template.execute("DELETE FROM " + CREDITS_TABLE_NAME + " WHERE NewID = " + id);
     }
 }

@@ -38,9 +38,10 @@ public class ClientControler implements DBClientControler {
                 preparedStatement.setString(4, locCLient.getLastName());
                 preparedStatement.setString(5, locCLient.getPhone());
                 preparedStatement.setInt(6, locCLient.getPass());
-                if(locCLient.getOldPass() != -1)
-                     preparedStatement.setInt(7, locCLient.getOldPass());
+                //if(locCLient.getOldPass() != -1)
+                    preparedStatement.setInt(7, locCLient.getOldPass());
                 preparedStatement.setDate(8, sqlDate);
+
                 return preparedStatement.execute();
             });
         }
@@ -48,26 +49,30 @@ public class ClientControler implements DBClientControler {
 
     @Override
     public void deleteClient(Integer id) {
-
+        if (Contains(getClient(id)))
+            template.execute("DELETE FROM " + CLIENTS_TABLE_NAME + " WHERE id = " + id);
     }
 
     @Override
     public List<Client> getAllClients() {
-        return null;
+        return template.query("SELECT * FROM " + CLIENTS_TABLE_NAME, new ClientRowMapper());
     }
 
     @Override
-    public Client egtClient(Integer id) {
-        return null;
+    public Client getClient(Integer id) {
+        return template.query("SELECT * FROM " + CLIENTS_TABLE_NAME + " WHERE id = " + id,
+                new ClientRowMapper()).stream().findFirst().orElse(null);
     }
 
     @Override
     public void upadateClient(Client locClient) {
-
+        //template.update("UPDATE " + CLIENTS_TABLE_NAME + " SET  = " + toUpdate.getCredits() +
+        // " WHERE ID = " + toUpdate.getID());
+        // work in progress
     }
 
     @Override
     public boolean Contains(Client locClinet) {
-        return false;
+        return (locClinet != null && getClient(locClinet.getNowId()) != null);
     }
 }

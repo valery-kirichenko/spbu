@@ -42,10 +42,10 @@ public class MyUI extends UI {
     private MyDataBase myDataBase;
 
     protected void init(VaadinRequest vaadinRequest){
-        //myDataBase.insertFromFile();
+        myDataBase.insertFromFile();
 
-        myDataBase.setCredits(new ArrayList<>(creditsController.getAllCredits()));
-        myDataBase.setListOfClients(new ArrayList<>(clientsController.getAllClients()));
+        //myDataBase.setCredits(new ArrayList<>(creditsController.getAllCredits()));
+        //myDataBase.setListOfClients(new ArrayList<>(clientsController.getAllClients()));
 
 
         getPage().setTitle("Bank information storage server");
@@ -64,7 +64,8 @@ public class MyUI extends UI {
         clientGrid.addColumn(Client::getPasstoString).setCaption("passport");
         clientGrid.addColumn(Client::getBirthDate).setCaption("birthday");
         clientGrid.getEditor().setEnabled(true);
-        clientGrid.setItems(myDataBase.getListOfClients());
+        //clientGrid.setItems(myDataBase.getListOfClients());
+        clientGrid.setItems(clientsController.getAllClients());
         clientGrid.setStyleGenerator(client ->{
             return myDataBase.debtCredits(client).size()>0 ? "overdue" : null;
         });
@@ -95,10 +96,12 @@ public class MyUI extends UI {
                 newClient.setNowId(myDataBase.getFreeId());
                 if(!fieldOldPass.getValue().isEmpty())
                     newClient.setOldPass(Integer.parseInt(fieldOldPass.getValue()));
-                myDataBase.tryMerge(newClient);
+                //myDataBase.tryMerge(newClient);
+                clientsController.addNewClient(newClient);
 
                 Notification.show("Client " + newClient.getName() + "was added");
-                clientGrid.setItems(myDataBase.getListOfClients());
+                //clientGrid.setItems(myDataBase.getListOfClients());
+                clientGrid.setItems(clientsController.getAllClients());
 
                 fieldName.clear();
                 fieldSurName.clear();
@@ -125,7 +128,8 @@ public class MyUI extends UI {
         clientGrid.addSelectionListener(event->{
             Optional<Client> client = event.getFirstSelectedItem();
             client.ifPresent(client1 -> {
-                creditGrid.setItems(myDataBase.getListOfCredits(client1));
+                //creditGrid.setItems(myDataBase.getListOfCredits(client1));
+                creditGrid.setItems(creditsController.getListOfCredits(client1));
                 curId = client1.getNowId();
                 curClient = client1;
             });
@@ -156,8 +160,10 @@ public class MyUI extends UI {
                 newCredit.setPaidSum(Double.parseDouble(fieldPaidSum.getValue()));
                 newCredit.setPercent(Double.parseDouble(fieldPersent.getValue()));
 
-                myDataBase.getMapOfCredits().get(curId).add(newCredit);
-                creditGrid.setItems(myDataBase.getListOfCredits(curClient));
+                //myDataBase.getMapOfCredits().get(curId).add(newCredit);
+                creditsController.addNewCredit(newCredit);
+                //creditGrid.setItems(myDataBase.getListOfCredits(curClient));
+                creditGrid.setItems(creditsController.getListOfCredits(curClient));
                 Notification.show("Credit was added!");
 
                 fieldAllSum.clear();
