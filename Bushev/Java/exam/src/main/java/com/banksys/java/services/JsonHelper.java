@@ -4,6 +4,7 @@ import com.banksys.java.models.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -12,8 +13,10 @@ import java.util.List;
 
 @Service
 public class JsonHelper {
+    @Autowired
+    RestTemplate template;
+
     public List<User> readUsers(String from){
-        RestTemplate template = new RestTemplate();
         String res = template.getForObject(from, String.class);
 
         return readResults((JSONArray) ((JSONObject) JSONValue.parse(res)).get("results"));
