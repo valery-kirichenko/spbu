@@ -2,16 +2,17 @@ package com.PolyProgrammist;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 @Service
 public class ServiceAnswerDTO {
-    Map<String, Double> rates;
+    List<Map <String, Object> > results;
 
-    public Map<String, Double> getRates() {
-        return rates;
+    public List<Map<String, Object>> getResults() {
+        return results;
     }
 
-    public void setRates(Map<String, Double> rates) {
-        this.rates = rates;
+    public void setResults(List<Map<String, Object>> results) {
+        this.results = results;
     }
 }
